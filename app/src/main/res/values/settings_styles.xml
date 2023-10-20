@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Строка Настройки -->
+    <style name="pageSettings_string_head">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingRight">52dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:layout_marginBottom">28dp</item>
+    </style>
+    <!-- Стрелка назад -->
+    <style name="pageSettings_arr_back">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:src">@drawable/ico_arr_back</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:contentDescription">Back arrow</item>
+    </style>
+    <!-- Текст Заголовок настройки  -->
+    <style name="pageSettings_txt_settings">
+        <item name="android:text">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingRight">86dp</item>
+        <item name="android:paddingBottom">12dp </item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+    <!-- Текст строки ночной темы Start  -->
+    <style name="pageSettings_txt_night_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingTop">21dp</item>
+        <item name="android:paddingBottom">21dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <!-- Переключатель Ночной темы  -->
+    <style name="pageSettings_switch">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">11dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingLeft">9dp</item>
+        <item name="android:paddingBottom">11dp</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+    <!-- Стили Start -->
+    <style name="pageSettings_string_simple">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:paddingTop">19dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingBottom">18dp</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+    <style name="pageSettings_string_frame">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="pageSettings_string_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginRight">32dp</item>
+    </style>
+    <style name="pageSettings_string_ico">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+    <!-- Стили для простой строки End -->
+</resources>

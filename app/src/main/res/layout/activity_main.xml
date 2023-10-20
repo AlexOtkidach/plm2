@@ -1,18 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3772E7"
     tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Оглавление страницы Playlist maker -->
+    <LinearLayout
+        style="@style/pageSettings_string_head"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:background="#3772E7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+        <TextView
+            style="@style/pageMain_box_for_Head"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:background="#3772E7"
+            android:text="@string/playlist_maker"
+            android:textSize="26sp"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+    <LinearLayout style="@style/pageMain_box_for_btn"
+        tools:ignore="MissingConstraints">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Обьект "Поиск"  -->
+        <Button android:id="@+id/search"
+            android:text="@string/search"
+            app:icon="@drawable/ic_search2"
+            style="@style/pageMain_btn">
+        </Button>
+
+        <!-- Обьект "Медиатека" -->
+        <Button android:id="@+id/media"
+            android:text="@string/mediateka"
+            app:icon="@drawable/ic_media2"
+            style="@style/pageMain_btn">
+        </Button>
+
+        <!-- Обьект "Настройки" -->
+        <Button android:id="@+id/settings"
+            android:text="@string/settings"
+            app:icon="@drawable/ic_settings"
+            style="@style/pageMain_btn">
+        </Button>
+    </LinearLayout>
