@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Page -->
+    <color name="txt_color">#1A1B22</color>
+    <color name="background_color">#3772E7</color>
+
+    <!-- Settings Page -->
+    <color name="txt_Settings_Page">#1A1B22</color>
+    <color name="background_Settings_Page">#FFFFFFFF</color>
+    <color name="color_icon">#1A1B22</color>
+
+    <color name="colorPrimaryVariant">#FF5722</color>
+
+    <color name="black">#FF000000</color>
+    <color name="blackSoft">#1A1B22</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="green">#4CAF50</color>
+    <color name="blue">#2DB1ED</color>
+    <color name="text_color">#FFFFFFFF</color>
+
+    <!-- Themes -->
+    <color name="gray">#E6E8EB</color>
+    <color name="blueDark">#3772E7</color>
+    <color name="pink">#C10066</color>
+    <color name="button_background_color">#808080</color>
+    <color name="button_text_color">#FFFFFF</color>
+</resources>

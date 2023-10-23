@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">plm2</string>
+    <string name="settings">Настройки</string>
+    <string name="mediateka">Медиатека</string>
+    <string name="search">Поиск</string>
+
+    <string name="dark_theme">Темная тема</string>
+    <string name="share_app">Поделиться приложением</string>
+    <string name="write_to_support">Написать в поддержку</string>
+    <string name="terms_of_use">Пользовательское соглашение</string>
+    <string name="playlist_maker">Playlist maker</string>
+    <string name="arr">Стрелка</string>
+
+
+    <!-- Кнопки -->
+    <string name="shareButtonText" translatable="false">
+        https://practicum.yandex.ru/android-developer/
+    </string>
+
+    <string name="theme_mail">
+        «Сообщение разработчикам и разработчицам приложения Playlist Maker»
+    </string>
+    <string name="text_mail">
+        «Спасибо разработчикам и разработчицам за крутое приложение!»
+    </string>
+
+    <string name="terms_article" translatable="false">
+        https://yandex.ru/legal/practicum_offer/
+    </string>
+</resources>
