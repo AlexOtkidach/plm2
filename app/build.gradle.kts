@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.plm2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.plm2"
@@ -33,6 +33,7 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildToolsVersion = "30.0.3"
 }
 
 dependencies {

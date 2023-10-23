@@ -2,12 +2,12 @@
 <resources>
     <!-- Main Page -->
     <color name="txt_color">#1A1B22</color>
-    <color name="background_color">#3772E7</color>
+    <color name="background_color">#1A1B22</color>
 
     <!-- Settings Page -->
-    <color name="txt_Settings_Page">#1A1B22</color>
-    <color name="background_Settings_Page">#FFFFFFFF</color>
-    <color name="color_icon">#1A1B22</color>
+    <color name="txt_Settings_Page">#ffffff</color>
+    <color name="background_Settings_Page">#1A1B22</color>
+    <color name="color_icon">#ffffff</color>
 
     <color name="colorPrimaryVariant">#FF5722</color>
 
