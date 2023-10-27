@@ -5,37 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
     tools:context=".MainActivity">
 
     <!-- Оглавление страницы Playlist maker -->
-    <LinearLayout style="@style/pageSettings_string_head"
+    <LinearLayout style="@style/pageMain"
         tools:ignore="MissingConstraints">
-        <TextView style="@style/pageMain_Head"
-            android:text="@string/playlist_maker"  />
+        <TextView style="@style/pageMainHead"
+            android:text="@string/playlistMaker"  />
     </LinearLayout>
-    <LinearLayout style="@style/pageMain_box_for_btn"
+    <LinearLayout style="@style/pageMainBoxForButtons"
         tools:ignore="MissingConstraints">
 
         <!-- Обьект "Поиск"  -->
         <Button android:id="@+id/search"
             android:text="@string/search"
-            app:icon="@drawable/ic_search2"
-            style="@style/pageMain_btn" >
+            app:icon="@drawable/ic_search"
+            style="@style/pageMainButton" >
         </Button>
 
         <!-- Обьект "Медиатека" -->
         <Button android:id="@+id/media"
             android:text="@string/mediateka"
             app:icon="@drawable/ic_media2"
-            style="@style/pageMain_btn">
+            style="@style/pageMainButton">
         </Button>
 
         <!-- Обьект "Настройки" -->
         <Button android:id="@+id/settings"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings"
-            style="@style/pageMain_btn">
+            style="@style/pageMainButton">
         </Button>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

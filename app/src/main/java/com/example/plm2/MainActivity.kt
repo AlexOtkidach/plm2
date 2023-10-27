@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Кнопка Поиск
+        // Эта кнопка чтобы производить поиск
         val searchButton = findViewById<Button>(R.id.search)
         searchButton.setOnClickListener {
             val mainGoToSearch = Intent(
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
                 SearchActivity::class.java)
             startActivity(mainGoToSearch)
         }
-        // Кнопка Медиатека
+       // Это кнопка для открытия медиатеки
         val mediaButton = findViewById<Button>(R.id.media)
         mediaButton.setOnClickListener {
             val mainGoToMedia = Intent(
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                 MediaActivity::class.java)
             startActivity(mainGoToMedia)
         }
-        /* Кнопка Настройки 1*/
+        // Это кнопка для настроек
         val settingsButton = findViewById<Button>(R.id.settings)
         settingsButton.setOnClickListener {
             val mainGoToSettings = Intent(

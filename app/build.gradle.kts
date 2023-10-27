@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.plm2"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -33,7 +33,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildToolsVersion = "30.0.3"
 }
 
 dependencies {

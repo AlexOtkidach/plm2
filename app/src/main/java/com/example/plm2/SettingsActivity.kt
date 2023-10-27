@@ -34,11 +34,11 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
         // Кнопка Написать в техподдержку
-        val supportButton = findViewById<FrameLayout>(R.id.btn_support)
+        val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SENDTO)
-            val support_theme = resources.getString(R.string.theme_mail)
-            val support_text = resources.getString(R.string.text_mail)
+            val support_theme = resources.getString(R.string.themeMail)
+            val support_text = resources.getString(R.string.textMail)
             shareIntent.data = Uri.parse("mailto:")
             shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("melifaro00@yandex.ru"))
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, support_theme)
@@ -47,10 +47,10 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Кнопка Пользовательское соглашение
-        val terms_button = findViewById<FrameLayout>(R.id.btn_terms)
+        val terms_button = findViewById<FrameLayout>(R.id.btnTerms)
         terms_button.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_VIEW)
-            val termsOfUseArticle = resources.getString(R.string.terms_article)
+            val termsOfUseArticle = resources.getString(R.string.termsArticle)
             shareIntent.data = Uri.parse(termsOfUseArticle)
             startActivity(shareIntent)
         }

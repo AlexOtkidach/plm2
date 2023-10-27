@@ -1,19 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <!-- name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar"-->
-
+    <!-- Основная тема приложения. -->
     <style name="Theme.Plm2" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
+        <!-- Основной цвет бренда. -->
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/blueDark</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
+        <!-- Вторичный цвет бренда. -->
         <item name="colorSecondary">@color/gray</item>
         <item name="colorSecondaryVariant">@color/pink</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <!-- Цвет строки состояния. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- Настройте вашу тему здесь. -->
     </style>
 </resources>
-
