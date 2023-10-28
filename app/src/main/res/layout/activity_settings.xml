@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundSettingsPage"
     tools:context=".MainActivity">
 
     <!-- Заголовок страницы -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/backgroundSettingsPage"
         android:orientation="vertical">
+    </LinearLayout>
 
-        <!-- Строка "Настройки" -->
-        <LinearLayout
-            style="@style/pageSettingsStringHead">
+    <!-- Заголовок страницы (используем Toolbar) -->
 
-            <!-- Иконка "Назад" -->
-            <ImageView
-                android:id="@+id/arrBack"
-                style="@style/pageSettingsArrBack"
-                android:src="@drawable/ic_arrow_back" />
-
-            <!-- Текст "Настройки" -->
-            <TextView
-                style="@style/pageSettingsTextSettings"
-                android:text="@string/settings" />
-        </LinearLayout>
-
-        <!-- Секция "Темная тема" -->
+    <!-- Секция "Темная тема" -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundSettingsPage"
+        app:theme="@style/ToolbarTheme">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <!-- Заголовок "Темная тема" -->
+            <ImageView
+                android:id="@+id/arrBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                android:layout_marginStart="@dimen/padding4dp"/>
+
             <TextView
-                style="@style/pageSettingsTextNightTheme"
-                android:text="@string/darkTheme" />
-
-            <!-- Переключатель -->
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchCompat"
-                style="@style/pageSettingsSwitch" />
+                android:id="@+id/settingsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings"
+                android:gravity="center_vertical"
+                style="@style/SettingsText"
+                android:layout_marginStart="@dimen/padding12dp"/>
         </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Заголовок "Темная тема" -->
+        <TextView
+            style="@style/pageSettingsTextNightTheme"
+            android:text="@string/darkTheme" />
+
+        <!-- Переключатель -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
         <!-- Секция "Поделиться приложением" -->
         <LinearLayout
             style="@style/pageSettingsStringSimple">
@@ -105,4 +124,4 @@
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+

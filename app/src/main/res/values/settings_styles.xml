@@ -43,8 +43,8 @@
         <item name="android:layout_gravity">start</item>
         <item name="android:layout_weight">1</item>
         <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingTop">@dimen/padding21dp</item>
-        <item name="android:paddingBottom">@dimen/padding21dp</item>
+        <item name="android:paddingTop">@dimen/padding24dp</item>
+        <item name="android:paddingBottom">@dimen/padding24dp</item>
         <item name="android:textColor">@color/txtSettingsPage</item>
         <item name="android:textSize">@dimen/text16</item>
     </style>

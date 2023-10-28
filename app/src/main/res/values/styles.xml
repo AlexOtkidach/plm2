@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Стиль для кнопки отображения -->
     <style name="displayButton">
         <item name="android:fontFamily">@font/ys_display_bold</item>
@@ -24,5 +25,13 @@
         <item name="android:background">@color/backgroundColor</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <!-- Стиль для текста Настройки в toolBar -->
+    <style name="SettingsText">
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/black</item>
+
     </style>
 </resources>
