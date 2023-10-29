@@ -1,82 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundSettingsPage"
     tools:context=".MainActivity">
 
+    <!-- Заголовок страницы -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundSettingsPage"
+        android:orientation="vertical">
+    </LinearLayout>
 
-        <!-- "Настройки"-->
-        <LinearLayout style="@style/pageSettings_string_head" >
+    <!-- Заголовок страницы (используем Toolbar) -->
 
-            <!-- "Стрелка назад" -->
-            <ImageView android:src="@drawable/ic_arrow_back"
-                style="@style/pageSettings_arr_back"/>
-
-            <!-- "Заголовок"  -->
-            <TextView android:text="@string/settings"
-                style="@style/pageSettings_txt_settings" />
-        </LinearLayout>
-
-        <!-- "Темная тема" -->
+    <!-- Секция "Темная тема" -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundSettingsPage"
+        app:theme="@style/ToolbarTheme">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white" >
-            <!-- Заголовок  -->
-            <TextView android:text="@string/dark_theme"
-                style="@style/pageSettings_txt_night_theme" />
+            android:gravity="center_vertical">
 
-            <!-- "Переключатель" -->
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchcompat"
-                style="@style/pageSettings_switch" />
+            <ImageView
+                android:id="@+id/arrBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                android:layout_marginStart="@dimen/padding4dp"/>
+
+            <TextView
+                android:id="@+id/settingsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings"
+                android:gravity="center_vertical"
+                style="@style/SettingsText"
+                android:layout_marginStart="@dimen/padding12dp"/>
         </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
-        <!-- "Поделиться приложением" -->
-        <LinearLayout style="@style/pageSettings_string_simple">
-            <FrameLayout style="@style/pageSettings_string_frame" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-                <!-- Заголовок  -->
-                <TextView android:text="@string/share_app"
-                    style="@style/pageSettings_string_text"/>
+        <!-- Заголовок "Темная тема" -->
+        <TextView
+            style="@style/pageSettingsTextNightTheme"
+            android:text="@string/darkTheme" />
 
-                <!-- Картинка  -->
-                <ImageView android:src="@drawable/ic_share"
-                    style="@style/pageSettings_string_ico" />
+        <!-- Переключатель -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+        <!-- Секция "Поделиться приложением" -->
+        <LinearLayout
+            style="@style/pageSettingsStringSimple">
+            <FrameLayout
+                android:id="@+id/shareButton"
+                style="@style/pageSettingsStringFrame">
+
+                <!-- Заголовок "Поделиться приложением" -->
+                <TextView
+                    style="@style/pageSettingsStringText"
+                    android:text="@string/shareApp" />
+
+                <!-- Иконка "Поделиться" -->
+                <ImageView
+                    style="@style/pageSettingsStringIcon"
+                    android:src="@drawable/ic_share" />
             </FrameLayout>
         </LinearLayout>
 
-        <!-- "Написать в техподдержку" -->
-        <LinearLayout style="@style/pageSettings_string_simple">
-            <FrameLayout style="@style/pageSettings_string_frame" >
-                <!-- Заголовок  -->
-                <TextView android:text="@string/write_to_support"
-                    style="@style/pageSettings_string_text"/>
-                <!-- Картинка  -->
-                <ImageView android:src="@drawable/ic_support"
-                    style="@style/pageSettings_string_ico"/>
+        <!-- Секция "Написать в техподдержку" -->
+        <LinearLayout
+            style="@style/pageSettingsStringSimple">
+            <FrameLayout
+                android:id="@+id/btnSupport"
+                style="@style/pageSettingsStringFrame">
+
+                <!-- Заголовок "Написать в техподдержку" -->
+                <TextView
+                    style="@style/pageSettingsStringText"
+                    android:text="@string/writeToSupport" />
+
+                <!-- Иконка "Техподдержка" -->
+                <ImageView
+                    style="@style/pageSettingsStringIcon"
+                    android:src="@drawable/ic_support" />
             </FrameLayout>
         </LinearLayout>
 
-        <!-- "Пользовательское соглашение" -->
-        <LinearLayout style="@style/pageSettings_string_simple" >
-            <FrameLayout style="@style/pageSettings_string_frame" >
-                <!-- "Заголовок"  -->
-                <TextView android:text="@string/terms_of_use"
-                    style="@style/pageSettings_string_text"/>
-                <!-- "Картинка"  -->
-                <ImageView android:src="@drawable/ic_arrow_forward"
-                    style="@style/pageSettings_string_ico"/>
+        <!-- Секция "Пользовательское соглашение" -->
+        <LinearLayout
+            style="@style/pageSettingsStringSimple">
+            <FrameLayout
+                android:id="@+id/btnTerms"
+                style="@style/pageSettingsStringFrame">
+
+                <!-- Заголовок "Пользовательское соглашение" -->
+                <TextView
+                    style="@style/pageSettingsStringText"
+                    android:text="@string/termsOfUse" />
+
+                <!-- Иконка "Стрелка вправо" -->
+                <ImageView
+                    style="@style/pageSettingsStringIcon"
+                    android:src="@drawable/ic_arrow_forward" />
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -5,48 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3772E7"
     tools:context=".MainActivity">
+
     <!-- Оглавление страницы Playlist maker -->
-    <LinearLayout
-        style="@style/pageSettings_string_head"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="#3772E7"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <LinearLayout style="@style/pageMain"
         tools:ignore="MissingConstraints">
-        <TextView
-            style="@style/pageMain_box_for_Head"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:background="#3772E7"
-            android:text="@string/playlist_maker"
-            android:textSize="26sp"
-            android:textColor="#FFFFFF" />
+        <TextView style="@style/pageMainHead"
+            android:text="@string/playlistMaker"  />
     </LinearLayout>
-    <LinearLayout style="@style/pageMain_box_for_btn"
+    <LinearLayout style="@style/pageMainBoxForButtons"
         tools:ignore="MissingConstraints">
 
         <!-- Обьект "Поиск"  -->
         <Button android:id="@+id/search"
             android:text="@string/search"
-            app:icon="@drawable/ic_search2"
-            style="@style/pageMain_btn">
+            app:icon="@drawable/ic_search"
+            style="@style/pageMainButton" >
         </Button>
 
         <!-- Обьект "Медиатека" -->
         <Button android:id="@+id/media"
             android:text="@string/mediateka"
             app:icon="@drawable/ic_media2"
-            style="@style/pageMain_btn">
+            style="@style/pageMainButton">
         </Button>
 
         <!-- Обьект "Настройки" -->
         <Button android:id="@+id/settings"
             android:text="@string/settings"
             app:icon="@drawable/ic_settings"
-            style="@style/pageMain_btn">
+            style="@style/pageMainButton">
         </Button>
     </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

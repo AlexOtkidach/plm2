@@ -1,12 +1,12 @@
 <resources>
     <!-- Цвета для главной страницы -->
     <color name="txtColor">#1A1B22</color>
-    <color name="backgroundColor">#3772E7</color>
+    <color name="backgroundColor">#1A1B22</color>
 
     <!-- Цвета для страницы настроек -->
-    <color name="txtSettingsPage">#1A1B22</color>
-    <color name="backgroundSettingsPage">#FFFFFFFF</color>
-    <color name="iconColor">#1A1B22</color>
+    <color name="txtSettingsPage">#ffffff</color>
+    <color name="backgroundSettingsPage">#1A1B22</color>
+    <color name="iconColor">#FFFFFFFF</color>
 
     <color name="colorPrimaryVariant">#FF5722</color>
 

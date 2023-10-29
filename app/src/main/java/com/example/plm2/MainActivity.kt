@@ -1,42 +1,42 @@
 package com.example.plm2
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
+//import androidx.appcompat.app.AppCompatDelegate
+
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Кнопка Поиск
+        // Эта кнопка чтобы производить поиск
         val searchButton = findViewById<Button>(R.id.search)
         searchButton.setOnClickListener {
-            val displayIntent = Intent(
+            val mainGoToSearch = Intent(
                 this,
                 SearchActivity::class.java)
-            startActivity(displayIntent)
+            startActivity(mainGoToSearch)
         }
-        // Кнопка Медиатека
+       // Это кнопка для открытия медиатеки
         val mediaButton = findViewById<Button>(R.id.media)
         mediaButton.setOnClickListener {
-            val displayIntent2 = Intent(
+            val mainGoToMedia = Intent(
                 this,
                 MediaActivity::class.java)
-            startActivity(displayIntent2)
+            startActivity(mainGoToMedia)
         }
-        /* Кнопка Настройки 1*/
+        // Это кнопка для настроек
         val settingsButton = findViewById<Button>(R.id.settings)
         settingsButton.setOnClickListener {
-            val displayIntent3 = Intent(
+            val mainGoToSettings = Intent(
                 this,
                 SettingsActivity::class.java)
-            startActivity(displayIntent3)
+            startActivity(mainGoToSettings)
         }
+        // Включение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        // Выключение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
-
 }
