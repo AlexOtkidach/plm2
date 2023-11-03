@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
                 this,
                 SettingsActivity::class.java)
             startActivity(mainGoToSettings)
+
         }
         // Включение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         // Выключение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

@@ -70,11 +70,13 @@
         <item name="android:paddingLeft">@dimen/padding16dp</item>
     </style>
 
+    <!-- Стиль для настроек -->
     <style name="pageSettingsStringFrame">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!-- Стиль для текста настроек -->
     <style name="pageSettingsStringText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -83,10 +85,12 @@
         <item name="android:layout_marginRight">32dp</item>
     </style>
 
+    <!-- Стиль для иконки настроек -->
     <style name="pageSettingsStringIcon">
         <item name="android:layout_width">@dimen/ico24</item>
         <item name="android:layout_height">@dimen/ico24</item>
         <item name="android:layout_gravity">end</item>
         <item name="android:tint">@color/iconColor</item>
+
     </style>
 </resources>
