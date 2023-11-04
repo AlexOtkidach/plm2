@@ -11,6 +11,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.internal.ViewUtils.hideKeyboard
+import androidx.appcompat.app.AppCompatDelegate
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -81,6 +83,7 @@ class SearchActivity : AppCompatActivity() {
             searchQuery = restoredQuery
             val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
             inputEditText.setText(searchQuery)
+
         }
     }
 }

@@ -24,4 +24,8 @@
     <color name="buttonBackgroundColor">#808080</color>
     <color name="buttonTextColor">#FFFFFF</color>
 
+    <!-- Цвет для строки поиска -->
+    <color name="seach_background_color">#AEAFB4</color>
+
+
 </resources>

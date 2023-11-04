@@ -22,16 +22,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-        <LinearLayout
-            style="@style/pageMainSearch">
+        <LinearLayout style="@style/pageMainSearch">
             <!-- Wrap -->
             <FrameLayout
                 android:id="@+id/seachBarLine"
-                style="@style/wrapSeach" >
+                style="@style/wrapSeach">
 
                 <!-- Loup -->
-                <ImageView
-                    style="@style/pageMainloup" />
+                <ImageView style="@style/pageMainloup" />
 
                 <!-- Очистка поля текста -->
                 <EditText

@@ -9,7 +9,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 
 class SettingsActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
+    private var someValue: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -39,8 +40,8 @@ class SettingsActivity : AppCompatActivity() {
             val shareIntent = Intent(Intent.ACTION_SENDTO)
             val support_theme = resources.getString(R.string.themeMail)
             val support_text = resources.getString(R.string.textMail)
-            shareIntent.data = Uri.parse("otkidach:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("otkidach.lesha@yandex.ru"))
+            shareIntent.data = Uri.parse("mailto:otkidach.lesha@yandex.ru")
+            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("mailto:alexotkidach@gmail.com"))
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, support_theme)
             shareIntent.putExtra(Intent.EXTRA_TEXT, support_text)
             startActivity(shareIntent)
@@ -54,6 +55,14 @@ class SettingsActivity : AppCompatActivity() {
             shareIntent.data = Uri.parse(termsOfUseArticle)
             startActivity(shareIntent)
         }
-
+    }
+        // Востановление состояния
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("someValue", someValue)
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        someValue = savedInstanceState.getInt("someValue")
     }
 }
