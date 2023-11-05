@@ -1,19 +1,42 @@
 package com.example.plm2
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : AppCompatActivity() {
-    private var someValue: Int = 0
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        sharedPrefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        // Состояние Switch на основе сохраненных настроек
+        val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
+        val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
+        switchTheme.isChecked = isDarkTheme
+
+        // Обработчик для Switch
+        switchTheme.setOnCheckedChangeListener { _, isChecked ->
+
+            // Сохраняем состояние в настройках
+            sharedPrefs.edit().putBoolean("isDarkTheme", isChecked).apply()
+
+            // Установка выбранной темы
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         // Стрелка назад переход с настроек на главную
         val arrToMain = findViewById<ImageView>(R.id.arrBack)
@@ -34,6 +57,7 @@ class SettingsActivity : AppCompatActivity() {
             val shareIntent = Intent.createChooser(sendIntent, null)
             startActivity(shareIntent)
         }
+
         // Кнопка Написать в техподдержку
         val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
@@ -55,14 +79,5 @@ class SettingsActivity : AppCompatActivity() {
             shareIntent.data = Uri.parse(termsOfUseArticle)
             startActivity(shareIntent)
         }
-    }
-        // Востановление состояния
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("someValue", someValue)
-    }
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        someValue = savedInstanceState.getInt("someValue")
     }
 }
