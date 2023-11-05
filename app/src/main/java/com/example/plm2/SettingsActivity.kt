@@ -38,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Стрелка назад переход с настроек на главную
+        // Стрелка назад с настроек на главную
         val arrToMain = findViewById<ImageView>(R.id.arrBack)
         arrToMain.setOnClickListener {
             val arrToMainIntent = Intent(this, MainActivity::class.java)
