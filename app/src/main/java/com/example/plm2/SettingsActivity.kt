@@ -4,12 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
@@ -19,6 +21,23 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         sharedPrefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+        val switchTheme2 = findViewById<SwitchCompat>(R.id.switchTheme)
+
+         // Получаем текущую цветовую схему приложения
+        val isDarkTheme2 = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        // Устанавливаем состояние переключателя
+        switchTheme2.isChecked = isDarkTheme2
+
+         // Установка слушателя для переключателя
+        switchTheme2.setOnCheckedChangeListener { _, isChecked ->
+            // Обработка изменения состояния переключателя
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
         // Состояние Switch на основе сохраненных настроек
         val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
         val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
@@ -39,10 +58,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Стрелка назад с настроек на главную
-        val arrToMain = findViewById<ImageView>(R.id.arrBack)
-        arrToMain.setOnClickListener {
-            val arrToMainIntent = Intent(this, MainActivity::class.java)
-            startActivity(arrToMainIntent)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Устанавливаем слушатель для кнопки назад (стрелки)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressed() // Это обработчик для кнопки "назад"
         }
 
         // Кнопка поделиться приложением

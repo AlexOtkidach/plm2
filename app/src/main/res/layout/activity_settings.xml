@@ -19,13 +19,14 @@
 
     <!-- Заголовок страницы (используем Toolbar) -->
 
-    <!-- Секция "Темная тема" -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/backgroundSettingsPage"
-        app:theme="@style/ToolbarTheme">
+        app:title="Настройки"
+        app:navigationIcon="?android:attr/homeAsUpIndicator"
+        app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,24 +35,14 @@
 
             <ImageView
                 android:id="@+id/arrBack"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding4dp"
-                android:src="@drawable/ic_arrow_back"
                 style="@style/pageSettingsStringText"
-
-                app:navigationIcon="@drawable/ic_arrow_back" />
-
-            <TextView
-                android:id="@+id/settingsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings"
-                android:gravity="center_vertical"
-                style="@style/pageSettingsTextSettings"
-                android:layout_marginStart="@dimen/padding4dp"/>
+                android:layout_marginStart="@dimen/padding1dp"
+                android:layout_marginEnd="@dimen/padding24dp"/>
+
         </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,7 +58,9 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchTheme"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding12dp"
+            android:layout_marginTop="@dimen/padding12dp"/>
     </LinearLayout>
         <!-- Секция "Поделиться приложением" -->
         <LinearLayout
