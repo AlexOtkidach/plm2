@@ -23,4 +23,9 @@
     <color name="pink">#C10066</color>
     <color name="buttonBackgroundColor">#808080</color>
     <color name="buttonTextColor">#FFFFFF</color>
+
+    <!-- Цвет для строки поиска -->
+    <color name="seach_background_color">#FFFFFF</color>
+
+
 </resources>
