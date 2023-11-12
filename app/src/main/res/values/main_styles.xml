@@ -141,4 +141,17 @@
     <style name="CoverImageURLStyle">
     </style>
 
+    <!-- Стиль Обложки исполнителя для страницы поиска -->
+    <style name="BaseTextStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="LightTextStyle" parent="BaseTextStyle">
+        <item name="android:textColor">@color/lightTextColor</item>
+    </style>
+
+    <style name="DarkTextStyle" parent="BaseTextStyle">
+        <item name="android:textColor">@color/darkTextColor</item>
+    </style>
+
 </resources>

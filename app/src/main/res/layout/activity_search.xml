@@ -46,8 +46,8 @@
                     android:id="@+id/seachBarLineImageV"
                     style="@style/icon_x" />
             </FrameLayout>
-            <!-- Дополнительная часть ниже поля поиска -->
 
+            <!-- Дополнительная часть ниже поля поиска -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -57,9 +57,12 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="16dp"
-                    android:background="@android:color/background_light"
-                    tools:listitem="@layout/item_track" />
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </RelativeLayout>
         </LinearLayout>

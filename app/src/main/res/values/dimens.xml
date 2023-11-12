@@ -35,5 +35,7 @@
     <dimen name="miniFontSize">11sp</dimen>
     <dimen name="errorTextSize">19sp</dimen>
 
+    <dimen name="coverTextSize">14sp</dimen>
+
 
 </resources>
