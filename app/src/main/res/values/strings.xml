@@ -26,4 +26,11 @@
     <string name="termsArticle" translatable="false">
         https://yandex.ru/legal/practicum_offer/
     </string>
+
+    <!-- Тут все для медиатеки -->
+    <string name="song_name">Название песни</string>
+    <string name="artist_name">Исполнитель</string>
+    <string name="duration">Длительность</string>
+    <string name="icon_this">Иконка тут</string>
+    <string name="todo">TODO</string>
 </resources>

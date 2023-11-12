@@ -10,37 +10,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation = "vertical">
+        android:orientation="vertical">
 
-    <!-- Добавляем Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="Поиск"
-        app:navigationIcon="?android:attr/homeAsUpIndicator"
-        app:layout_constraintTop_toTopOf="parent" />
+        <!-- Добавляем Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Поиск"
+            app:navigationIcon="?android:attr/homeAsUpIndicator"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <LinearLayout style="@style/pageMainSearch">
-            <!-- Wrap -->
+            <!-- Поле поиска -->
             <FrameLayout
                 android:id="@+id/seachBarLine"
-                style="@style/wrapSeach">
+                style="@style/wrap_seach">
 
-                <!-- Loup -->
-                <ImageView style="@style/pageMainloup" />
+                <!-- Иконка поиска -->
+                <ImageView style="@style/page_main_loup" />
 
-                <!-- Очистка поля текста -->
+                <!-- Поле ввода текста -->
                 <EditText
                     android:id="@+id/seachBarLineEditT"
-                    style="@style/textPassingPage"
-                    android:layout_width="match_parent" />
+                    style="@style/text_passing_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
+                <!-- Иконка очистки поля -->
                 <ImageView
                     android:id="@+id/seachBarLineImageV"
-                    style="@style/iconX" />
+                    style="@style/icon_x" />
             </FrameLayout>
+            <!-- Дополнительная часть ниже поля поиска -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp"
+                    android:background="@android:color/background_light"
+                    tools:listitem="@layout/item_track" />
+
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

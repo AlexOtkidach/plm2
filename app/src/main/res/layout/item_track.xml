@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/padding8dp"
+    android:paddingTop="@dimen/padding8dp">
+
+    <RelativeLayout
+        android:id="@+id/oneItem"
+        style="@style/itemStyles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/coverImageURL"
+            style="@style/CoverImageURLStyle"
+            android:layout_width="@dimen/cover_size_image"
+            android:layout_height="@dimen/cover_size_image"
+            android:layout_marginStart="16dp"
+            android:scaleType="fitCenter"
+            tools:text="@string/icon_this"
+            android:contentDescription="@string/todo" />
+
+        <TextView
+            android:id="@+id/compositionName"
+            style="@style/CompositionNameStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/layout_marginStart"
+            android:layout_marginTop="@dimen/padding4dp"
+            android:gravity="top"
+            tools:text="@string/song_name"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/artistName"
+            style="@style/artistStyleName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_marginTop_artist"
+            android:layout_marginStart="@dimen/layout_marginStart"
+            tools:text="@string/artist_name"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <View
+            android:id="@+id/ellipse_1"
+            android:layout_width="@dimen/padding4dp"
+            android:layout_height="@dimen/padding4dp"
+            android:layout_marginStart="@dimen/padding4dp"
+            android:layout_marginTop="@dimen/padding28dp"
+            android:layout_toEndOf="@+id/artistName"
+            android:background="@drawable/ic_circle"
+            tools:text="Иконка" />
+
+        <TextView
+            android:id="@+id/duration"
+            style="@style/TrackDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/padding4dp"
+            android:layout_marginTop="@dimen/padding24dp"
+            android:layout_marginEnd="@dimen/padding24dp"
+            android:layout_toEndOf="@+id/ellipse_1"
+            android:gravity="top"
+            tools:text="Длительность"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <View
+            android:id="@+id/vector"
+            android:layout_width="@dimen/arrow_size_vertical"
+            android:layout_height="@dimen/arrow_size_horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_arrow_forward" />
+
+    </RelativeLayout>
+
+</FrameLayout>

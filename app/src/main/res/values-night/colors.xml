@@ -26,6 +26,5 @@
 
     <!-- Цвет для строки поиска -->
     <color name="seach_background_color">#FFFFFF</color>
-
-
+    
 </resources>

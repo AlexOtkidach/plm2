@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Кратно 8 или 4 -->
+    <dimen name="padding1dp">1dp</dimen>
     <dimen name="padding4dp">4dp</dimen>
+    <dimen name="padding8dp">8dp</dimen>
+    <dimen name="padding10dp">10dp</dimen>
     <dimen name="padding12dp">12dp</dimen>
     <dimen name="padding16dp">16dp</dimen>
     <dimen name="padding24dp">24dp</dimen>
+    <dimen name="padding28dp">28dp</dimen>
+
+    <dimen name="padding458dp">458dp</dimen>
+    <dimen name="padding346dp">346dp</dimen>
+    <dimen name="padding266dp">266dp</dimen>
+    <dimen name="padding120dp">120dp</dimen>
+    <dimen name="padding210dp">210dp</dimen>
+
+    <dimen name="cover_size_image">45dp</dimen>
+
+    <dimen name="arrow_size_vertical">8dp</dimen>
+    <dimen name="arrow_size_horizontal">14dp</dimen>
+
+    <dimen name="layout_marginTop_artist">25dp</dimen>
+    <dimen name="layout_marginStart">66dp</dimen>
 
     <dimen name="ico48">48dp</dimen>
     <dimen name="ico24">24dp</dimen>
 
     <dimen name="text16">16sp</dimen>
     <dimen name="head24">24sp</dimen>
+
+    <dimen name="typesettingFontSize">16sp</dimen>
+    <dimen name="titleFontSize">22sp</dimen>
+    <dimen name="miniFontSize">11sp</dimen>
+    <dimen name="errorTextSize">19sp</dimen>
+
+
 </resources>

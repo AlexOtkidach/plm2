@@ -2,7 +2,7 @@
     <!-- СТИЛИ ГЛАВНОЙ СТРАНИЦЫ ^_^ -->
 
     <!-- Стиль для бокса с заголовком страницы и фоном -->
-    <style name="pageMain">
+    <style name="pageMain" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
@@ -35,7 +35,7 @@
     </style>
 
     <!-- Стиль для кнопок -->
-    <style name="pageMainButton">
+    <style name="pageMainButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -56,7 +56,7 @@
     </style>
 
     <!-- Стиль для ToolBar -->
-    <style name="ToolbarTheme" parent="Widget.AppCompat.Toolbar">
+    <style name="toolbar_theme" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@color/backgroundSettingsPage</item>
     </style>
 
@@ -64,7 +64,7 @@
     <!-- СТИЛИ СТРАНИЦЫ ПОИСКА ^_^ -->
 
     <!-- Стиль для бокса страницы поиска -->
-    <style name="pageMainSearchBox">
+    <style name="page_main_search_box">
         <item name="android:background">@drawable/ic_search2</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_width">match_parent</item>
@@ -74,17 +74,17 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
     </style>
-    <style name="pageMainSearch">
+    <style name="page_main_search">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <!-- Стиль для иконки поска  -->
-    <style name="pageMainloup">
+    <!-- Стиль для иконки поиска  -->
+    <style name="page_main_loup">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">@color/iconColor</item>
+        <item name="android:tint">@color/black</item>
         <item name="srcCompat">@drawable/ic_search</item>
         <item name="android:layout_gravity">start</item>
         <item name="android:layout_marginTop">13dp</item>
@@ -99,7 +99,7 @@
     </style>
 
     <!-- Стиль для иконки очистки поля поиска  -->
-    <style name="iconX">
+    <style name="icon_x">
         <item name="srcCompat">@drawable/ic_x</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -109,11 +109,11 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
-        <item name="android:tint">@color/iconColor</item>
+        <item name="android:tint">@color/black</item>
     </style>
 
     <!-- Стиль для поля ввода текста -->
-    <style name="textPassingPage">
+    <style name="text_passing_page">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
@@ -126,10 +126,19 @@
     </style>
 
     <!-- Стиль Wrap для страницы поиска -->
-    <style name="wrapSeach">
+    <style name="wrap_seach">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">16dp</item>
         <item name="android:background">@drawable/rounded_background</item>
     </style>
+
+    <!-- Стиль Wrap для страницы собложкой -->
+    <style name="itemStyles">
+    </style>
+
+    <!-- Стиль для изображения обложки-->
+    <style name="CoverImageURLStyle">
+    </style>
+
 </resources>

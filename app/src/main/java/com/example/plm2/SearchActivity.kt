@@ -11,12 +11,14 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.internal.ViewUtils.hideKeyboard
-import androidx.appcompat.app.AppCompatDelegate
-
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchQuery: String
+
+    companion object {
+        private const val SEARCH_QUERY_KEY = "search_query"
+    }
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +27,6 @@ class SearchActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        // Включаем кнопку "назад" (стрелку)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         // Устанавливаем слушатель для кнопки
         toolbar.setNavigationOnClickListener {
@@ -44,7 +42,6 @@ class SearchActivity : AppCompatActivity() {
             hideKeyboard(inputEditText) // Скрываем клавиатуру после очистки поля
         }
         val simpleTextWatcher = object : TextWatcher {
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
@@ -71,19 +68,18 @@ class SearchActivity : AppCompatActivity() {
 
     // переопределяем метод onSaveInstanceState, чтобы сохранить значение searchQuery в Bundle
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("search_query", searchQuery)
+        outState.putString(SEARCH_QUERY_KEY, searchQuery)
         super.onSaveInstanceState(outState)
     }
 
     // переопределяем метод onRestoreInstanceState, чтобы извлечь данные из Bundle и установить их в EditText
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val restoredQuery = savedInstanceState.getString("search_query")
+        val restoredQuery = savedInstanceState.getString(SEARCH_QUERY_KEY)
         if (restoredQuery != null) {
             searchQuery = restoredQuery
             val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
             inputEditText.setText(searchQuery)
-
         }
     }
 }

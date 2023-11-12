@@ -32,6 +32,23 @@
         <item name="android:fontFamily">@font/ys_display_bold</item>
         <item name="android:textSize">26sp</item>
         <item name="android:textColor">@color/black</item>
-
     </style>
+        <!-- Стиль для текста для наименования артиста -->
+        <style name="artistStyleName">
+            <item name="android:textSize">@dimen/padding12dp</item>
+        </style>
+
+    <!-- Стиль для текста для наименования композитора -->
+        <style name="CompositionNameStyle">
+            <item name="android:fontFamily">@font/ys_display_regular</item>
+            <item name="android:textSize">@dimen/typesettingFontSize</item>
+            <item name="android:textColor">@color/black</item>
+        </style>
+    <!-- Стиль продолжительности трека -->
+                  <style name="TrackDuration">
+                <item name="android:textSize">@dimen/miniFontSize</item>
+            </style>
+
+
+
 </resources>
