@@ -1,3 +1,4 @@
+import android.content.res.Resources
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,15 @@ class TrackAdapter(private val trackList: List<Track>) :
     private var query: String = ""
     private var trackListFiltered: List<Track> = trackList
 
+    companion object {
+
+        // Функция для конвертации dp в пиксели
+        private fun dpToPixels(dp: Int): Int {
+            val density = Resources.getSystem().displayMetrics.density
+            return (dp * density + 0.5f).toInt()
+        }
+    }
+
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val trackNameTextView: TextView = itemView.findViewById(R.id.trackNameTextView)
         private val artistAndTimeTextView: TextView = itemView.findViewById(R.id.artistAndTimeTextView)
@@ -31,7 +41,7 @@ class TrackAdapter(private val trackList: List<Track>) :
                     .load(track.artworkUrl100)
                     .placeholder(R.drawable.placeholder_image)
                     .error(R.drawable.error_image)
-                    .transform(RoundedCorners(8))
+                    .transform(RoundedCorners(dpToPixels(8)))  // Используем dpToPixels
                     .into(artworkImageView)
             } else {
                 // Если трек не соответствует запросу, скрываем элемент списка

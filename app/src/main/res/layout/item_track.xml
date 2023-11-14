@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/artworkImageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder"
         android:background="@drawable/image_background_rounded" />/>
