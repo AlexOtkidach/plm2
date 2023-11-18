@@ -6,7 +6,7 @@
     <!-- Цвета для страницы настроек -->
     <color name="txtSettingsPage">#1A1B22</color>
     <color name="backgroundSettingsPage">#FFFFFFFF</color>
-    <color name="iconColor">#1A1B22</color>
+    <color name="iconColor">#AEAFB4</color>
 
     <color name="colorPrimaryVariant">#FF5722</color>
 
@@ -26,6 +26,11 @@
 
     <!-- Цвет для строки поиска -->
     <color name="seach_background_color">#AEAFB4</color>
+    <color name="gray_for_media">#FFFFFF</color>
+
+
+        <color name="lightTextColor">#AEAFB4</color>
+        <color name="darkTextColor">#FFFFFF</color>
 
 
 </resources>

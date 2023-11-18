@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+
 //import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
@@ -17,15 +18,17 @@ class MainActivity : AppCompatActivity() {
         searchButton.setOnClickListener {
             val mainGoToSearch = Intent(
                 this,
-                SearchActivity::class.java)
+                SearchActivity::class.java
+            )
             startActivity(mainGoToSearch)
         }
-       // Это кнопка для открытия медиатеки
+        // Это кнопка для открытия медиатеки
         val mediaButton = findViewById<Button>(R.id.media)
         mediaButton.setOnClickListener {
             val mainGoToMedia = Intent(
                 this,
-                MediaActivity::class.java)
+                MediaActivity::class.java
+            )
             startActivity(mainGoToMedia)
         }
         // Это кнопка для настроек
@@ -33,11 +36,11 @@ class MainActivity : AppCompatActivity() {
         settingsButton.setOnClickListener {
             val mainGoToSettings = Intent(
                 this,
-                SettingsActivity::class.java)
+                SettingsActivity::class.java
+            )
             startActivity(mainGoToSettings)
-
         }
-        // Включение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        // Выключение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 }
+        // Включение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        // Выключение ночного режима AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
