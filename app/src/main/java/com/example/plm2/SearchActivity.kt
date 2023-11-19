@@ -3,11 +3,13 @@ package com.example.plm2
 import Track
 import TrackAdapter
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -15,14 +17,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.android.material.internal.ViewUtils.hideKeyboard
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchQuery: String
     private lateinit var trackAdapter: TrackAdapter
-    private lateinit var recyclerView: RecyclerView // Добавляем переменную
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var apiService: MusicApiService
+
+    private val BASE_URL = "https://itunes.apple.com"
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +41,9 @@ class SearchActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Включаем кнопку "назад" (стрелку)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        // Устанавливаем слушатель для кнопки
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -47,45 +54,60 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            hideKeyboard(inputEditText) // Скрываем клавиатуру после очистки поля
+            hideKeyboard(inputEditText)
         }
 
-        // Создаем адаптер
         trackAdapter = TrackAdapter(createTrackList())
 
-        // Инициализируем RecyclerView
         recyclerView = findViewById(R.id.recyclerView)
-
-        // Скрываем RecyclerView до начала ввода текста
         recyclerView.visibility = View.GONE
-
-        // Настраиваем RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = trackAdapter
 
         val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-                searchQuery = s.toString() // Обновляем searchQuery при изменении текста
-                trackAdapter.filter(searchQuery) // Передаем запрос в адаптер
-
-                // Строка для логгирования, чтобы видеть текст в логах из текстового поля
+                searchQuery = s.toString()
+                trackAdapter.filter(searchQuery)
                 Log.d("SearchActivity", "onTextChanged: $s")
 
-                // Если есть результаты фильтрации, делаем RecyclerView видимым,
-                // в противном случае возвращаем его к начальному состоянию
-                recyclerView.visibility = if (s.isNullOrBlank() || trackAdapter.itemCount > 0) View.VISIBLE else View.GONE
+                recyclerView.visibility =
+                    if (s.isNullOrBlank() || trackAdapter.itemCount > 0) View.VISIBLE else View.GONE
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
+            override fun afterTextChanged(s: Editable?) {}
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
+        // Инициализация Retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        // Создание экземпляра MusicApiService
+        apiService = retrofit.create(MusicApiService::class.java)
+
+        // В методе, где обрабатываем ввод пользователя и отправляем запрос, используем Retrofit
+        val call = apiService.search(inputEditText.text.toString())
+
+        call.enqueue(object : Callback<SearchResults> {
+            override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
+                if (response.isSuccessful) {
+                    // Обработка успешного ответа
+                    val tracks = response.body()?.results
+                    // Обновление пользовательского интерфейса полученными данными
+                } else {
+                    // Обработка ошибки
+                }
+            }
+
+            override fun onFailure(call: Call<SearchResults>, t: Throwable) {
+                // Обработка ошибки сети
+            }
+        })
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -96,13 +118,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    // переопределяем метод onSaveInstanceState, чтобы сохранить значение searchQuery в Bundle
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("search_query", searchQuery)
         super.onSaveInstanceState(outState)
     }
 
-    // переопределяем метод onRestoreInstanceState, чтобы извлечь данные из Bundle и установить их в EditText
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val restoredQuery = savedInstanceState.getString("search_query")
@@ -134,17 +154,17 @@ class SearchActivity : AppCompatActivity() {
                 "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
             ),
             Track(
-                "Whole Lotta Love",
-                "Led Zeppelin",
-                "5:33",
-                "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-            ),
-            Track(
                 "Sweet Child O'Mine",
                 "Guns N' Roses",
                 "5:03",
                 "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
             )
         )
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
