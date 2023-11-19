@@ -67,8 +67,70 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- Первый плейсхолдер -->
+                <ImageView
+                    android:id="@+id/placeholderImageView"
+                    android:layout_width="312dp"
+                    android:layout_height="88dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="300dp"
+                    android:src="@drawable/ic_error_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/placeholderTextView"
+                    android:layout_width="222dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="274dp"
+                    android:clipToOutline="true"
+                    android:gravity="center_horizontal|top"
+                    android:text="Ничего не нашлось"
+                    android:textSize="20sp" />
+
+                <!-- Второй плейсхолдер -->
+                <ImageView
+                    android:id="@+id/secondPlaceholderImageView"
+                    android:layout_width="312dp"
+                    android:layout_height="88dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="300dp"
+                    android:src="@drawable/ic_error_communication"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/secondPlaceholderTextView"
+                    android:layout_width="230dp"
+                    android:layout_height="124dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="92dp"
+                    android:layout_marginTop="274dp"
+                    android:clipToOutline="true"
+                    android:gravity="center_horizontal|top"
+                    android:text="Проблемы со связью. Загрузка не удалась. Проверьте подключение к интернету"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <!-- Кнопка Обновить -->
+                <Button
+                    android:id="@+id/refreshButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Обновить"
+                    android:layout_below="@id/recyclerView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/topButton"
+                    android:background="@drawable/button_background"
+                    android:visibility="gone" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
-

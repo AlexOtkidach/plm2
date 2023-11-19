@@ -33,5 +33,6 @@
     <string name="duration">Длительность</string>
     <string name="icon_this">Иконка тут</string>
     <string name="todo">TODO</string>
-    <string name="artist_and_time">%1\$s • %2\$s</string>
+    <string name="artist_and_time">%s • %s</string>
+
 </resources>

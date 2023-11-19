@@ -48,6 +48,23 @@
                   <style name="TrackDuration">
                 <item name="android:textSize">@dimen/miniFontSize</item>
             </style>
+    <style name="TextFrontError">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/typesettingFontSize2</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Стиль для кнопки обновить светлой темы -->
+    <style name="Button.LightTheme" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Стиль кнопки обновить для темной темы -->
+    <style name="Button.DarkTheme" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 
 
