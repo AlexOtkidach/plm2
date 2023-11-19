@@ -118,6 +118,14 @@ class SearchActivity : AppCompatActivity() {
         val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
         val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
+        // Инициализация видимости обоих плейсхолдеров как невидимых
+        val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
+        val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
+        placeholderImageView.visibility = View.GONE
+        placeholderTextView.visibility = View.GONE
+        secondPlaceholderImageView.visibility = View.GONE
+        secondPlaceholderTextView.visibility = View.GONE
+
         // Добавление логики для управления видимостью второго плейсхолдера и кнопки "Обновить"
         val connectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -199,7 +207,7 @@ class SearchActivity : AppCompatActivity() {
             val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
             val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
-            if (tracks.isNullOrEmpty()) {
+            if (tracks.isNullOrEmpty() && searchQuery.isNotBlank()) {
                 placeholderImageView.visibility = View.VISIBLE
                 placeholderTextView.visibility = View.VISIBLE
 
