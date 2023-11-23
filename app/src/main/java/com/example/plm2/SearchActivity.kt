@@ -32,6 +32,7 @@ import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
 
+    private lateinit var connectivityManager: ConnectivityManager
     private lateinit var searchQuery: String
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var recyclerView: RecyclerView
@@ -48,6 +49,10 @@ class SearchActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Инициализируйте переменную в методе onCreate
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -208,6 +213,13 @@ class SearchActivity : AppCompatActivity() {
                         if (searchQuery.isNotBlank() && !tracks.isNullOrEmpty()) View.VISIBLE else View.GONE
                     updatePlaceholderVisibility(tracks)
                     lastSearchQuery = searchQuery
+                    // Проверка наличия интернет-соединения
+
+                    if (isNetworkAvailable(connectivityManager)) {
+                        // Если есть интернет, скрываем кнопку "Обновить"
+                        findViewById<Button>(R.id.refreshButton).visibility = View.GONE
+                    }
+
                 } else {
                     showSearchErrorPlaceholder()
                 }
