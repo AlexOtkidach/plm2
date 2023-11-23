@@ -26,5 +26,8 @@
 
     <!-- Цвет для строки поиска -->
     <color name="seach_background_color">#FFFFFF</color>
-    
+
+    <!-- Цвет для кнопки Обновить-->
+    <color name="buttonBackground">#FFFFFF</color>
+    <color name="buttonText">#FF000000</color>
 </resources>

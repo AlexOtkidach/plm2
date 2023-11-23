@@ -32,5 +32,11 @@
         <color name="lightTextColor">#AEAFB4</color>
         <color name="darkTextColor">#FFFFFF</color>
 
+    <!-- Цвет для кнопки обновить-->
+    <color name="buttonBackground">#FF000000</color>
+    <color name="buttonText">#FFFFFF</color>
+
+
+
 
 </resources>

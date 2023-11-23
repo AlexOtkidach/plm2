@@ -1,5 +1,3 @@
-<!-- res/layout/activity_search.xml -->
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -90,7 +88,7 @@
                     android:layout_marginTop="274dp"
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
-                    android:text="Ничего не нашлось"
+                    android:text="@string/not_found"
                     android:textSize="20sp"
                     android:visibility="gone"/>
 
@@ -107,31 +105,31 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:visibility="gone" />
 
+                <!-- Кнопка Обновить -->
                 <TextView
                     android:id="@+id/secondPlaceholderTextView"
-                    android:layout_width="230dp"
-                    android:layout_height="124dp"
-                    android:layout_alignParentLeft="true"
+                    android:layout_width="338dp"
+                    android:layout_height="127dp"
+
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="92dp"
-                    android:layout_marginTop="274dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="260dp"
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
-                    android:text="Проблемы со связью. Загрузка не удалась. Проверьте подключение к интернету"
+                    android:text="@string/no_connection"
                     android:textSize="20sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
-                <!-- Кнопка Обновить -->
                 <Button
                     android:id="@+id/refreshButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Обновить"
+                    android:text="@string/refresh_button"
                     android:layout_below="@id/recyclerView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/topButton"
                     android:background="@drawable/button_background"
-                    android:visibility="gone" />
+                    android:textColor="@color/black" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -23,7 +23,7 @@
 
     <dimen name="layout_marginTop_artist">25dp</dimen>
     <dimen name="layout_marginStart">66dp</dimen>
-    <dimen name="topButton">400dp</dimen>
+    <dimen name="topButton">375dp</dimen>
     400dp
 
     <dimen name="ico48">48dp</dimen>
