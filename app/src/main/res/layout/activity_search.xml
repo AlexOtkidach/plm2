@@ -82,12 +82,9 @@
                     android:id="@+id/placeholderTextView"
                     android:layout_width="222dp"
                     android:layout_height="100dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="100dp"
-                    android:layout_marginTop="274dp"
-                    android:clipToOutline="true"
-                    android:gravity="center_horizontal|top"
+                    android:layout_marginTop="260dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="90dp"
                     android:text="@string/not_found"
                     android:textSize="20sp"
                     android:visibility="gone"/>
@@ -129,7 +126,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/topButton"
                     android:background="@drawable/button_background"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:visibility="gone"/>/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
