@@ -173,9 +173,11 @@ class SearchActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-            return capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
-                NetworkCapabilities.TRANSPORT_CELLULAR
-            ))
+
+            return capabilities?.run {
+                hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
+            } ?: false
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnected
@@ -187,7 +189,7 @@ class SearchActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
-                // Добавьте вывод в лог для кода ответа
+                // Вывод в лог для кода ответа
                 println("Response code: ${response.code()}")
 
                 if (response.isSuccessful) {

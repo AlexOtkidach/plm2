@@ -65,14 +65,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Первый плейсхолдер -->
+                <!-- Первый плейсхолдер (ошибка запроса данных)-->
                 <ImageView
                     android:id="@+id/placeholderImageView"
-                    android:layout_width="312dp"
-                    android:layout_height="88dp"
+                    android:layout_width="@dimen/padding312dp"
+                    android:layout_height="@dimen/padding88dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="300dp"
+                    android:layout_marginStart="@dimen/padding24dp"
+                    android:layout_marginTop="@dimen/padding300dp"
                     android:src="@drawable/ic_error_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -80,23 +80,23 @@
 
                 <TextView
                     android:id="@+id/placeholderTextView"
-                    android:layout_width="222dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="260dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="90dp"
+                    android:layout_width="@dimen/padding224dp"
+                    android:layout_height="@dimen/padding100dp"
+                    android:layout_marginTop="@dimen/padding260dp"
                     android:text="@string/not_found"
-                    android:textSize="20sp"
+                    android:gravity="center_horizontal|top"
+                    android:textSize="@dimen/head20"
+                    android:layout_centerHorizontal="true"
                     android:visibility="gone"/>
 
-                <!-- Второй плейсхолдер -->
+                <!-- Второй плейсхолдер (ошибка запроса от сервера)-->
                 <ImageView
                     android:id="@+id/secondPlaceholderImageView"
-                    android:layout_width="312dp"
-                    android:layout_height="88dp"
+                    android:layout_width="@dimen/padding312dp"
+                    android:layout_height="@dimen/padding88dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="300dp"
+                    android:layout_marginStart="@dimen/padding24dp"
+                    android:layout_marginTop="@dimen/padding300dp"
                     android:src="@drawable/ic_error_communication"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -105,16 +105,15 @@
                 <!-- Кнопка Обновить -->
                 <TextView
                     android:id="@+id/secondPlaceholderTextView"
-                    android:layout_width="338dp"
-                    android:layout_height="127dp"
-
+                    android:layout_width="@dimen/padding340dp"
+                    android:layout_height="@dimen/padding128dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="260dp"
+                    android:layout_marginTop="@dimen/padding260dp"
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
                     android:text="@string/no_connection"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/head20"
                     android:visibility="gone"/>
 
                 <Button
