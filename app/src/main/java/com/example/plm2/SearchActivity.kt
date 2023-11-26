@@ -3,6 +3,7 @@ package com.example.plm2
 import TrackAdapter
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
 import android.icu.text.SimpleDateFormat
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -20,6 +21,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +44,6 @@ class SearchActivity : AppCompatActivity() {
 
     private val BASE_URL = "https://itunes.apple.com"
 
-    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -50,9 +51,17 @@ class SearchActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Инициализируйте переменную в методе onCreate
-        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val typedValue = android.util.TypedValue()
+        theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
+        val color = ContextCompat.getColor(this, typedValue.resourceId)
 
+        // Назначаем цвет стрелке "назад"
+        val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back)
+        upArrow?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        supportActionBar?.setHomeAsUpIndicator(upArrow)
+
+
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -67,8 +76,6 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
         val refreshButton = findViewById<Button>(R.id.refreshButton)
 
-
-
         clearButton.setOnClickListener {
             inputEditText.setText("")
             lastSearchQuery = null
@@ -81,6 +88,7 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 performSearch()
+                hideKeyboard(inputEditText) // Добавил вызов hideKeyboard для скрытия клавиатуры после нажатия Done
                 true
             } else {
                 false
@@ -104,7 +112,6 @@ class SearchActivity : AppCompatActivity() {
                 recyclerView.visibility =
                     if (s.isNullOrBlank() || trackAdapter.itemCount > 0) View.VISIBLE else View.GONE
 
-                // Проверка для скрытия первого плейсхолдера при стирании текста в строке поиск
                 if (s.isNullOrBlank()) {
                     findViewById<ImageView>(R.id.placeholderImageView).visibility = View.GONE
                     findViewById<TextView>(R.id.placeholderTextView).visibility = View.GONE
@@ -133,39 +140,39 @@ class SearchActivity : AppCompatActivity() {
         val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
         val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
-        // Инициализация видимости обоих плейсхолдеров как невидимых
         val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
         val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-        placeholderImageView.visibility = View.GONE
-        placeholderTextView.visibility = View.GONE
-        secondPlaceholderImageView.visibility = View.GONE
-        secondPlaceholderTextView.visibility = View.GONE
-
-        // Добавление логики для управления видимостью второго плейсхолдера и кнопки "Обновить"
-        val connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         // Проверка состояния интернет-соединения
         if (!isNetworkAvailable(connectivityManager)) {
-
             // Если нет подключения к интернету, отобразите второй плейсхолдер и кнопку "Обновить"
-            findViewById<ImageView>(R.id.secondPlaceholderImageView).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.secondPlaceholderTextView).visibility = View.VISIBLE
-            findViewById<Button>(R.id.refreshButton).visibility = View.VISIBLE
+            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
+            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
+            val refreshButton = findViewById<Button>(R.id.refreshButton)
+
+            secondPlaceholderImageView.visibility = View.VISIBLE
+            secondPlaceholderTextView.visibility = View.VISIBLE
+            refreshButton.visibility = View.VISIBLE
 
             // Скрываем первый плейсхолдер, так как второй уже виден
-            findViewById<ImageView>(R.id.placeholderImageView).visibility = View.GONE
-            findViewById<TextView>(R.id.placeholderTextView).visibility = View.GONE
+            val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
+            val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
+            placeholderImageView.visibility = View.GONE
+            placeholderTextView.visibility = View.GONE
 
             // Добавление обработчика клика на кнопке "Обновить"
-            findViewById<Button>(R.id.refreshButton).setOnClickListener {
+            refreshButton.setOnClickListener {
                 performSearch()
             }
         } else {
             // Если есть подключение к интернету, скрываем второй плейсхолдер и кнопку "Обновить"
-            findViewById<ImageView>(R.id.secondPlaceholderImageView).visibility = View.GONE
-            findViewById<TextView>(R.id.secondPlaceholderTextView).visibility = View.GONE
-            findViewById<Button>(R.id.refreshButton).visibility = View.GONE
+            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
+            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
+            val refreshButton = findViewById<Button>(R.id.refreshButton)
+
+            secondPlaceholderImageView.visibility = View.GONE
+            secondPlaceholderTextView.visibility = View.GONE
+            refreshButton.visibility = View.GONE
         }
     }
 
@@ -175,8 +182,12 @@ class SearchActivity : AppCompatActivity() {
             val capabilities = connectivityManager.getNetworkCapabilities(network)
 
             return capabilities?.run {
-                hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
+                hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
+                    NetworkCapabilities.TRANSPORT_CELLULAR
+                )
+                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(
+                    NetworkCapabilities.TRANSPORT_BLUETOOTH
+                )
             } ?: false
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
@@ -189,7 +200,6 @@ class SearchActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
-                // Вывод в лог для кода ответа
                 println("Response code: ${response.code()}")
 
                 if (response.isSuccessful) {
@@ -215,13 +225,12 @@ class SearchActivity : AppCompatActivity() {
                         if (searchQuery.isNotBlank() && !tracks.isNullOrEmpty()) View.VISIBLE else View.GONE
                     updatePlaceholderVisibility(tracks)
                     lastSearchQuery = searchQuery
-                    // Проверка наличия интернет-соединения
 
+                    // Проверка наличия интернет-соединения
                     if (isNetworkAvailable(connectivityManager)) {
                         // Если есть интернет, скрываем кнопку "Обновить"
                         findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                     }
-
                 } else {
                     showSearchErrorPlaceholder()
                 }
@@ -239,28 +248,29 @@ class SearchActivity : AppCompatActivity() {
             val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
             val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
             val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
+            val refreshButton = findViewById<Button>(R.id.refreshButton)
 
             if (tracks.isNullOrEmpty() && searchQuery.isNotBlank()) {
                 placeholderImageView.visibility = View.VISIBLE
                 placeholderTextView.visibility = View.VISIBLE
 
-                // Скрываем второй плейсхолдер, так как первый уже виден
                 secondPlaceholderImageView.visibility = View.GONE
                 secondPlaceholderTextView.visibility = View.GONE
+                refreshButton.visibility = View.GONE
             } else if (tracks.isNullOrEmpty() && searchQuery.isBlank()) {
-                // Если поисковый запрос пуст, то оба плейсхолдера должны быть скрыты
-                placeholderImageView.visibility = View.GONE
-                placeholderTextView.visibility = View.GONE
-                secondPlaceholderImageView.visibility = View.GONE
-                secondPlaceholderTextView.visibility = View.GONE
-            } else {
-                // Если треки найдены, оба плейсхолдера должны быть скрыты
                 placeholderImageView.visibility = View.GONE
                 placeholderTextView.visibility = View.GONE
 
-                // Добавление видимости для второго плейсхолдера
                 secondPlaceholderImageView.visibility = View.GONE
                 secondPlaceholderTextView.visibility = View.GONE
+                refreshButton.visibility = View.GONE
+            } else {
+                placeholderImageView.visibility = View.GONE
+                placeholderTextView.visibility = View.GONE
+
+                secondPlaceholderImageView.visibility = View.GONE
+                secondPlaceholderTextView.visibility = View.GONE
+                refreshButton.visibility = View.GONE
             }
         }
     }
@@ -273,16 +283,13 @@ class SearchActivity : AppCompatActivity() {
             val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
             val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
-            // Устанавливаем видимость второго плейсхолдера и кнопки "Обновить"
             secondPlaceholderImageView.visibility = View.VISIBLE
             secondPlaceholderTextView.visibility = View.VISIBLE
             refreshButton.visibility = View.VISIBLE
 
-            // Скрываем первый плейсхолдер, так как второй уже виден
             placeholderImageView.visibility = View.GONE
             placeholderTextView.visibility = View.GONE
 
-            // Добавление обработчика клика на кнопке "Обновить"
             refreshButton.setOnClickListener {
                 performSearch()
             }

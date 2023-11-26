@@ -17,7 +17,7 @@
             android:layout_height="?attr/actionBarSize"
             app:title="Поиск"
             app:navigationIcon="?android:attr/homeAsUpIndicator"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,20 +27,32 @@
             <!-- Поле поиска -->
             <FrameLayout
                 android:id="@+id/seachBarLine"
-                style="@style/wrap_seach">
+                style="@style/wrap_search">
+
 
                 <!-- Иконка поиска -->
-                <ImageView style="@style/page_main_loup" />
+                <ImageView style="@style/page_main_loup"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="@dimen/not_a_multiple_of_four"
+                    android:layout_marginStart="@dimen/padding12dp"/>
 
                 <!-- Поле ввода текста -->
                 <EditText
                     android:id="@+id/seachBarLineEditT"
                     style="@style/text_passing_page"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="301dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/padding8dp"
+                    android:layout_marginBottom="@dimen/padding8dp"
+                    android:background="@color/searchLine"
+                    android:gravity="top"
+                    android:hint="Поиск"
+                    android:textCursorDrawable="@drawable/custom_cursor"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:hint="Введите запрос" />
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/search_text_color"/>
 
                 <!-- Иконка очистки поля -->
                 <ImageView
@@ -58,35 +70,39 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
 
                 <!-- Первый плейсхолдер (ошибка запроса данных)-->
                 <ImageView
                     android:id="@+id/placeholderImageView"
+                    android:src="@drawable/ic_error_image"
                     android:layout_width="@dimen/padding312dp"
                     android:layout_height="@dimen/padding88dp"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/recyclerView"
                     android:layout_marginStart="@dimen/padding24dp"
-                    android:layout_marginTop="@dimen/padding300dp"
-                    android:src="@drawable/ic_error_image"
+                    android:layout_marginTop="@dimen/padding100dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/placeholderTextView"
-                    android:layout_width="@dimen/padding224dp"
-                    android:layout_height="@dimen/padding100dp"
-                    android:layout_marginTop="@dimen/padding260dp"
-                    android:text="@string/not_found"
-                    android:gravity="center_horizontal|top"
-                    android:textSize="@dimen/head20"
+                    android:layout_width="@dimen/padding340dp"
+                    android:layout_height="@dimen/padding128dp"
+                    android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/padding200dp"
+                    android:layout_below="@+id/secondPlaceholderImageView"
+                    android:clipToOutline="true"
+                    android:gravity="center_horizontal|top"
+                    android:text="@string/not_found"
+                    android:textSize="@dimen/head20"
                     android:visibility="gone"/>
 
                 <!-- Второй плейсхолдер (ошибка запроса от сервера)-->
@@ -94,13 +110,14 @@
                     android:id="@+id/secondPlaceholderImageView"
                     android:layout_width="@dimen/padding312dp"
                     android:layout_height="@dimen/padding88dp"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/recyclerView"
                     android:layout_marginStart="@dimen/padding24dp"
-                    android:layout_marginTop="@dimen/padding300dp"
+                    android:layout_marginTop="@dimen/padding100dp"
                     android:src="@drawable/ic_error_communication"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <!-- Кнопка Обновить -->
                 <TextView
@@ -109,24 +126,26 @@
                     android:layout_height="@dimen/padding128dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/padding260dp"
+                    android:layout_marginTop="@dimen/padding200dp"
+                    android:layout_below="@+id/secondPlaceholderImageView"
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
                     android:text="@string/no_connection"
                     android:textSize="@dimen/head20"
                     android:visibility="gone"/>
 
+                <!-- Кнопка Обновить -->
                 <Button
                     android:id="@+id/refreshButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/refresh_button"
-                    android:layout_below="@id/recyclerView"
+                    android:layout_below="@id/secondPlaceholderTextView"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/topButton"
+                    android:layout_marginTop="@dimen/padding24dp"
                     android:background="@drawable/button_background"
-                    android:textColor="@color/black"
-                    android:visibility="gone"/>/>
+                    android:textColor="@color/buttonText"
+                    android:visibility="gone"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

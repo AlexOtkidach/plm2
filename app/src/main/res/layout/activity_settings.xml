@@ -60,7 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding12dp"
-            android:layout_marginTop="@dimen/padding12dp"/>
+            android:layout_marginTop="@dimen/padding12dp" />
+
     </LinearLayout>
         <!-- Секция "Поделиться приложением" -->
         <LinearLayout

@@ -23,10 +23,14 @@
     <color name="pink">#C10066</color>
     <color name="buttonBackgroundColor">#808080</color>
     <color name="buttonTextColor">#FFFFFF</color>
+    <color name="searchLine">#E6E8EB</color>
+    <color name="searchLineX">#AEAFB4</color>
+
 
     <!-- Цвет для строки поиска -->
     <color name="seach_background_color">#AEAFB4</color>
     <color name="gray_for_media">#FFFFFF</color>
+    <color name="search_text_color">#000000</color>
 
 
         <color name="lightTextColor">#AEAFB4</color>
@@ -35,6 +39,12 @@
     <!-- Цвет для кнопки обновить-->
     <color name="buttonBackground">#FF000000</color>
     <color name="buttonText">#FFFFFF</color>
+    <color name="colorPrimaryVariantTool">#FF000000</color>
+
+    <!-- Цвет для названия и атрибутов трека-->
+    <color name="trackList">#AEAFB4</color>
+    <color name="trackListHead">#FF000000</color>
+
 
 
 

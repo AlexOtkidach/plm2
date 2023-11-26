@@ -63,7 +63,7 @@
 
     <!-- СТИЛИ СТРАНИЦЫ ПОИСКА ^_^ -->
 
-    <!-- Стиль для бокса страницы поиска -->
+    <!-- Стиль для бокса страницxы поиска -->
     <style name="page_main_search_box">
         <item name="android:background">@drawable/ic_search2</item>
         <item name="android:orientation">horizontal</item>
@@ -84,8 +84,7 @@
     <style name="page_main_loup">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">@color/black</item>
-        <item name="srcCompat">@drawable/ic_search</item>
+        <item name="srcCompat">@drawable/ic_search2</item>
         <item name="android:layout_gravity">start</item>
         <item name="android:layout_marginTop">13dp</item>
         <item name="android:layout_marginBottom">8dp</item>
@@ -109,14 +108,13 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
-        <item name="android:tint">@color/black</item>
+        <item name="android:tint">@color/searchLineX</item>
     </style>
 
     <!-- Стиль для поля ввода текста -->
     <style name="text_passing_page">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:hint">@string/search</item>
         <item name="android:layout_marginLeft">40dp</item>
         <item name="android:layout_marginRight">40dp</item>
@@ -126,7 +124,7 @@
     </style>
 
     <!-- Стиль Wrap для страницы поиска -->
-    <style name="wrap_seach">
+    <style name="wrap_search">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">16dp</item>
@@ -147,7 +145,11 @@
     </style>
 
     <style name="LightTextStyle" parent="BaseTextStyle">
-        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:textColor">@color/trackList</item>
+    </style>
+
+    <style name="LightTextStyleHead" parent="BaseTextStyle">LightTextStyleHead
+        <item name="android:textColor">@color/trackListHead</item>
     </style>
 
     <style name="DarkTextStyle" parent="BaseTextStyle">
