@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,7 +24,20 @@ class SettingsActivity : AppCompatActivity() {
 
         val switchTheme2 = findViewById<SwitchCompat>(R.id.switchTheme)
 
-         // Получаем текущую цветовую схему приложения
+        // Установка цвета свитча
+        val switchCompat = findViewById<SwitchCompat>(R.id.switchTheme)
+        switchCompat.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
+        switchCompat.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
+
+        // Цвет подложки (track)
+        switchCompat.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.switchTrackColor))
+
+        // Цвет рычажка (thumb)
+        switchCompat.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchThumbColor))
+
+
+
+        // Получаем текущую цветовую схему приложения
         val isDarkTheme2 = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         // Устанавливаем состояние переключателя

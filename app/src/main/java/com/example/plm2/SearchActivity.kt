@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -22,6 +23,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +62,6 @@ class SearchActivity : AppCompatActivity() {
         upArrow?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
 
-
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         supportActionBar?.apply {
@@ -75,6 +76,13 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
         val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
         val refreshButton = findViewById<Button>(R.id.refreshButton)
+        val refreshText = resources.getString(R.string.refresh_button)
+        val refreshTextResId = R.string.refresh_button
+
+        refreshButton.setText(refreshTextResId)
+        refreshButton.transformationMethod = null
+
+        refreshButton.text = refreshText
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -88,7 +96,7 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 performSearch()
-                hideKeyboard(inputEditText) // Добавил вызов hideKeyboard для скрытия клавиатуры после нажатия Done
+                hideKeyboard(inputEditText)
                 true
             } else {
                 false
@@ -136,43 +144,51 @@ class SearchActivity : AppCompatActivity() {
         searchQuery = ""
         performSearch()
 
-        // Добавление второго изображения для второго плейсхолдера
         val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
         val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
         val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
         val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
 
-        // Проверка состояния интернет-соединения
         if (!isNetworkAvailable(connectivityManager)) {
-            // Если нет подключения к интернету, отобразите второй плейсхолдер и кнопку "Обновить"
-            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
-            val refreshButton = findViewById<Button>(R.id.refreshButton)
-
             secondPlaceholderImageView.visibility = View.VISIBLE
             secondPlaceholderTextView.visibility = View.VISIBLE
             refreshButton.visibility = View.VISIBLE
 
-            // Скрываем первый плейсхолдер, так как второй уже виден
-            val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
-            val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
             placeholderImageView.visibility = View.GONE
             placeholderTextView.visibility = View.GONE
 
-            // Добавление обработчика клика на кнопке "Обновить"
             refreshButton.setOnClickListener {
                 performSearch()
             }
         } else {
-            // Если есть подключение к интернету, скрываем второй плейсхолдер и кнопку "Обновить"
-            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
-            val refreshButton = findViewById<Button>(R.id.refreshButton)
-
             secondPlaceholderImageView.visibility = View.GONE
             secondPlaceholderTextView.visibility = View.GONE
             refreshButton.visibility = View.GONE
+        }
+
+        inputEditText.clearFocus()
+
+        refreshButton.setOnClickListener {
+            performSearch()
+            if (lastSearchQuery != null) {
+                searchQuery = lastSearchQuery!!
+                performSearch()
+            } else {
+                performSearch()
+            }
+
+            // Анимацию моргания кнопки при нажатии
+            ViewCompat.animate(refreshButton)
+                .setDuration(200)
+                .alpha(0.5f)
+                .withEndAction {
+                    ViewCompat.animate(refreshButton)
+                        .setDuration(200)
+                        .alpha(1.0f)
+                        .start()
+                }
+                .start()
         }
     }
 
@@ -180,7 +196,6 @@ class SearchActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-
             return capabilities?.run {
                 hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
                     NetworkCapabilities.TRANSPORT_CELLULAR
@@ -200,8 +215,6 @@ class SearchActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
-                println("Response code: ${response.code()}")
-
                 if (response.isSuccessful) {
                     val songs = response.body()?.results
                     if (songs != null) {
@@ -226,14 +239,13 @@ class SearchActivity : AppCompatActivity() {
                     updatePlaceholderVisibility(tracks)
                     lastSearchQuery = searchQuery
 
-                    // Проверка наличия интернет-соединения
                     if (isNetworkAvailable(connectivityManager)) {
-                        // Если есть интернет, скрываем кнопку "Обновить"
                         findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                     }
                 } else {
                     showSearchErrorPlaceholder()
                 }
+                lastSearchQuery = searchQuery
             }
 
             override fun onFailure(call: Call<SearchResults>, t: Throwable) {

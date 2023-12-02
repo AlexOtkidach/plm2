@@ -9,7 +9,9 @@
     <dimen name="padding16dp">16dp</dimen>
     <dimen name="padding24dp">24dp</dimen>
     <dimen name="padding28dp">28dp</dimen>
+    <dimen name="padding36dp">36dp</dimen>
     <dimen name="padding88dp">88dp</dimen>
+    <dimen name="padding92dp">92dp</dimen>
 
     <dimen name="not_a_multiple_of_four">13dp</dimen>
 
@@ -40,6 +42,7 @@
     <dimen name="ico48">48dp</dimen>
     <dimen name="ico24">24dp</dimen>
 
+    <dimen name="textButton">11sp</dimen>
     <dimen name="text16">16sp</dimen>
     <dimen name="head24">24sp</dimen>
     <dimen name="head20">20sp</dimen>

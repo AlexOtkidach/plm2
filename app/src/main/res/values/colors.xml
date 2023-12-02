@@ -26,11 +26,19 @@
     <color name="searchLine">#E6E8EB</color>
     <color name="searchLineX">#AEAFB4</color>
 
+    <!-- Цвета для Свитча -->
+        <color name="SwitchColorRe">#AEAFB4</color>
+        <color name="DarkSwitchColorRe">#E6E8EB</color>
+    <color name="switchTrackColor">#E6E8EB</color>
+    <color name="switchThumbColor">#AEAFB4</color>
 
     <!-- Цвет для строки поиска -->
     <color name="seach_background_color">#AEAFB4</color>
     <color name="gray_for_media">#FFFFFF</color>
     <color name="search_text_color">#000000</color>
+
+    <!-- Визуальное отображение нажатия обновить -->
+    <color name="colorButtonPressed">#FFFFFF</color>
 
 
         <color name="lightTextColor">#AEAFB4</color>

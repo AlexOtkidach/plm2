@@ -119,7 +119,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:visibility="gone"/>
 
-                <!-- Кнопка Обновить -->
+
                 <TextView
                     android:id="@+id/secondPlaceholderTextView"
                     android:layout_width="@dimen/padding340dp"
@@ -137,8 +137,9 @@
                 <!-- Кнопка Обновить -->
                 <Button
                     android:id="@+id/refreshButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/padding92dp"
+                    android:layout_height="@dimen/padding36dp"
+                    android:textSize="@dimen/textButton"
                     android:text="@string/refresh_button"
                     android:layout_below="@id/secondPlaceholderTextView"
                     android:layout_centerHorizontal="true"
