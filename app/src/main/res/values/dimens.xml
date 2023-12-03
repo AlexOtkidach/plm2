@@ -47,6 +47,10 @@
     <dimen name="head24">24sp</dimen>
     <dimen name="head20">20sp</dimen>
 
+    <dimen name="corner_radius">54dp</dimen>
+
+
+
     <dimen name="typesettingFontSize">16sp</dimen>
     <dimen name="typesettingFontSize2">100sp</dimen>
     <dimen name="titleFontSize">24sp</dimen>
