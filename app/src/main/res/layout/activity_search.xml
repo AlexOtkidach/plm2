@@ -132,7 +132,8 @@
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
                     android:text="@string/no_connection"
-                    android:textSize="@dimen/head20" />
+                    android:textSize="@dimen/head20"
+                    android:visibility="gone"/>
 
                 <!-- Кнопка Обновить -->
                 <Button
@@ -148,7 +149,8 @@
                     android:textColor="@color/buttonText"
                     android:fontFamily="@font/ys_display_bold"
                     android:gravity="center"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
