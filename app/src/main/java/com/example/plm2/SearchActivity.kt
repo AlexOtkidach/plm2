@@ -43,9 +43,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var apiService: MusicApiService
     private lateinit var viewModel: SearchViewModel
     private var lastSearchQuery: String? = null
+    private lateinit var searchHistory: SearchHistory // Добавлено
 
     private val BASE_URL = "https://itunes.apple.com"
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -57,12 +59,12 @@ class SearchActivity : AppCompatActivity() {
         theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
         val color = ContextCompat.getColor(this, typedValue.resourceId)
 
-        // Назначаем цвет стрелке "назад"
         val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back)
         upArrow?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
 
-        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -76,13 +78,9 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
         val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
         val refreshButton = findViewById<Button>(R.id.refreshButton)
-        val refreshText = resources.getString(R.string.refresh_button)
-        val refreshTextResId = R.string.refresh_button
 
-        refreshButton.setText(refreshTextResId)
+        refreshButton.setText(R.string.refresh_button)
         refreshButton.transformationMethod = null
-
-        refreshButton.text = refreshText
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -111,7 +109,13 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.adapter = trackAdapter
 
         inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
@@ -144,11 +148,13 @@ class SearchActivity : AppCompatActivity() {
         searchQuery = ""
         performSearch()
 
-        val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
+        val secondPlaceholderImageView =
+            findViewById<ImageView>(R.id.secondPlaceholderImageView)
         val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
 
         val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
         val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
+        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle) // Добавлено
 
         if (!isNetworkAvailable(connectivityManager)) {
             secondPlaceholderImageView.visibility = View.VISIBLE
@@ -178,7 +184,6 @@ class SearchActivity : AppCompatActivity() {
                 performSearch()
             }
 
-            // Анимацию моргания кнопки при нажатии
             ViewCompat.animate(refreshButton)
                 .setDuration(200)
                 .alpha(0.5f)
@@ -190,6 +195,9 @@ class SearchActivity : AppCompatActivity() {
                 }
                 .start()
         }
+
+        searchHistory =
+            SearchHistory(getSharedPreferences("search_prefs", Context.MODE_PRIVATE))
     }
 
     private fun isNetworkAvailable(connectivityManager: ConnectivityManager): Boolean {
@@ -214,7 +222,10 @@ class SearchActivity : AppCompatActivity() {
         val call = apiService.search(searchQuery)
 
         call.enqueue(object : Callback<SearchResults> {
-            override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
+            override fun onResponse(
+                call: Call<SearchResults>,
+                response: Response<SearchResults>
+            ) {
                 if (response.isSuccessful) {
                     val songs = response.body()?.results
                     if (songs != null) {
@@ -224,6 +235,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                     val tracks: List<Track>? = songs?.map { song ->
                         Track(
+                            trackId = song.trackId ?: "",
                             trackName = song.trackName ?: "",
                             artistName = song.artistName ?: "",
                             trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(
@@ -242,6 +254,7 @@ class SearchActivity : AppCompatActivity() {
                     if (isNetworkAvailable(connectivityManager)) {
                         findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                     }
+                    updateSearchHistory() // Добавлено
                 } else {
                     showSearchErrorPlaceholder()
                 }
@@ -258,9 +271,12 @@ class SearchActivity : AppCompatActivity() {
         Handler(mainLooper).post {
             val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
             val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
+            val secondPlaceholderImageView =
+                findViewById<ImageView>(R.id.secondPlaceholderImageView)
+            val secondPlaceholderTextView =
+                findViewById<TextView>(R.id.secondPlaceholderTextView)
             val refreshButton = findViewById<Button>(R.id.refreshButton)
+            val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
 
             if (tracks.isNullOrEmpty() && searchQuery.isNotBlank()) {
                 placeholderImageView.visibility = View.VISIBLE
@@ -284,6 +300,13 @@ class SearchActivity : AppCompatActivity() {
                 secondPlaceholderTextView.visibility = View.GONE
                 refreshButton.visibility = View.GONE
             }
+
+            // Обновление видимости заголовка истории поиска
+            if (searchHistory.getSearchHistory().isNotEmpty()) {
+                searchHistoryTitle.visibility = View.VISIBLE
+            } else {
+                searchHistoryTitle.visibility = View.GONE
+            }
         }
     }
 
@@ -292,8 +315,10 @@ class SearchActivity : AppCompatActivity() {
             val refreshButton = findViewById<Button>(R.id.refreshButton)
             val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
             val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-            val secondPlaceholderImageView = findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
+            val secondPlaceholderImageView =
+                findViewById<ImageView>(R.id.secondPlaceholderImageView)
+            val secondPlaceholderTextView =
+                findViewById<TextView>(R.id.secondPlaceholderTextView)
 
             secondPlaceholderImageView.visibility = View.VISIBLE
             secondPlaceholderTextView.visibility = View.VISIBLE
@@ -316,5 +341,12 @@ class SearchActivity : AppCompatActivity() {
         val inputMethodManager =
             view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    // Добавлено
+    private fun updateSearchHistory() {
+        if (searchQuery.isNotBlank()) {
+            searchHistory.addSearchQuery(searchQuery)
+        }
     }
 }

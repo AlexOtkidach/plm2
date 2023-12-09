@@ -84,7 +84,8 @@ class TrackAdapter(private var trackList: List<Track>) :
                 trackName = song.trackName,
                 artistName = song.artistName,
                 trackTime = song.trackTime,
-                artworkUrl100 = song.artworkUrl100
+                artworkUrl100 = song.artworkUrl100,
+                trackId = song.trackId
 
             )
         } ?: emptyList()
