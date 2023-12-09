@@ -2,8 +2,8 @@
     <!-- Основная тема приложения. -->
     <style name="Theme.Plm2" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Основной цвет бренда. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorPrimary">@color/buttonTextColor</item>
+        <item name="colorAccent">@color/txtColor</item>
         <item name="colorPrimaryVariant">@color/blueDark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Вторичный цвет бренда. -->

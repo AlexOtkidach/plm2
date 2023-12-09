@@ -43,7 +43,6 @@
 
         </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,8 +58,9 @@
             android:id="@+id/switchTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding12dp"
-            android:layout_marginTop="@dimen/padding12dp"/>
+            android:layout_marginTop="@dimen/padding12dp"
+            android:layout_marginEnd="@dimen/padding12dp" />
+
     </LinearLayout>
         <!-- Секция "Поделиться приложением" -->
         <LinearLayout

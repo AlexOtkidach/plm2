@@ -27,6 +27,7 @@
             android:id="@+id/trackNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/LightTextStyleHead"
             android:text="Название трека"
             android:textSize="16sp"
             android:textStyle="bold" />

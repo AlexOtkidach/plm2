@@ -9,31 +9,53 @@
     <dimen name="padding16dp">16dp</dimen>
     <dimen name="padding24dp">24dp</dimen>
     <dimen name="padding28dp">28dp</dimen>
+    <dimen name="padding36dp">36dp</dimen>
+    <dimen name="padding88dp">88dp</dimen>
+    <dimen name="padding92dp">92dp</dimen>
 
-    <dimen name="padding458dp">458dp</dimen>
-    <dimen name="padding346dp">346dp</dimen>
+    <dimen name="not_a_multiple_of_four">13dp</dimen>
+
+    <dimen name="padding128dp">128dp</dimen>
     <dimen name="padding266dp">266dp</dimen>
+    <dimen name="padding100dp">100dp</dimen>
     <dimen name="padding120dp">120dp</dimen>
+    <dimen name="padding224dp">224dp</dimen>
+    <dimen name="padding200dp">200dp</dimen>
     <dimen name="padding210dp">210dp</dimen>
+    <dimen name="padding260dp">260dp</dimen>
+    <dimen name="padding300dp">300dp</dimen>
+    <dimen name="padding312dp">312dp</dimen>
+    <dimen name="padding346dp">346dp</dimen>
+    <dimen name="padding340dp">340dp</dimen>
+    <dimen name="padding458dp">458dp</dimen>
 
     <dimen name="cover_size_image">45dp</dimen>
 
     <dimen name="arrow_size_vertical">8dp</dimen>
-    <dimen name="arrow_size_horizontal">14dp</dimen>
+    <dimen name="arrow_size_horizontal">16dp</dimen>
 
-    <dimen name="layout_marginTop_artist">25dp</dimen>
-    <dimen name="layout_marginStart">66dp</dimen>
+    <dimen name="layout_marginTop_artist">24dp</dimen>
+    <dimen name="layout_marginStart">64dp</dimen>
+    <dimen name="topButton">376dp</dimen>
+
 
     <dimen name="ico48">48dp</dimen>
     <dimen name="ico24">24dp</dimen>
 
+    <dimen name="textButton">11sp</dimen>
     <dimen name="text16">16sp</dimen>
     <dimen name="head24">24sp</dimen>
+    <dimen name="head20">20sp</dimen>
+
+    <dimen name="corner_radius">54dp</dimen>
+
+
 
     <dimen name="typesettingFontSize">16sp</dimen>
-    <dimen name="titleFontSize">22sp</dimen>
-    <dimen name="miniFontSize">11sp</dimen>
-    <dimen name="errorTextSize">19sp</dimen>
+    <dimen name="typesettingFontSize2">100sp</dimen>
+    <dimen name="titleFontSize">24sp</dimen>
+    <dimen name="miniFontSize">12sp</dimen>
+    <dimen name="errorTextSize">18sp</dimen>
 
     <dimen name="coverTextSize">14sp</dimen>
 

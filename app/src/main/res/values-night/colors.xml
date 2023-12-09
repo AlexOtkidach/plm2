@@ -23,8 +23,28 @@
     <color name="pink">#C10066</color>
     <color name="buttonBackgroundColor">#808080</color>
     <color name="buttonTextColor">#FFFFFF</color>
+    <color name="searchLine">#FFFFFF</color>
+    <color name="searchLineX">#1A1B22</color>
 
-    <!-- Цвет для строки поиска -->
+    <!-- Цвета для Свитча -->
+    <color name="SwitchColorRe">#AEAFB4</color>
+    <color name="DarkSwitchColorRe">#E6E8EB</color>
+    <color name="switchTrackColor">#E6E8EB</color>
+    <color name="switchThumbColor">#AEAFB4</color>
+
+    <!-- Визуальное отображение нажатия обновить -->
+    <color name="colorButtonPressed">#000000</color>
+
+    <!-- Цвет для троки поиска -->
     <color name="seach_background_color">#FFFFFF</color>
-    
+    <color name="search_text_color">#000000</color>
+
+    <!-- Цвет для кнопки Обновить-->
+    <color name="buttonBackground">#FFFFFF</color>
+    <color name="buttonText">#FF000000</color>
+    <color name="colorPrimaryVariantTool">#FF000000</color>
+
+    <!-- Цвет для названия и атрибутов трека-->
+    <color name="trackList">#FFFFFF</color>
+    <color name="trackListHead">#FFFFFF</color>
 </resources>
