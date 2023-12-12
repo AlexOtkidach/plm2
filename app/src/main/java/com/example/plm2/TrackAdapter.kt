@@ -1,4 +1,7 @@
+package com.example.plm2
+
 import android.content.res.Resources
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,14 +10,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.plm2.R
-import com.example.plm2.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class TrackAdapter(private var trackList: List<Track>) :
-    RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private var query: String = ""
-    private var trackListFiltered: List<Track> = trackList
+    var onTrackClickListener: ((Track) -> Unit)? = null
+    private var selectedTrackId: Long? = null
 
     companion object {
         // Функция для конвертации dp в пиксели
@@ -24,28 +26,44 @@ class TrackAdapter(private var trackList: List<Track>) :
         }
     }
 
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        val track = trackList[position]
+        holder.bind(track, track.trackId == selectedTrackId)
+        holder.itemView.setOnClickListener {
+            onTrackClickListener?.invoke(track)
+            setSelectedTrackId(track.trackId)
+        }
+    }
+
+
+    fun setSelectedTrackId(trackId: Long) {
+        selectedTrackId = trackId
+        notifyDataSetChanged()  // Обновить список для отображения выбранного элемента
+    }
+
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val trackNameTextView: TextView = itemView.findViewById(R.id.trackNameTextView)
-        private val artistAndTimeTextView: TextView =
-            itemView.findViewById(R.id.artistAndTimeTextView)
+        private val artistAndTimeTextView: TextView = itemView.findViewById(R.id.artistAndTimeTextView)
         private val artworkImageView: ImageView = itemView.findViewById(R.id.artworkImageView)
 
-        fun bind(track: Track, query: String) {
-            itemView.visibility = View.VISIBLE
+        fun bind(track: Track, isSelected: Boolean) {
+            val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             trackNameTextView.text = track.trackName
             artistAndTimeTextView.text = itemView.context.getString(
                 R.string.artist_and_time,
                 track.artistName,
-                track.trackTime
+                formattedTime
             )
 
-            // Используем Glide для загрузки изображения
             Glide.with(itemView)
                 .load(track.artworkUrl100)
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.error_image)
-                .transform(RoundedCorners(dpToPixels(8)))  // Используем dpToPixels
+                .transform(RoundedCorners(dpToPixels(8)))
                 .into(artworkImageView)
+
+            // Изменение внешнего вида элемента при выборе
+            itemView.setBackgroundColor(if (isSelected) Color.LTGRAY else Color.TRANSPARENT)
         }
     }
 
@@ -55,41 +73,22 @@ class TrackAdapter(private var trackList: List<Track>) :
         return TrackViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackListFiltered[position], query)
-    }
+    override fun getItemCount(): Int = trackList.size
 
-    override fun getItemCount(): Int {
-        return trackListFiltered.size
-    }
-
-    fun filter(query: String) {
-        trackListFiltered = if (query.isBlank()) {
-            trackList // Если запрос пустой, покажем все треки
-        } else {
-            trackList.filter { track ->
-                track.trackName.contains(query, ignoreCase = true) || track.artistName.contains(
-                    query,
-                    ignoreCase = true
-                )
-            }
-        }
+    fun setTracks(tracks: List<Track>?) {
+        trackList = tracks ?: emptyList()
         notifyDataSetChanged()
     }
 
-    // Метод для обновления данных в адаптере
-    fun setTracks(tracks: List<Track>?) {
-        trackList = tracks?.map { song ->
-            Track(
-                trackName = song.trackName,
-                artistName = song.artistName,
-                trackTime = song.trackTime,
-                artworkUrl100 = song.artworkUrl100,
-                trackId = song.trackId
-
-            )
-        } ?: emptyList()
-
-        filter(query)
+    fun filter(query: String) {
+        trackList = if (query.isBlank()) {
+            trackList
+        } else {
+            trackList.filter { track ->
+                track.trackName.contains(query, ignoreCase = true) ||
+                        track.artistName.contains(query, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
     }
 }

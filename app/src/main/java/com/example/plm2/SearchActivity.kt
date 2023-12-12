@@ -1,10 +1,8 @@
 package com.example.plm2
 
-import TrackAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.PorterDuff
-import android.icu.text.SimpleDateFormat
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -32,18 +30,19 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var connectivityManager: ConnectivityManager
     private lateinit var searchQuery: String
     private lateinit var trackAdapter: TrackAdapter
+    private lateinit var historyAdapter: TrackAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var historyRecyclerView: RecyclerView
     private lateinit var apiService: MusicApiService
     private lateinit var viewModel: SearchViewModel
     private var lastSearchQuery: String? = null
-    private lateinit var searchHistory: SearchHistory // Добавлено
+    private lateinit var searchHistory: SearchHistory
 
     private val BASE_URL = "https://itunes.apple.com"
 
@@ -52,27 +51,44 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        // Инициализация и настройка Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         val typedValue = android.util.TypedValue()
         theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
         val color = ContextCompat.getColor(this, typedValue.resourceId)
-
         val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back)
         upArrow?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
-
-        connectivityManager =
-            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-
         toolbar.setNavigationOnClickListener {
             onBackPressed()
+        }
+
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+
+        // Настройка адаптера и RecyclerView для результатов поиска
+        trackAdapter = TrackAdapter(createTrackList()).apply {
+            onTrackClickListener = { track ->
+                updateSearchHistory(track)
+                displaySearchHistory()  // Показать историю поиска после выбора трека
+            }
+        }
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
+            visibility = View.GONE
+            layoutManager = LinearLayoutManager(this@SearchActivity)
+            adapter = trackAdapter
+        }
+
+        // Настройка RecyclerView и адаптера для истории поиска
+        historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView).apply {
+            layoutManager = LinearLayoutManager(this@SearchActivity)
+            historyAdapter = TrackAdapter(emptyList())
+            adapter = historyAdapter
         }
 
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
@@ -154,7 +170,7 @@ class SearchActivity : AppCompatActivity() {
 
         val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
         val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle) // Добавлено
+        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
 
         if (!isNetworkAvailable(connectivityManager)) {
             secondPlaceholderImageView.visibility = View.VISIBLE
@@ -196,8 +212,8 @@ class SearchActivity : AppCompatActivity() {
                 .start()
         }
 
-        searchHistory =
-            SearchHistory(getSharedPreferences("search_prefs", Context.MODE_PRIVATE))
+        searchHistory = SearchHistory(getSharedPreferences("search_prefs", Context.MODE_PRIVATE))
+        displaySearchHistory()  // Первоначальное отображение истории поиска
     }
 
     private fun isNetworkAvailable(connectivityManager: ConnectivityManager): Boolean {
@@ -216,6 +232,8 @@ class SearchActivity : AppCompatActivity() {
             val networkInfo = connectivityManager.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnected
         }
+        searchHistory =
+            SearchHistory(getSharedPreferences("search_prefs", Context.MODE_PRIVATE))
     }
 
     private fun performSearch() {
@@ -228,20 +246,13 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val songs = response.body()?.results
-                    if (songs != null) {
-                        for (song in songs) {
-                            println("Track Name: ${song.trackName}, Artist Name: ${song.artistName}")
-                        }
-                    }
                     val tracks: List<Track>? = songs?.map { song ->
                         Track(
-                            trackId = song.trackId ?: "",
                             trackName = song.trackName ?: "",
                             artistName = song.artistName ?: "",
-                            trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(
-                                song.trackTimeMillis ?: 0L
-                            ),
-                            artworkUrl100 = song.artworkUrl100 ?: ""
+                            trackTimeMillis = song.trackTimeMillis ?: 0L,
+                            artworkUrl100 = song.artworkUrl100 ?: "",
+                            trackId = song.trackId.toLongOrNull() ?: 0L // Преобразование строки в Long
                         )
                     }
                     trackAdapter.setTracks(tracks)
@@ -251,20 +262,36 @@ class SearchActivity : AppCompatActivity() {
                     updatePlaceholderVisibility(tracks)
                     lastSearchQuery = searchQuery
 
+                    tracks?.forEach { track ->
+                        updateSearchHistory(track) // Метод для обновления истории поиска
+                    }
+
                     if (isNetworkAvailable(connectivityManager)) {
                         findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                     }
-                    updateSearchHistory() // Добавлено
                 } else {
                     showSearchErrorPlaceholder()
                 }
-                lastSearchQuery = searchQuery
             }
 
             override fun onFailure(call: Call<SearchResults>, t: Throwable) {
                 showSearchErrorPlaceholder()
             }
         })
+    }
+
+    // Обновление истории поиска
+    private fun updateSearchHistory(track: Track) {
+        searchHistory.addTrackToHistory(track)
+        displaySearchHistory() // Обновить историю поиска
+    }
+
+    // Отображение истории поиска
+    private fun displaySearchHistory() {
+        val historyTracks = searchHistory.getSearchHistory()
+        historyAdapter.setTracks(historyTracks)
+        historyAdapter.notifyDataSetChanged()
+        historyRecyclerView.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
     }
 
     private fun updatePlaceholderVisibility(tracks: List<Track>?) {
@@ -333,6 +360,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveThemePreference(isDarkTheme: Boolean) {
+        val editor = getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit()
+        editor.putBoolean("dark_theme", isDarkTheme)
+        editor.apply()
+    }
+
     private fun createTrackList(): List<Track> {
         return emptyList()
     }
@@ -341,12 +374,5 @@ class SearchActivity : AppCompatActivity() {
         val inputMethodManager =
             view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    // Добавлено
-    private fun updateSearchHistory() {
-        if (searchQuery.isNotBlank()) {
-            searchHistory.addSearchQuery(searchQuery)
-        }
     }
 }
