@@ -27,10 +27,10 @@
     <color name="searchLineX">#1A1B22</color>
 
     <!-- Цвета для Свитча -->
-    <color name="SwitchColorRe">#AEAFB4</color>
-    <color name="DarkSwitchColorRe">#E6E8EB</color>
-    <color name="switchTrackColor">#E6E8EB</color>
-    <color name="switchThumbColor">#AEAFB4</color>
+    <color name="SwitchColorRe">#9FBBF3</color>
+    <color name="DarkSwitchColorRe">#3772E7</color>
+    <color name="switchTrackColor">#9FBBF3</color>
+    <color name="switchThumbColor">#3772E7</color>
 
     <!-- Визуальное отображение нажатия обновить -->
     <color name="colorButtonPressed">#000000</color>
@@ -47,4 +47,7 @@
     <!-- Цвет для названия и атрибутов трека-->
     <color name="trackList">#FFFFFF</color>
     <color name="trackListHead">#FFFFFF</color>
+
+    <!-- Цвет для заголовка списка истории-->
+    <color name="title_search_history">#FFFFFF</color>
 </resources>

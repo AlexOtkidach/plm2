@@ -2,6 +2,7 @@ package com.example.plm2
 
 import android.content.res.Resources
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,9 @@ class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<Tr
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = trackList[position]
         holder.bind(track, track.trackId == selectedTrackId)
+        Log.d("TrackAdapter", "Binding track: ${track.trackName}")
         holder.itemView.setOnClickListener {
+            Log.d("TrackAdapter", "Track clicked: ${track.trackName}")
             onTrackClickListener?.invoke(track)
             setSelectedTrackId(track.trackId)
         }

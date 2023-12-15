@@ -69,10 +69,12 @@
                 android:layout_marginStart="@dimen/padding16dp"
                 android:layout_marginTop="@dimen/padding16dp"
                 android:layout_marginBottom="@dimen/margin_between_title_and_recycler_view"
+                android:fontFamily="@font/ys_display_bold"
                 android:gravity="center"
                 android:text="@string/you_search"
-                android:textColor="@color/black"
-                android:textSize="@dimen/head20" />
+                android:textColor="@color/title_search_history"
+                android:textSize="@dimen/head20"
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -97,9 +99,9 @@
                     android:layout_marginStart="@dimen/padding24dp"
                     android:layout_marginTop="@dimen/padding100dp"
                     android:src="@drawable/ic_error_image"
-                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/placeholderTextView"
@@ -113,7 +115,7 @@
                     android:gravity="center_horizontal|top"
                     android:text="@string/not_found"
                     android:textSize="@dimen/head20"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <!-- Второй плейсхолдер (ошибка запроса от сервера)-->
                 <ImageView
@@ -161,32 +163,34 @@
                     android:textSize="@dimen/textButton"
                     android:visibility="gone" />
 
-                <!-- Заголовок "История поиска" -->
-
-                <!-- Кнопка "Очистить историю" -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/historyRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_between_title_and_recycler_view"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
             </RelativeLayout>
         </LinearLayout>
+        <!-- Список истории поиска -->
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/margin_between_title_and_recycler_view"
+            android:layout_marginBottom="24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:visibility="gone"/>
+            <!-- Кнопка очистки истории -->
         <Button
             android:id="@+id/clearHistoryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_between_recycler_view_and_button"
-            android:layout_marginBottom="@dimen/padding24dp"
             android:background="@drawable/button_background"
             android:fontFamily="@font/ys_display_bold"
             android:gravity="center"
+            android:layout_marginBottom="@dimen/padding24dp"
             android:text="@string/clear_history"
+            android:textAllCaps="false"
             android:textColor="@color/buttonText"
             android:textSize="@dimen/textButton"
-            android:textAllCaps="false"/>
+            android:visibility="gone"/>
+
     </LinearLayout>
 </RelativeLayout>
