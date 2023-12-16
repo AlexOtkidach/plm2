@@ -26,19 +26,28 @@ class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<Tr
             return (dp * density + 0.5f).toInt()
         }
     }
-
+    private fun isLastItem(position: Int): Boolean {
+        return position == trackList.size - 1
+    }
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = trackList[position]
         holder.bind(track, track.trackId == selectedTrackId)
         Log.d("TrackAdapter", "Binding track: ${track.trackName}")
+        // Установка слушателя кликов
         holder.itemView.setOnClickListener {
-            Log.d("TrackAdapter", "Track clicked: ${track.trackName}")
             onTrackClickListener?.invoke(track)
             setSelectedTrackId(track.trackId)
         }
+        // Добавление отступа к последнему элементу
+        val layoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
+        if (isLastItem(position)) {
+            layoutParams.bottomMargin = dpToPixels(24) // 24dp в пиксели
+        } else {
+            layoutParams.bottomMargin = 0
+        }
+        holder.itemView.layoutParams = layoutParams
+
     }
-
-
     fun setSelectedTrackId(trackId: Long) {
         selectedTrackId = trackId
         notifyDataSetChanged()  // Обновить список для отображения выбранного элемента

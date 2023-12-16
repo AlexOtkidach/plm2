@@ -2,6 +2,7 @@ package com.example.plm2
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -16,7 +17,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +27,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,7 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -55,16 +53,12 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderTextView: TextView
     private lateinit var secondPlaceholderImageView: ImageView
     private lateinit var secondPlaceholderTextView: TextView
-
+    private lateinit var sharedPreferences: SharedPreferences
 
     private val BASE_URL = "https://itunes.apple.com"
     private var searchJob: Job? = null
 
-    private val gson by lazy { Gson() }
-    private val historyType: Type by lazy { object : TypeToken<List<Track>>() {}.type }
-
-
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -98,11 +92,10 @@ class SearchActivity : AppCompatActivity() {
 
 
         // Настройка адаптера и RecyclerView для результатов поиска
-        trackAdapter = TrackAdapter(createTrackList()).apply {
-            onTrackClickListener = { track ->
-                updateSearchHistory(track)
-                displaySearchHistory()  // Показать историю поиска после выбора трека
-            }
+        trackAdapter = TrackAdapter(createTrackList())
+        trackAdapter.onTrackClickListener = { track ->
+            searchHistory.addTrackToHistory(track)
+            displaySearchHistory()
         }
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             visibility = View.GONE
@@ -120,6 +113,7 @@ class SearchActivity : AppCompatActivity() {
         val refreshButton = findViewById<Button>(R.id.refreshButton)
         val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
 
+        //Обработчика кнопки "Очистить историю"
         clearButton.setOnClickListener {
             inputEditText.setText("")
             lastSearchQuery = null
@@ -127,21 +121,21 @@ class SearchActivity : AppCompatActivity() {
             recyclerView.visibility = View.GONE
             updatePlaceholderVisibility(emptyList())
             displaySearchHistory()
+            hideSearchHistory()
         }
+        // Инициализация sharedPreferences
+        sharedPreferences = getSharedPreferences("search_history_key", Context.MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferences)
+
             // Очистить историю поиска и обновить видимость кнопки
             clearHistoryButton.setOnClickListener {
-                // Очистить историю поиска и обновить видимость кнопки
                 searchHistory.clearSearchHistory()
-                displaySearchHistory()
+                historyRecyclerView.visibility = View.GONE
+                it.visibility = View.GONE
+                hideSearchHistory()
             }
-
         refreshButton.setText(R.string.refresh_button)
         refreshButton.transformationMethod = null
-        trackAdapter = TrackAdapter(createTrackList())
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.visibility = View.GONE
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = trackAdapter
 
         // Обработка событий в поле ввода текста
         inputEditText.addTextChangedListener(object : TextWatcher {
@@ -164,7 +158,6 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
         // Обработчик события нажатия кнопки "Ввод" на клавиатуре
@@ -230,23 +223,10 @@ class SearchActivity : AppCompatActivity() {
                 }
                 .start()
         }
-        searchHistory = SearchHistory(getSharedPreferences("search_prefs", Context.MODE_PRIVATE))
+        // Инициализация sharedPreferences
         displaySearchHistory()  // Первоначальное отображение истории поиска
     }
-    private fun showSearchHistoryComponents() {
-        // Показываем элементы, связанные с историей поиска
-        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.VISIBLE
-        historyRecyclerView.visibility = View.VISIBLE
-        findViewById<Button>(R.id.clearHistoryButton).visibility = View.VISIBLE
 
-    }
-    private fun hideSearchHistoryComponents() {
-        // Скрываем элементы, связанные с историей поиска
-        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
-        findViewById<Button>(R.id.clearHistoryButton).visibility = View.GONE
-
-    }
     private fun isNetworkAvailable(connectivityManager: ConnectivityManager): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
@@ -261,11 +241,9 @@ class SearchActivity : AppCompatActivity() {
             return networkInfo != null && networkInfo.isConnected
         }
     }
-
     private fun performSearch() {
         searchQuery = findViewById<EditText>(R.id.seachBarLineEditT).text.toString()
         hideSearchHistory() // Скрыть историю при начале поиска
-
         val call = apiService.search(searchQuery)
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
@@ -285,9 +263,6 @@ class SearchActivity : AppCompatActivity() {
                     recyclerView.visibility = if (!tracks.isNullOrEmpty()) View.VISIBLE else View.GONE
                     updatePlaceholderVisibility(tracks)
                     lastSearchQuery = searchQuery
-                    tracks?.forEach { track ->
-                        updateSearchHistory(track) // Метод для обновления истории поиска
-                    }
                 } else {
                     showSearchErrorPlaceholder()
                     updatePlaceholderVisibility(emptyList()) // Обновление видимости плейсхолдеров
@@ -302,38 +277,10 @@ class SearchActivity : AppCompatActivity() {
             }
         })
     }
-    // Использование Gson для добавления трека в историю
-    private fun updateSearchHistory(track: Track) {
-        Log.d("SearchActivity", "Updating search history with track: ${track.trackName}")
-        val historyList = getSearchHistory().toMutableList()
-        if (historyList.size >= 10) {
-            historyList.removeAt(historyList.size - 1)
-        }
-        if (!historyList.contains(track)) {
-            historyList.add(0, track) // Добавляем в начало списка
-            saveSearchHistory(historyList)
-        }
-        saveSearchHistory(historyList)
-        displaySearchHistory()// Обновить историю поиска
-    }
 
-    // Получение истории поиска из SharedPreferences
-    private fun getSearchHistory(): List<Track> {
-        val json = getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
-            .getString("search_history", null)
-        return gson.fromJson(json, historyType) ?: emptyList()
-    }
-
-    // Сохранение истории поиска в SharedPreferences
-    private fun saveSearchHistory(historyList: List<Track>) {
-        val json = gson.toJson(historyList)
-        getSharedPreferences("search_prefs", Context.MODE_PRIVATE)
-            .edit()
-            .putString("search_history", json)
-            .apply()
-    }
     // Метод для отображения истории поиска
     private fun displaySearchHistory() {
+        Log.d("SearchActivity", "Displaying search history")
         // Скрыть все плейсхолдеры
         placeholderImageView.visibility = View.GONE
         placeholderTextView.visibility = View.GONE
@@ -345,12 +292,36 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter.notifyDataSetChanged()
 
         // Установить видимость компонентов истории
-        findViewById<Button>(R.id.clearHistoryButton).visibility =
-            if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
+        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
+        val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
+
+        if (historyTracks.isEmpty()) {
+            searchHistoryTitle.visibility = View.GONE
+            historyRecyclerView.visibility = View.GONE
+            clearHistoryButton.visibility = View.GONE
+        } else {
+            searchHistoryTitle.visibility = View.VISIBLE
+            historyRecyclerView.visibility = View.VISIBLE
+            clearHistoryButton.visibility = View.VISIBLE
+        }
+    }
+    private fun showSearchHistoryComponents() {
+        // Показываем элементы, связанные с историей поиска
+        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.VISIBLE
+        historyRecyclerView.visibility = View.VISIBLE
+        findViewById<Button>(R.id.clearHistoryButton).visibility = View.VISIBLE
+
+    }
+    private fun hideSearchHistoryComponents() {
+        // Скрываем элементы, связанные с историей поиска
+        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.GONE
+        historyRecyclerView.visibility = View.GONE
+        findViewById<Button>(R.id.clearHistoryButton).visibility = View.GONE
 
     }
     // Метод для скрытия истории поиска
     private fun hideSearchHistory() {
+        Log.d("SearchActivity", "Hiding search history")
         // Скрыть компоненты истории
         findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.GONE
         historyRecyclerView.visibility = View.GONE
@@ -411,11 +382,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-    private fun saveThemePreference(isDarkTheme: Boolean) {
-        val editor = getSharedPreferences("app_prefs", Context.MODE_PRIVATE).edit()
-        editor.putBoolean("dark_theme", isDarkTheme)
-        editor.apply()
-    }
     private fun createTrackList(): List<Track> {
         return emptyList()
     }
@@ -426,4 +392,5 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
+
 }

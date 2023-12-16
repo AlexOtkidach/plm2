@@ -60,22 +60,6 @@
                     android:id="@+id/seachBarLineImageV"
                     style="@style/icon_x" />
             </FrameLayout>
-
-            <!-- Дополнительная часть ниже поля поиска -->
-            <TextView
-                android:id="@+id/searchHistoryTitle"
-                android:layout_width="378dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding16dp"
-                android:layout_marginTop="@dimen/padding16dp"
-                android:layout_marginBottom="@dimen/margin_between_title_and_recycler_view"
-                android:fontFamily="@font/ys_display_bold"
-                android:gravity="center"
-                android:text="@string/you_search"
-                android:textColor="@color/title_search_history"
-                android:textSize="@dimen/head20"
-                android:visibility="gone"/>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,8 +149,23 @@
 
             </RelativeLayout>
         </LinearLayout>
-        <!-- Список истории поиска -->
 
+        <!-- Заголовок истории поиска -->
+        <TextView
+            android:id="@+id/searchHistoryTitle"
+            android:layout_width="378dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding16dp"
+            android:layout_marginTop="@dimen/padding16dp"
+            android:layout_marginBottom="@dimen/margin_between_title_and_recycler_view"
+            android:fontFamily="@font/ys_display_bold"
+            android:gravity="center"
+            android:text="@string/you_search"
+            android:textColor="@color/title_search_history"
+            android:textSize="@dimen/head20"
+            android:visibility="gone"/>
+
+        <!-- Список истории поиска -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historyRecyclerView"
             android:layout_width="match_parent"
@@ -176,11 +175,13 @@
             android:layout_marginBottom="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="gone"/>
+
             <!-- Кнопка очистки истории -->
         <Button
             android:id="@+id/clearHistoryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerView"
             android:layout_gravity="center"
             android:background="@drawable/button_background"
             android:fontFamily="@font/ys_display_bold"
