@@ -22,7 +22,28 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         sharedPrefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        val switchTheme2 = findViewById<SwitchCompat>(R.id.switchTheme)
+        val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
+
+        // Установка цвета свитча
+        switchTheme.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
+        switchTheme.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
+
+        // Восстановление сохраненного состояния темы и установка переключателя в соответствующее положение
+        val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
+        switchTheme.isChecked = isDarkTheme
+
+        // Слушатель для переключения темы
+        switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            // Сохраняем выбор пользователя
+            sharedPrefs.edit().putBoolean("isDarkTheme", isChecked).apply()
+
+            // Переключение темы
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
 
         // Установка цвета свитча
         val switchCompat = findViewById<SwitchCompat>(R.id.switchTheme)
@@ -34,28 +55,6 @@ class SettingsActivity : AppCompatActivity() {
 
         // Цвет рычажка (thumb)
         switchCompat.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchThumbColor))
-
-
-
-        // Получаем текущую цветовую схему приложения
-        val isDarkTheme2 = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
-        // Устанавливаем состояние переключателя
-        switchTheme2.isChecked = isDarkTheme2
-
-         // Установка слушателя для переключателя
-        switchTheme2.setOnCheckedChangeListener { _, isChecked ->
-            // Обработка изменения состояния переключателя
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-        // Состояние Switch на основе сохраненных настроек
-        val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
-        val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
-        switchTheme.isChecked = isDarkTheme
 
         // Обработчик для Switch
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
