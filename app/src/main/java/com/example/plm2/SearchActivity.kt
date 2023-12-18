@@ -251,11 +251,15 @@ class SearchActivity : BaseActivity() {
                     val songs = response.body()?.results
                     val tracks: List<Track>? = songs?.map { song ->
                         Track(
+                            itemId = song.trackId.toLongOrNull() ?: 0L,
                             trackName = song.trackName ?: "",
                             artistName = song.artistName ?: "",
                             trackTimeMillis = song.trackTimeMillis ?: 0L,
                             artworkUrl100 = song.artworkUrl100 ?: "",
-                            trackId = song.trackId.toLongOrNull() ?: 0L // Преобразование строки в Long
+                            collectionName = song.collectionName ?: "", // Добавил значение по умолчанию
+                            releaseDate = song.releaseDate ?: "", // Добавил значение по умолчанию
+                            primaryGenreName = song.primaryGenreName ?: "", // Добавил значение по умолчанию
+                            country = song.country ?: "" // Добавил значение по умолчанию
                         )
                     }
                     trackAdapter.setTracks(tracks)
