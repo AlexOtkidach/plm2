@@ -35,7 +35,10 @@
     <string name="todo">TODO</string>
     <string name="artist_and_time">%s • %s</string>
     <string name="refresh_button">Обновить</string>
-    <string name="not_found">Нечего не нашлось</string>
+    <string name="not_found">Ничего не нашлось</string>
     <string name="no_connection">Проблемы со связью\n\nЗагрузка не удалась.Проверьте\nподключение к интернету</string>
+    <string name="you_search">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
+
 
 </resources>

@@ -7,7 +7,7 @@ import android.widget.Button
 
 //import androidx.appcompat.app.AppCompatDelegate
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

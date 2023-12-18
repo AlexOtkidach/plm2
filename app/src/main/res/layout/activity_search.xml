@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,9 +30,9 @@
                 android:id="@+id/seachBarLine"
                 style="@style/wrap_search">
 
-
                 <!-- Иконка поиска -->
-                <ImageView style="@style/page_main_loup"
+                <ImageView
+                    style="@style/page_main_loup"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginTop="@dimen/not_a_multiple_of_four"
@@ -59,34 +60,29 @@
                     android:id="@+id/seachBarLineImageV"
                     style="@style/icon_x" />
             </FrameLayout>
-
-            <!-- Дополнительная часть ниже поля поиска -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:context=".MainActivity">
 
+                <!-- Результаты поиска -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 <!-- Первый плейсхолдер (ошибка запроса данных)-->
                 <ImageView
                     android:id="@+id/placeholderImageView"
-                    android:src="@drawable/ic_error_image"
                     android:layout_width="@dimen/padding312dp"
                     android:layout_height="@dimen/padding88dp"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@+id/recyclerView"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginStart="@dimen/padding24dp"
                     android:layout_marginTop="@dimen/padding100dp"
+                    android:src="@drawable/ic_error_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:visibility="gone"/>
@@ -95,10 +91,10 @@
                     android:id="@+id/placeholderTextView"
                     android:layout_width="@dimen/padding340dp"
                     android:layout_height="@dimen/padding128dp"
+                    android:layout_below="@+id/secondPlaceholderImageView"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/padding200dp"
-                    android:layout_below="@+id/secondPlaceholderImageView"
                     android:clipToOutline="true"
                     android:gravity="center_horizontal|top"
                     android:text="@string/not_found"
@@ -110,15 +106,14 @@
                     android:id="@+id/secondPlaceholderImageView"
                     android:layout_width="@dimen/padding312dp"
                     android:layout_height="@dimen/padding88dp"
-                    android:layout_centerHorizontal="true"
                     android:layout_below="@+id/recyclerView"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginStart="@dimen/padding24dp"
                     android:layout_marginTop="@dimen/padding100dp"
                     android:src="@drawable/ic_error_communication"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
-
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/secondPlaceholderTextView"
@@ -133,25 +128,70 @@
                     android:gravity="center_horizontal|top"
                     android:text="@string/no_connection"
                     android:textSize="@dimen/head20"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <!-- Кнопка Обновить -->
                 <Button
                     android:id="@+id/refreshButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/textButton"
-                    android:text="@string/refresh_button"
                     android:layout_below="@id/secondPlaceholderTextView"
                     android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/padding24dp"
                     android:background="@drawable/button_background"
-                    android:textColor="@color/buttonText"
                     android:fontFamily="@font/ys_display_bold"
                     android:gravity="center"
-                    android:layout_gravity="center"
-                    android:visibility="gone"/>
+                    android:text="@string/refresh_button"
+                    android:textColor="@color/buttonText"
+                    android:textSize="@dimen/textButton"
+                    android:visibility="gone" />
+
             </RelativeLayout>
         </LinearLayout>
+
+        <!-- Заголовок истории поиска -->
+        <TextView
+            android:id="@+id/searchHistoryTitle"
+            android:layout_width="378dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding16dp"
+            android:layout_marginTop="@dimen/padding16dp"
+            android:layout_marginBottom="@dimen/margin_between_title_and_recycler_view"
+            android:fontFamily="@font/ys_display_bold"
+            android:gravity="center"
+            android:text="@string/you_search"
+            android:textColor="@color/title_search_history"
+            android:textSize="@dimen/head20"
+            android:visibility="gone"/>
+
+        <!-- Список истории поиска -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/margin_between_title_and_recycler_view"
+            android:layout_marginBottom="24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:visibility="gone"/>
+
+            <!-- Кнопка очистки истории -->
+        <Button
+            android:id="@+id/clearHistoryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerView"
+            android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/ys_display_bold"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/padding24dp"
+            android:text="@string/clear_history"
+            android:textAllCaps="false"
+            android:textColor="@color/buttonText"
+            android:textSize="@dimen/textButton"
+            android:visibility="gone"/>
+
     </LinearLayout>
 </RelativeLayout>

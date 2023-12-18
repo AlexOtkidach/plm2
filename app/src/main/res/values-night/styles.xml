@@ -64,6 +64,10 @@
             <item name="android:background">@color/buttonBackground</item>
         </style>
 
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- Определите цвета и атрибуты для темной темы -->
+    </style>
+
         <!-- Для изменения цвета курсора в поле поиска -->
     <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>

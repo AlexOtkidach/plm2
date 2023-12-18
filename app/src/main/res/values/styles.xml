@@ -22,8 +22,14 @@
 
     <!-- Тема приложения в обычном режиме -->
     <style name="appTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">@color/backgroundColor</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="appTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/buttonBackground</item>
         <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
     </style>
 
@@ -64,7 +70,11 @@
             <item name="android:background">@color/buttonBackground</item>
         </style>
 
-        <!-- Для изменения цвета курсора в поле поиска -->
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Определите цвета и атрибуты для светлой темы -->
+    </style>
+
+    <!-- Для изменения цвета курсора в поле поиска -->
     <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>

@@ -53,6 +53,11 @@
     <color name="trackList">#AEAFB4</color>
     <color name="trackListHead">#FF000000</color>
 
+    <!-- Цвет для заголовка списка истории-->
+    <color name="title_search_history">#FF000000</color>
+
+
+
 
 
 
