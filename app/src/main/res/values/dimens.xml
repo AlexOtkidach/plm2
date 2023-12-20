@@ -9,6 +9,7 @@
     <dimen name="padding16dp">16dp</dimen>
     <dimen name="padding24dp">24dp</dimen>
     <dimen name="padding28dp">28dp</dimen>
+    <dimen name="padding32dp">32dp</dimen>
     <dimen name="padding36dp">36dp</dimen>
     <dimen name="padding88dp">88dp</dimen>
     <dimen name="padding92dp">92dp</dimen>
@@ -47,6 +48,7 @@
 
     <dimen name="textButton">11sp</dimen>
     <dimen name="text16">16sp</dimen>
+    <dimen name="text13">13sp</dimen>
     <dimen name="head24">24sp</dimen>
     <dimen name="head20">20sp</dimen>
 

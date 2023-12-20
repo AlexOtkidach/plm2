@@ -40,5 +40,10 @@
     <string name="you_search">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
 
-
+    <!-- Тут все для Аудиоплеера -->
+    <!-- Длительность выше, дублирую из медиатеки -->
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>Genre
+    <string name="genre">Жанр</string>country
+    <string name="country">Страна</string>
 </resources>

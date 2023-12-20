@@ -63,13 +63,23 @@ class AudioPlayerActivity : AppCompatActivity() {
                 addToPlaylistButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
                 addToFavoritesButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
             }
-                // Загрузка обложки трека с использованием Picasso
-                track.artworkUrl512?.let { artworkUrl ->
-                    val imageView = findViewById<ImageView>(R.id.album_cover)
-                    Picasso.get().load(artworkUrl).into(imageView)
-                }
+
+            // Загрузка обложки трека с использованием Picasso
+            track.artworkUrl512?.let { artworkUrl ->
+                val imageView = findViewById<ImageView>(R.id.album_cover)
+                Picasso.get()
+                    .load(artworkUrl)
+                    .placeholder(R.drawable.placeholder_image)
+                    .into(imageView)
+            } ?: run {
+
+                // Если artworkUrl512 пуст, установливает изображение плейсхолдера
+                val imageView = findViewById<ImageView>(R.id.album_cover)
+                imageView.setImageResource(R.drawable.placeholder_image)
             }
+        }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
