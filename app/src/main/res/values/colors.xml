@@ -56,10 +56,8 @@
     <!-- Цвет для заголовка списка истории-->
     <color name="title_search_history">#FF000000</color>
 
-
-
-
-
-
-
+    <!-- Цвет элементов Аудиоплеера -->
+    <color name="audio_player_text_gray">#AEAFB4</color>
+    <color name="play_button_color">#000000</color>
+    <color name="playlist_favorite_icon_color_dark">#AEAFB4</color>
 </resources>

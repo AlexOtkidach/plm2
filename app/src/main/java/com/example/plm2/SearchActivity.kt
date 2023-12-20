@@ -1,7 +1,9 @@
 package com.example.plm2
 
+import Track
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
@@ -9,6 +11,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -19,7 +22,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -93,19 +95,33 @@ class SearchActivity : BaseActivity() {
 
         // Настройка адаптера и RecyclerView для результатов поиска
         trackAdapter = TrackAdapter(createTrackList())
-        trackAdapter.onTrackClickListener = { track ->
+        trackAdapter.onTrackClickListener = { track: Track ->
             searchHistory.addTrackToHistory(track)
             displaySearchHistory()
+            // Intent для перехода на экран "Аудиоплеер"
+            val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+            intent.putExtra("track", track as Parcelable)
+            intent.putExtra("trackImageUrl", track.artworkUrl100)
+            startActivity(intent)
         }
+
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             visibility = View.GONE
             layoutManager = LinearLayoutManager(this@SearchActivity)
             adapter = trackAdapter
         }
+
         historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView).apply {
             layoutManager = LinearLayoutManager(this@SearchActivity)
             historyAdapter = TrackAdapter(emptyList())
             adapter = historyAdapter
+        }
+
+        historyAdapter.onTrackClickListener = { track: Track ->
+            // Intent для перехода на экран "Аудиоплеер"
+            val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+            intent.putExtra("track", track as Parcelable)
+            startActivity(intent)
         }
 
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)

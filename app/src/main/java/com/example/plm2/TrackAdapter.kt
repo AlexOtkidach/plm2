@@ -1,5 +1,6 @@
 package com.example.plm2
 
+import Track
 import android.content.res.Resources
 import android.graphics.Color
 import android.util.Log
@@ -31,12 +32,12 @@ class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<Tr
     }
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = trackList[position]
-        holder.bind(track, track.trackId == selectedTrackId)
+        holder.bind(track, track.itemId == selectedTrackId)
         Log.d("TrackAdapter", "Binding track: ${track.trackName}")
         // Установка слушателя кликов
         holder.itemView.setOnClickListener {
             onTrackClickListener?.invoke(track)
-            setSelectedTrackId(track.trackId)
+            setSelectedTrackId(track.itemId)
         }
         // Добавление отступа к последнему элементу
         val layoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams

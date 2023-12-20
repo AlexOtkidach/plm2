@@ -49,11 +49,12 @@
         android:orientation="horizontal">
 
         <!-- Заголовок "Темная тема" -->
+
+        <!-- Переключатель -->
         <TextView
             style="@style/page_settings_text_night_theme"
             android:text="@string/darkTheme" />
 
-        <!-- Переключатель -->
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchTheme"
             android:layout_width="wrap_content"
