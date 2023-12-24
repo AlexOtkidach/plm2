@@ -6,5 +6,9 @@ data class Song(
     val artistName: String,
     val trackTime: String,
     val trackTimeMillis: Long,
-    val artworkUrl100: String
+    val artworkUrl100: String,
+    val collectionName: String,
+    val releaseDate: String,
+    val country: String,
+    val primaryGenreName: String
 )

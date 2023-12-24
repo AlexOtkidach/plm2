@@ -78,4 +78,11 @@
     <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>
+        <!-- Для текста строк данных Аудиоплеера  -->
+        <style name="AudioPlayerTextLeft" parent="Widget.AppCompat.EditText">
+            <item name="android:textColor">@color/playlist_favorite_icon_color_dark</item>
+            <item name="android:fontFamily">@font/ys_display_regular</item>
+            <item name="android:textSize">@dimen/text13</item>
+        </style>
+
 </resources>
