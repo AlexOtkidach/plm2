@@ -15,12 +15,14 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -29,6 +31,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,6 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 class SearchActivity : BaseActivity() {
@@ -56,9 +62,25 @@ class SearchActivity : BaseActivity() {
     private lateinit var secondPlaceholderImageView: ImageView
     private lateinit var secondPlaceholderTextView: TextView
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var inputEditText: EditText
 
     private val BASE_URL = "https://itunes.apple.com"
     private var searchJob: Job? = null
+
+    private val debouncer = Observable.create(ObservableOnSubscribe<String> { emitter ->
+        inputEditText = findViewById(R.id.seachBarLineEditT)
+        inputEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let { emitter.onNext(it.toString()) }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    })
+        .debounce(2000, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
 
     @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,11 +93,16 @@ class SearchActivity : BaseActivity() {
         secondPlaceholderImageView = findViewById(R.id.secondPlaceholderImageView)
         secondPlaceholderTextView = findViewById(R.id.secondPlaceholderTextView)
 
+        debouncer.subscribe { query ->
+            Handler(mainLooper).post {
+                performSearch()
+            }
+        }
 
         // Инициализация и настройка Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val typedValue = android.util.TypedValue()
+        val typedValue = TypedValue()
         theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)
         val color = ContextCompat.getColor(this, typedValue.resourceId)
         val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back)
@@ -90,7 +117,7 @@ class SearchActivity : BaseActivity() {
         }
 
         // Для проверки доступности сети
-        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 
 
         // Настройка адаптера и RecyclerView для результатов поиска
@@ -124,10 +151,10 @@ class SearchActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
         val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
         val refreshButton = findViewById<Button>(R.id.refreshButton)
         val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
+
 
         //Обработчика кнопки "Очистить историю"
         clearButton.setOnClickListener {
@@ -140,7 +167,7 @@ class SearchActivity : BaseActivity() {
             hideSearchHistory()
         }
         // Инициализация sharedPreferences
-        sharedPreferences = getSharedPreferences("search_history_key", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("search_history_key", MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferences)
 
             // Очистить историю поиска и обновить видимость кнопки
@@ -258,11 +285,15 @@ class SearchActivity : BaseActivity() {
         }
     }
     private fun performSearch() {
+        Log.d("SearchActivity", "performSearch called")
+        showProgressBar()
         searchQuery = findViewById<EditText>(R.id.seachBarLineEditT).text.toString()
         hideSearchHistory() // Скрыть историю при начале поиска
+        Log.d("SearchActivity", "Search query: $searchQuery")
         val call = apiService.search(searchQuery)
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
+                Log.d("SearchActivity", "onResponse called")
                 if (response.isSuccessful) {
                     val songs = response.body()?.results
                     val tracks: List<Track>? = songs?.map { song ->
@@ -290,12 +321,24 @@ class SearchActivity : BaseActivity() {
                     if (isNetworkAvailable(connectivityManager)) {
                         findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                     }
+                hideProgressBar()
             }
             override fun onFailure(call: Call<SearchResults>, t: Throwable) {
+                Log.e("SearchActivity", "onFailure called", t)
                 showSearchErrorPlaceholder()
                 updatePlaceholderVisibility(emptyList())
+                hideProgressBar()
+
             }
         })
+    }
+
+    private fun showProgressBar() {
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
     }
 
     // Метод для отображения истории поиска
@@ -408,7 +451,7 @@ class SearchActivity : BaseActivity() {
     private fun hideKeyboard() {
         val view = this.currentFocus
         view?.let {
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
