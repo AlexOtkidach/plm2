@@ -277,7 +277,8 @@ class SearchActivity : BaseActivity() {
                                 collectionName = song.collectionName ?: "",
                                 releaseDate = song.releaseDate ?: "",
                                 primaryGenreName = song.primaryGenreName ?: "",
-                                country = song.country ?: ""
+                                country = song.country ?: "",
+                                previewUrl = song.previewUrl ?: ""
                         )
                     }
                     trackAdapter.setTracks(tracks)

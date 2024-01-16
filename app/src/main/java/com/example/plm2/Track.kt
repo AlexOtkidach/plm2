@@ -11,7 +11,8 @@ data class Track(
     @SerializedName("albumName") val collectionName: String?,
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("genre") val primaryGenreName: String?,
-    @SerializedName("country") val country: String?
+    @SerializedName("country") val country: String?,
+    @SerializedName("previewUrl") val previewUrl: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
@@ -22,7 +23,8 @@ data class Track(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString() ?: ""
     )
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(itemId)
@@ -34,6 +36,7 @@ data class Track(
         parcel.writeString(releaseDate)
         parcel.writeString(primaryGenreName)
         parcel.writeString(country)
+        parcel.writeString(previewUrl)
     }
     // Обновляем ссылку на более качественное изображение
     val artworkUrl512: String?
