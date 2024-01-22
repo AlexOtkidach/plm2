@@ -3,8 +3,11 @@ package com.example.plm2
 import Track
 import android.content.res.Configuration
 import android.graphics.PorterDuff
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -15,6 +18,9 @@ import androidx.core.content.ContextCompat
 import java.util.concurrent.TimeUnit
 import com.squareup.picasso.Picasso
 
+private lateinit var mediaPlayer: MediaPlayer
+private lateinit var playPauseButton: ImageButton
+private lateinit var playbackProgressTextView: TextView
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -22,13 +28,52 @@ class AudioPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
 
-        // Реализация Toolbar
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        // Получение объекта Track из Intent
         val track: Track? = intent.getParcelableExtra("track")
+
         if (track != null) {
+            mediaPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                setDataSource(track.previewUrl)
+                prepareAsync()
+            }
+
+            mediaPlayer.setOnCompletionListener {
+                // Код, выполняемый по окончании трека
+                playPauseButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp) // Установка иконки "Играть"
+                // Остановка обновления UI воспроизведения
+                handler.removeCallbacks(updateTimeRunnable)
+                // Сброс счетчика времени воспроизведения
+                playbackProgressTextView.text = "00:00"
+                // Остановка обновления UI воспроизведения
+
+            }
+
+            playPauseButton = findViewById(R.id.play_button)
+            playbackProgressTextView = findViewById(R.id.time_playback)
+
+            playPauseButton.setOnClickListener {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.pause()
+                    playPauseButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp) // Иконка "Играть"
+                } else {
+                    mediaPlayer.start()
+                    playPauseButton.setImageResource(R.drawable.ic_pause_black_24dp) // Иконка "Пауза"
+                    handler.post(updateTimeRunnable)
+                }
+            }
+
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            setSupportActionBar(toolbar)
+
+            supportActionBar?.apply {
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+            }
+
             // Использование свойств объекта Track
             val trackNameTextView = findViewById<TextView>(R.id.track_name)
             trackNameTextView.text = track.trackName
@@ -59,6 +104,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
             val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+
                 // Текущая тема - темная
                 addToPlaylistButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
                 addToFavoritesButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
@@ -78,6 +124,43 @@ class AudioPlayerActivity : AppCompatActivity() {
                 imageView.setImageResource(R.drawable.placeholder_image)
             }
         }
+    }
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateTimeRunnable = object : Runnable {
+        override fun run() {
+            if (mediaPlayer.isPlaying) {
+                val currentTime = mediaPlayer.currentPosition
+                updatePlaybackTime(currentTime)
+                handler.postDelayed(this, 1000)
+            }
+        }
+    }
+
+    private fun updatePlaybackTime(timeInMillis: Int) {
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeInMillis.toLong())
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeInMillis.toLong()) % 60
+        playbackProgressTextView.text = String.format("%02d:%02d", minutes, seconds)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Проверка, было ли аудио воспроизведено до перехода приложения в фон
+        // Если да, возобновляем обновление UI.
+        if (mediaPlayer.isPlaying) {
+            playPauseButton.setImageResource(R.drawable.ic_pause_black_24dp) // Иконка "Пауза"
+            handler.post(updateTimeRunnable)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // При переходе в фоновый режим приостанавливаем воспроизведение и обновление UI
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            playPauseButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp) // Иконка "Играть"
+        }
+        handler.removeCallbacks(updateTimeRunnable)
     }
 
     override fun onSupportNavigateUp(): Boolean {

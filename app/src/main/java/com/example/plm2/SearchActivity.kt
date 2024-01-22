@@ -65,6 +65,9 @@ class SearchActivity : BaseActivity() {
     private var debounceJob: Job? = null
     private val debouncePeriod: Long = 2000 // Задержка debounce в миллисекундах
 
+    // У    правления состоянием прогресс-бара
+    private var isSearching: Boolean = false
+
     @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -187,20 +190,20 @@ class SearchActivity : BaseActivity() {
             }
         }
         viewModel = ViewModelProvider(
-                this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(SearchViewModel::class.java)
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
         apiService = retrofit.create(MusicApiService::class.java)
         searchQuery = ""
         performSearch(searchQuery)
 
         val secondPlaceholderImageView =
-                findViewById<ImageView>(R.id.secondPlaceholderImageView)
+            findViewById<ImageView>(R.id.secondPlaceholderImageView)
         val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
         val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
         val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
@@ -229,15 +232,15 @@ class SearchActivity : BaseActivity() {
                 performSearch(searchQuery)
             }
             ViewCompat.animate(refreshButton)
-                    .setDuration(200)
-                    .alpha(0.5f)
-                    .withEndAction {
-                        ViewCompat.animate(refreshButton)
-                                .setDuration(200)
-                                .alpha(1.0f)
-                                .start()
-                    }
-                    .start()
+                .setDuration(200)
+                .alpha(0.5f)
+                .withEndAction {
+                    ViewCompat.animate(refreshButton)
+                        .setDuration(200)
+                        .alpha(1.0f)
+                        .start()
+                }
+                .start()
         }
         // Инициализация sharedPreferences
         displaySearchHistory()  // Первоначальное отображение истории поиска
@@ -259,9 +262,13 @@ class SearchActivity : BaseActivity() {
     }
 
     private fun performSearch(query: String) {
+        if (isSearching) return // Предотвращаем повторный запуск поиска, если он уже идет
+
         progressBar.visibility = View.VISIBLE
+        isSearching = true
         searchQuery = query
         hideSearchHistory()
+
         val call = apiService.search(searchQuery)
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
@@ -269,16 +276,16 @@ class SearchActivity : BaseActivity() {
                     val songs = response.body()?.results
                     val tracks: List<Track>? = songs?.map { song ->
                         Track(
-                                itemId = song.trackId.toLongOrNull() ?: 0L,
-                                trackName = song.trackName ?: "",
-                                artistName = song.artistName ?: "",
-                                trackTimeMillis = song.trackTimeMillis ?: 0L,
-                                artworkUrl100 = song.artworkUrl100 ?: "",
-                                collectionName = song.collectionName ?: "",
-                                releaseDate = song.releaseDate ?: "",
-                                primaryGenreName = song.primaryGenreName ?: "",
-                                country = song.country ?: "",
-                                previewUrl = song.previewUrl ?: ""
+                            itemId = song.trackId.toLongOrNull() ?: 0L,
+                            trackName = song.trackName ?: "",
+                            artistName = song.artistName ?: "",
+                            trackTimeMillis = song.trackTimeMillis ?: 0L,
+                            artworkUrl100 = song.artworkUrl100 ?: "",
+                            collectionName = song.collectionName ?: "",
+                            releaseDate = song.releaseDate ?: "",
+                            primaryGenreName = song.primaryGenreName ?: "",
+                            country = song.country ?: "",
+                            previewUrl = song.previewUrl ?: ""
                         )
                     }
                     trackAdapter.setTracks(tracks)
@@ -293,12 +300,16 @@ class SearchActivity : BaseActivity() {
                 if (isNetworkAvailable(connectivityManager)) {
                     findViewById<Button>(R.id.refreshButton).visibility = View.GONE
                 }
+                // Завершение поиска
+                isSearching = false
                 progressBar.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<SearchResults>, t: Throwable) {
                 showSearchErrorPlaceholder()
                 updatePlaceholderVisibility(emptyList())
+                // Завершение поиска
+                isSearching = false
                 progressBar.visibility = View.GONE
             }
         })
@@ -363,9 +374,9 @@ class SearchActivity : BaseActivity() {
             val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
             val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
             val secondPlaceholderImageView =
-                    findViewById<ImageView>(R.id.secondPlaceholderImageView)
+                findViewById<ImageView>(R.id.secondPlaceholderImageView)
             val secondPlaceholderTextView =
-                    findViewById<TextView>(R.id.secondPlaceholderTextView)
+                findViewById<TextView>(R.id.secondPlaceholderTextView)
             val refreshButton = findViewById<Button>(R.id.refreshButton)
             val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
 
@@ -397,9 +408,9 @@ class SearchActivity : BaseActivity() {
             val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
             val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
             val secondPlaceholderImageView =
-                    findViewById<ImageView>(R.id.secondPlaceholderImageView)
+                findViewById<ImageView>(R.id.secondPlaceholderImageView)
             val secondPlaceholderTextView =
-                    findViewById<TextView>(R.id.secondPlaceholderTextView)
+                findViewById<TextView>(R.id.secondPlaceholderTextView)
 
             secondPlaceholderImageView.visibility = View.VISIBLE
             secondPlaceholderTextView.visibility = View.VISIBLE
