@@ -6,6 +6,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" tools:ignore="WrongManifestParent" />
 
+    <!-- Разрешения для использования мультимедиа -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,7 +37,7 @@
             android:name=".SettingsActivity"
             android:exported="true" />
         <activity
-            android:name=".AudioPlayerActivity"
+            android:name="presentation.AudioPlayerActivity"
             android:exported="true"
             android:label=""/>
         <activity

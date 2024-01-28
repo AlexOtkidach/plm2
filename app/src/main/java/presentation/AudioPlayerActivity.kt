@@ -1,4 +1,4 @@
-package com.example.plm2
+package presentation
 
 import Track
 import android.content.res.Configuration
@@ -15,31 +15,59 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.example.plm2.R
 import java.util.concurrent.TimeUnit
 import com.squareup.picasso.Picasso
+import data.AudioPlayerRepositoryImpl
+import domain.AudioPlayerInteractor
+import domain.AudioPlayerUseCase
 
-private lateinit var mediaPlayer: MediaPlayer
+
 private lateinit var playPauseButton: ImageButton
 private lateinit var playbackProgressTextView: TextView
+private lateinit var audioPlayerUseCase: AudioPlayerUseCase // Инициализация audioPlayerUseCase
+private lateinit var viewModel: AudioPlayerViewModel // Создание viewModel
+
+
 
 class AudioPlayerActivity : AppCompatActivity() {
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var audioPlayerManager: AudioPlayerManager
+    private lateinit var audioPlayerInteractor: AudioPlayerInteractor
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
 
+        // Инициализация mediaPlayer перед его использованием
+        mediaPlayer = MediaPlayer()
+        mediaPlayer.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        )
+        audioPlayerManager = AudioPlayerManager(mediaPlayer)
+
+        mediaPlayer = MediaPlayer().apply {
+            // Инициализация аудиоплеера и установка DataSource
+        }
+        // Инициализация audioPlayerUseCase
+        audioPlayerInteractor = AudioPlayerUseCase(AudioPlayerRepositoryImpl(this))
+
+        // Создание viewModel, передавая ей audioPlayerUseCase
+        viewModel = AudioPlayerViewModel(audioPlayerUseCase)
+
         val track: Track? = intent.getParcelableExtra("track")
 
         if (track != null) {
-            mediaPlayer = MediaPlayer().apply {
-                setAudioAttributes(
-                    AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build()
-                )
-                setDataSource(track.previewUrl)
-                prepareAsync()
-            }
+            mediaPlayer.setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            mediaPlayer.setDataSource(track.previewUrl)
+            mediaPlayer.prepareAsync()
 
             mediaPlayer.setOnCompletionListener {
                 // Код, выполняемый по окончании трека
@@ -48,21 +76,23 @@ class AudioPlayerActivity : AppCompatActivity() {
                 handler.removeCallbacks(updateTimeRunnable)
                 // Сброс счетчика времени воспроизведения
                 playbackProgressTextView.text = "00:00"
-                // Остановка обновления UI воспроизведения
-
             }
 
             playPauseButton = findViewById(R.id.play_button)
             playbackProgressTextView = findViewById(R.id.time_playback)
 
             playPauseButton.setOnClickListener {
-                if (mediaPlayer.isPlaying) {
-                    mediaPlayer.pause()
-                    playPauseButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp) // Иконка "Играть"
+                if (audioPlayerInteractor.isPlaying()) {
+                    audioPlayerInteractor.pauseTrack()
+                    playPauseButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp)
                 } else {
-                    mediaPlayer.start()
-                    playPauseButton.setImageResource(R.drawable.ic_pause_black_24dp) // Иконка "Пауза"
-                    handler.post(updateTimeRunnable)
+                    // Вам также нужно передать выбранный трек сюда
+                    val track: Track? = intent.getParcelableExtra("track")
+                    if (track != null) {
+                        audioPlayerInteractor.playTrack(track)
+                        playPauseButton.setImageResource(R.drawable.ic_pause_black_24dp)
+                        handler.post(updateTimeRunnable)
+                    }
                 }
             }
 
@@ -106,8 +136,18 @@ class AudioPlayerActivity : AppCompatActivity() {
             if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
 
                 // Текущая тема - темная
-                addToPlaylistButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
-                addToFavoritesButton.setColorFilter(ContextCompat.getColor(this, R.color.playlist_favorite_icon_color_dark), PorterDuff.Mode.SRC_IN)
+                addToPlaylistButton.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.playlist_favorite_icon_color_dark
+                    ), PorterDuff.Mode.SRC_IN
+                )
+                addToFavoritesButton.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.playlist_favorite_icon_color_dark
+                    ), PorterDuff.Mode.SRC_IN
+                )
             }
 
             // Загрузка обложки трека с использованием Picasso
@@ -129,7 +169,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val updateTimeRunnable = object : Runnable {
         override fun run() {
-            if (mediaPlayer.isPlaying) {
+            if (audioPlayerInteractor.isPlaying()) {
                 val currentTime = mediaPlayer.currentPosition
                 updatePlaybackTime(currentTime)
                 handler.postDelayed(this, 1000)
