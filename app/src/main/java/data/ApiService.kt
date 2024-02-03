@@ -1,6 +1,6 @@
 package data
 
-import Track
+import domain.Track
 import retrofit2.http.GET
 
 interface ApiService {

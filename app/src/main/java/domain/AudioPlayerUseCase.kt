@@ -1,6 +1,6 @@
 package domain
 
-import Track
+import domain.Track
 import data.AudioPlayerRepository
 
 class AudioPlayerUseCase(private val repository: AudioPlayerRepository) : AudioPlayerInteractor {

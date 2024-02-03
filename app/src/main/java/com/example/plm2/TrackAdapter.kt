@@ -1,6 +1,6 @@
 package com.example.plm2
 
-import Track
+import domain.Track
 import android.content.res.Resources
 import android.graphics.Color
 import android.util.Log

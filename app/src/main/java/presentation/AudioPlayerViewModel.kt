@@ -1,8 +1,19 @@
 package presentation
 
 import androidx.lifecycle.ViewModel
-import domain.AudioPlayerUseCase
+import androidx.lifecycle.viewModelScope
+import domain.GetTracksUseCase
+import kotlinx.coroutines.launch
 
-class AudioPlayerViewModel(private val audioPlayerUseCase: AudioPlayerUseCase) : ViewModel() {
-    // TODO: Добавьте методы и логику для управления аудиоплеером и обновления UI.
+
+class AudioPlayerViewModel(
+    private val getTracksUseCase: GetTracksUseCase
+): ViewModel() {
+
+    fun getTracks() {
+        viewModelScope.launch {
+            val tracks = getTracksUseCase.execute()
+            // Обновление UI с помощью полученных треков
+        }
+    }
 }

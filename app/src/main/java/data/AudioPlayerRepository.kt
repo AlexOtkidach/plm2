@@ -1,6 +1,6 @@
 package data
 
-import Track
+import domain.Track
 
 interface AudioPlayerRepository {
     suspend fun loadTracks(): List<Track>

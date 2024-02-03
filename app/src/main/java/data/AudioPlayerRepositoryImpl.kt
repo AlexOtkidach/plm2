@@ -1,9 +1,9 @@
 package data
 
-import Track
+import domain.Track
 import android.content.Context
 import android.net.ConnectivityManager
-import com.example.plm2.MusicApiService
+import domain.GetTracksUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -40,5 +40,11 @@ class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepos
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
+    }
+    class TracksRepositoryImpl: GetTracksUseCase {
+        override suspend fun execute(): List<Track> {
+            // Здесь реализация загрузки треков, например, из SharedPreferences
+            return listOf() // Возвращаем пустой список для примера
+        }
     }
 }
