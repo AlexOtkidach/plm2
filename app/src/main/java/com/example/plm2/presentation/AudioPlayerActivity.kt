@@ -1,6 +1,5 @@
-package presentation
+package com.example.plm2.presentation
 
-import domain.Track
 import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.media.AudioAttributes
@@ -14,14 +13,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.plm2.R
+import com.example.plm2.data.AudioPlayerRepository
+import com.example.plm2.data.AudioPlayerRepositoryImpl
+import com.example.plm2.domain.AudioPlayerUseCase
 import java.util.concurrent.TimeUnit
 import com.squareup.picasso.Picasso
+import com.example.plm2.domain.Track
 
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playPauseButton: ImageButton
     private lateinit var playbackProgressTextView: TextView
     private lateinit var audioPlayerManager: AudioPlayerManager
-
+    private lateinit var audioPlayerUseCase: AudioPlayerUseCase
+    private lateinit var audioPlayerRepository: AudioPlayerRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
@@ -33,8 +37,13 @@ class AudioPlayerActivity : AppCompatActivity() {
                     .build()
             )
         }
-
         audioPlayerManager = AudioPlayerManager(mediaPlayer)
+
+        // Инициализация AudioPlayerRepository (если у вас уже есть реализация)
+        audioPlayerRepository = AudioPlayerRepositoryImpl(this) // Замените на вашу реализацию
+
+        // Инициализация AudioPlayerUseCase с использованием AudioPlayerRepository
+        audioPlayerUseCase = AudioPlayerUseCase(audioPlayerRepository)
 
         // Инициализация и настройка AudioPlayerManager и UI
         audioPlayerManager.onProgressUpdate = { currentPosition ->

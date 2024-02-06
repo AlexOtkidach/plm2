@@ -1,6 +1,5 @@
 package com.example.plm2
 
-import domain.Track
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -30,10 +29,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.plm2.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import presentation.AudioPlayerActivity
+import com.example.plm2.presentation.AudioPlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

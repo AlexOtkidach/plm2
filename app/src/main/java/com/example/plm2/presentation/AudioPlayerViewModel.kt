@@ -1,8 +1,8 @@
-package presentation
+package com.example.plm2.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import domain.GetTracksUseCase
+import com.example.plm2.domain.GetTracksUseCase
 import kotlinx.coroutines.launch
 
 

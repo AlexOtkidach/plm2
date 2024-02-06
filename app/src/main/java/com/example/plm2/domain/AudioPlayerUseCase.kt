@@ -1,7 +1,7 @@
-package domain
+package com.example.plm2.domain
 
-import domain.Track
-import data.AudioPlayerRepository
+import com.example.plm2.domain.Track
+import com.example.plm2.data.AudioPlayerRepository
 
 class AudioPlayerUseCase(private val repository: AudioPlayerRepository) : AudioPlayerInteractor {
     private var isPlaying: Boolean = false

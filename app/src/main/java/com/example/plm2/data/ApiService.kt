@@ -1,6 +1,6 @@
-package data
+package com.example.plm2.data
 
-import domain.Track
+import com.example.plm2.domain.Track
 import retrofit2.http.GET
 
 interface ApiService {

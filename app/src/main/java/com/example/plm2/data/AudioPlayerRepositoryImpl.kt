@@ -1,9 +1,9 @@
-package data
+package com.example.plm2.data
 
-import domain.Track
+import com.example.plm2.domain.Track
 import android.content.Context
 import android.net.ConnectivityManager
-import domain.GetTracksUseCase
+import com.example.plm2.domain.GetTracksUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -43,8 +43,7 @@ class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepos
     }
     class TracksRepositoryImpl: GetTracksUseCase {
         override suspend fun execute(): List<Track> {
-            // Здесь реализация загрузки треков, например, из SharedPreferences
-            return listOf() // Возвращаем пустой список для примера
+            return listOf()
         }
     }
 }

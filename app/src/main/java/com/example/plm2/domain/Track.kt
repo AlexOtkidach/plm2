@@ -1,4 +1,4 @@
-package domain
+package com.example.plm2.domain
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -28,6 +28,7 @@ data class Track(
         parcel.readString(),
         parcel.readString() ?: ""
     )
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(itemId)
         parcel.writeString(trackName)
@@ -40,16 +41,19 @@ data class Track(
         parcel.writeString(country)
         parcel.writeString(previewUrl)
     }
-    // Обновляем ссылку на более качественное изображение
+
     val artworkUrl512: String?
         get() = artworkUrl100?.replace("/100x100bb.jpg", "/512x512bb.jpg")
+
     override fun describeContents(): Int {
         return 0
     }
+
     companion object CREATOR : Parcelable.Creator<Track> {
         override fun createFromParcel(parcel: Parcel): Track {
             return Track(parcel)
         }
+
         override fun newArray(size: Int): Array<Track?> {
             return arrayOfNulls(size)
         }

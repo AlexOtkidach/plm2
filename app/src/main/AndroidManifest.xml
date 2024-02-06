@@ -37,7 +37,7 @@
             android:name=".SettingsActivity"
             android:exported="true" />
         <activity
-            android:name="presentation.AudioPlayerActivity"
+            android:name=".presentation.AudioPlayerActivity"
             android:exported="true"
             android:label=""/>
         <activity
