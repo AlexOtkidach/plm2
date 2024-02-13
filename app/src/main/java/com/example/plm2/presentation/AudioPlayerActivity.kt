@@ -20,15 +20,18 @@ import java.util.concurrent.TimeUnit
 import com.squareup.picasso.Picasso
 import com.example.plm2.domain.Track
 
+
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playPauseButton: ImageButton
     private lateinit var playbackProgressTextView: TextView
     private lateinit var audioPlayerManager: AudioPlayerManager
     private lateinit var audioPlayerUseCase: AudioPlayerUseCase
     private lateinit var audioPlayerRepository: AudioPlayerRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
+
 
         val mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(

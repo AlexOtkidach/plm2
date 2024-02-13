@@ -6,11 +6,9 @@ import android.net.ConnectivityManager
 import com.example.plm2.domain.GetTracksUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepository, GetTracksUseCase {
 
-class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepository {
-
-    private val apiService: ApiService // Инициализируйте ваш ApiService
-
+    private val apiService: ApiService
     init {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://itunes.apple.com")
@@ -24,13 +22,15 @@ class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepos
         return try {
             val response = apiService.getTracks()
             if (response.isNotEmpty()) {
-                response
+                // Маппим список TrackDto в список Track с помощью функции расширения
+                response.map { it.toTrack() } // Вызываем функцию toTrack() здесь
             } else {
-                // Обработка ошибки загрузки (например, пустой ответ)
+                // Если список пуст, вернуть пустой список
                 emptyList()
             }
         } catch (e: Exception) {
             // Обработка ошибки, например, отсутствия интернет-соединения или других исключений
+            // Вернуть пустой список в случае ошибки
             emptyList()
         }
     }
@@ -41,9 +41,7 @@ class AudioPlayerRepositoryImpl(private val context: Context) : AudioPlayerRepos
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }
-    class TracksRepositoryImpl: GetTracksUseCase {
-        override suspend fun execute(): List<Track> {
-            return listOf()
-        }
+    override suspend fun execute(): List<Track> {
+        return listOf()
     }
 }
