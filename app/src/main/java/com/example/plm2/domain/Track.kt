@@ -2,7 +2,7 @@ package com.example.plm2.domain
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
+
 
 data class Track(
     val itemId: Long,

@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import java.io.IOException
 
-class AudioPlayerManager(private val mediaPlayer: MediaPlayer) {
+class AudioPlayerManager(private val mediaPlayer: MediaPlayer, private val view: AudioPlayerView) {
     private val handler = Handler(Looper.getMainLooper())
     private var updateTimeTask: Runnable? = null
     var onProgressUpdate: ((Int) -> Unit)? = null
@@ -14,10 +14,17 @@ class AudioPlayerManager(private val mediaPlayer: MediaPlayer) {
     private var wasPlayingBeforePause = false //флаг, который будет указывать, было ли воспроизведение
     // активно перед переходом пользователя на другой экран или нет
 
+    // Обработчик прогресса воспроизведения
+    private var playbackProgressListener: ((Int) -> Unit)? = null
+
+    // Метод для установки обработчика прогресса воспроизведения
+    fun setPlaybackProgressListener(listener: (Int) -> Unit) {
+        playbackProgressListener = listener
+    }
     fun startUpdateTimeTask() {
         updateTimeTask = object : Runnable {
             override fun run() {
-                onProgressUpdate?.invoke(mediaPlayer.currentPosition)
+                view.updatePlaybackProgress(mediaPlayer.currentPosition)
                 handler.postDelayed(this, 1000)
             }
         }.also { handler.postDelayed(it, 1000) }
