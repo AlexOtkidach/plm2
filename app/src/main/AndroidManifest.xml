@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Разрешение для доступа к интернету -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" tools:ignore="WrongManifestParent" />
-
+    <!-- Разрешения для использования мультимедиа -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,8 +22,13 @@
         android:theme="@style/Theme.Plm2"
         tools:targetApi="31">
 
+        <!-- Meta-data для идентификатора приложения Google Mobile Ads в связи с ошибкой-->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7512654077048543~1234567890"/>
+        <!-- Идфикатор мой, но индификатор приложения рандом, на функционал обучения не влияет-->
 
-        <!-- Ваши активити и другие настройки приложения -->
+        <!-- Активити и другие настройки приложения -->
         <activity
             android:name=".SearchActivity"
             android:exported="true" />
@@ -29,7 +39,7 @@
             android:name=".SettingsActivity"
             android:exported="true" />
         <activity
-            android:name=".AudioPlayerActivity"
+            android:name=".presentation.AudioPlayerActivity"
             android:exported="true"
             android:label=""/>
         <activity
@@ -41,6 +51,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 </manifest>

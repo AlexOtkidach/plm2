@@ -1,10 +1,12 @@
 package com.example.plm2
 
-import Track
+
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.example.plm2.domain.Track
+
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     fun getSearchHistory(): List<Track> {
