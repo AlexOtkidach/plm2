@@ -22,6 +22,9 @@ import com.example.plm2.domain.Track
 import com.squareup.picasso.Picasso
 import java.util.concurrent.TimeUnit
 import com.example.plm2.data.TracksRepositoryImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var playPauseButton: ImageButton
@@ -79,7 +82,10 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         // Проверяем интернет-соединение перед загрузкой треков
         if (!isInternetConnected()) {
             // Обработка отсутствия интернет-соединения
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Нет соединения с Интернетом", Toast.LENGTH_SHORT).show()
+        } else {
+            // Загрузка треков
+            loadTracks()
         }
     }
 
@@ -193,5 +199,12 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         val minutes = (timeInMillis / 1000) / 60
         val seconds = (timeInMillis / 1000) % 60
         return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun loadTracks() {
+        GlobalScope.launch(Dispatchers.Main) {
+            val tracks = audioPlayerRepository.loadTracks()
+            // Далее можно выполнить необходимые действия с загруженными треками, например, обновить UI
+        }
     }
 }
