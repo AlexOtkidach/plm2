@@ -1,18 +1,16 @@
-package com.example.plm2
+package com.example.plm2.presentation
 
 import android.content.Intent
 import android.net.Uri
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import com.example.plm2.R
 
 class SettingsActivity : BaseActivity() {
     private lateinit var sharedPrefs: SharedPreferences

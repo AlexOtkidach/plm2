@@ -1,7 +1,7 @@
 package com.example.plm2.data
 
-import com.example.plm2.domain.Track
 import android.content.Context
+import com.example.plm2.domain.Track
 import com.example.plm2.domain.AudioPlayerRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,11 +20,7 @@ class TracksRepositoryImpl(private val context: Context) : AudioPlayerRepository
     override suspend fun loadTracks(): List<Track> {
         return try {
             val response = retrofitService.getTracks()
-            if (response.isNotEmpty()) {
-                response.map { it.toTrack() }
-            } else {
-                emptyList()
-            }
+            response.map { it.toTrack() }
         } catch (e: Exception) {
             emptyList()
         }

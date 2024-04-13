@@ -1,4 +1,5 @@
-package com.example.plm2
+package com.example.plm2.presentation
+import com.example.plm2.data.SearchResults
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

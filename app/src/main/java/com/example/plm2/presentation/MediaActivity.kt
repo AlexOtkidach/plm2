@@ -1,7 +1,7 @@
-package com.example.plm2
+package com.example.plm2.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.plm2.R
 
 class MediaActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

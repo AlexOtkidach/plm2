@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/backgroundSettingsPage"
-    tools:context=".MainActivity">
+    tools:context=".presentation.MainActivity">
 
     <!-- Заголовок страницы -->
     <LinearLayout

@@ -12,7 +12,6 @@ class AudioPlayerManager(private val mediaPlayer: MediaPlayer, private val view:
     var onProgressUpdate: ((Int) -> Unit)? = null
     private var isPrepared = false // Флаг готовности к воспроизведению
     private var wasPlayingBeforePause = false //флаг, который будет указывать, было ли воспроизведение
-    // активно перед переходом пользователя на другой экран или нет
 
     // Обработчик прогресса воспроизведения
     private var playbackProgressListener: ((Int) -> Unit)? = null
@@ -45,8 +44,8 @@ class AudioPlayerManager(private val mediaPlayer: MediaPlayer, private val view:
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync() // Асинхронная подготовка
             mediaPlayer.setOnPreparedListener {
-                isPrepared = true // Трек готов к воспроизведению
-                startUpdateTimeTask() // <--- Здесь начинаем отсчет времени
+                isPrepared = true
+                startUpdateTimeTask()
             }
             mediaPlayer.setOnCompletionListener {
                 isPrepared = false // Сброс флага готовности после завершения трека

@@ -1,5 +1,4 @@
-package com.example.plm2
-
+package com.example.plm2.data
 
 import android.content.SharedPreferences
 import android.util.Log
@@ -41,7 +40,5 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
         const val HISTORY_KEY = "search_history_key"
         val gson = Gson()
     }
-    data class HistoryItem(val trackId: String) // Идентификатор элемента истории поиска
-    data class TrackItem(val trackId: String) // Идентификатор элемента списка треков
 }
 

@@ -1,4 +1,4 @@
-package com.example.plm2
+package com.example.plm2.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -29,11 +29,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.plm2.R
+import com.example.plm2.data.SearchHistory
+import com.example.plm2.data.SearchResults
 import com.example.plm2.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.example.plm2.presentation.AudioPlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -64,7 +66,7 @@ class SearchActivity : BaseActivity() {
     private var debounceJob: Job? = null
     private val debouncePeriod: Long = 2000 // Задержка debounce в миллисекундах
 
-    // У    правления состоянием прогресс-бара
+    // Управления состоянием прогресс-бара
     private var isSearching: Boolean = false
 
     @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
@@ -268,25 +270,29 @@ class SearchActivity : BaseActivity() {
         searchQuery = query
         hideSearchHistory()
 
+        val currentPlaybackTime: Int = 0
         val call = apiService.search(searchQuery)
         call.enqueue(object : Callback<SearchResults> {
             override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
                 if (response.isSuccessful) {
                     val songs = response.body()?.results
-                    val tracks: List<Track>? = songs?.map { song ->
-                        Track(
-                            itemId = song.trackId.toLongOrNull() ?: 0L,
-                            trackName = song.trackName ?: "",
-                            artistName = song.artistName ?: "",
-                            trackTimeMillis = song.trackTimeMillis ?: 0L,
-                            artworkUrl100 = song.artworkUrl100 ?: "",
-                            collectionName = song.collectionName ?: "",
-                            releaseDate = song.releaseDate ?: "",
-                            primaryGenreName = song.primaryGenreName ?: "",
-                            country = song.country ?: "",
-                            previewUrl = song.previewUrl ?: ""
-                        )
-                    }
+                    val tracks: List<Track> = songs?.mapNotNull { song ->
+                        song?.let {
+                            Track(
+                                itemId = song.trackId?.toLongOrNull() ?: 0L,
+                                trackName = song.trackName ?: "",
+                                artistName = song.artistName ?: "",
+                                trackTimeMillis = song.trackTimeMillis ?: 0L,
+                                artworkUrl100 = song.artworkUrl100 ?: "",
+                                collectionName = song.collectionName ?: "",
+                                releaseDate = song.releaseDate ?: "",
+                                primaryGenreName = song.primaryGenreName ?: "",
+                                country = song.country ?: "",
+                                previewUrl = song.previewUrl ?: "",
+                                currentPlaybackTime = 0
+                            )
+                        }
+                    }?.filterNotNull() ?: emptyList()
                     trackAdapter.setTracks(tracks)
                     trackAdapter.notifyDataSetChanged()
                     recyclerView.visibility = if (!tracks.isNullOrEmpty()) View.VISIBLE else View.GONE

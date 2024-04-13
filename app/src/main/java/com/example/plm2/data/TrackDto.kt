@@ -1,19 +1,16 @@
-package com.example.plm2.data
-
 import com.example.plm2.domain.Track
-import com.google.gson.annotations.SerializedName
 
 data class TrackDto(
-    val ItemId: Long,
-    val compositionName: String,
+    val itemId: Long,
+    val trackName: String,
     val artistName: String,
     val coverImageURL: String
 )
 
 fun TrackDto.toTrack(): Track {
     return Track(
-        itemId = ItemId,
-        trackName = compositionName,
+        itemId = itemId,
+        trackName = trackName,
         artistName = artistName,
         trackTimeMillis = 0,
         artworkUrl100 = coverImageURL,
@@ -21,6 +18,7 @@ fun TrackDto.toTrack(): Track {
         releaseDate = null,
         primaryGenreName = null,
         country = null,
-        previewUrl = null
+        previewUrl = null,
+        currentPlaybackTime = 0
     )
 }

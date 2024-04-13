@@ -1,4 +1,4 @@
-package com.example.plm2
+package com.example.plm2.presentation
 
 import com.example.plm2.domain.Track
 import android.content.res.Resources
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.plm2.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -51,7 +52,7 @@ class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<Tr
     }
     fun setSelectedTrackId(trackId: Long) {
         selectedTrackId = trackId
-        notifyDataSetChanged()  // Обновить список для отображения выбранного элемента
+        notifyDataSetChanged()  // Обновияем список для отображения выбранного элемента
     }
 
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

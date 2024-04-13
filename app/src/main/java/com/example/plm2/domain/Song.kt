@@ -1,4 +1,4 @@
-package com.example.plm2
+package com.example.plm2.domain
 
 data class Song(
     val trackId: String,

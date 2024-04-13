@@ -75,7 +75,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Показываем кнопку Назад на Toolbar
+        // Назад на Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -164,13 +164,24 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         track.previewUrl?.let { url ->
             audioPlayerManager.prepare(url)
         }
-        track.artworkUrl512?.let { artworkUrl ->
+        if (track.artworkUrl512 != null) {
             Picasso.get()
-                .load(artworkUrl)
+                .load(track.artworkUrl512)
                 .placeholder(R.drawable.placeholder_image)
                 .into(findViewById<ImageView>(R.id.album_cover))
-        } ?: run {
+        } else {
             findViewById<ImageView>(R.id.album_cover).setImageResource(R.drawable.placeholder_image)
+        }
+        track?.let { track ->
+            val artworkUrl: String? = track.artworkUrl512
+            if (artworkUrl != null) {
+                Picasso.get()
+                    .load(artworkUrl)
+                    .placeholder(R.drawable.placeholder_image)
+                    .into(findViewById<ImageView>(R.id.album_cover))
+            } else {
+                findViewById<ImageView>(R.id.album_cover).setImageResource(R.drawable.placeholder_image)
+            }
         }
     }
 
@@ -204,7 +215,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private fun loadTracks() {
         GlobalScope.launch(Dispatchers.Main) {
             val tracks = audioPlayerRepository.loadTracks()
-            // Далее можно выполнить необходимые действия с загруженными треками, например, обновить UI
         }
     }
 }
