@@ -30,9 +30,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plm2.R
-import com.example.plm2.data.SearchHistory
+import com.example.plm2.data.local.SearchHistory
 import com.example.plm2.data.SearchResults
 import com.example.plm2.domain.Track
+import com.example.plm2.presentation.base.BaseActivity
+import com.example.plm2.presentation.viewmodel.SearchViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

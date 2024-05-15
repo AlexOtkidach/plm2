@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.base
 
 import android.content.Context
 import android.os.Bundle

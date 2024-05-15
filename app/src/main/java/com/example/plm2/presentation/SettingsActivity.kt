@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import com.example.plm2.R
+import com.example.plm2.presentation.base.BaseActivity
 
 class SettingsActivity : BaseActivity() {
     private lateinit var sharedPrefs: SharedPreferences

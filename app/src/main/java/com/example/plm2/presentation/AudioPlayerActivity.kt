@@ -17,7 +17,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.plm2.R
 import com.example.plm2.domain.AudioPlayerRepository
-import com.example.plm2.domain.AudioPlayerUseCase
+import com.example.plm2.domain.usecase.AudioPlayerUseCase
 import com.example.plm2.domain.Track
 import com.squareup.picasso.Picasso
 import java.util.concurrent.TimeUnit

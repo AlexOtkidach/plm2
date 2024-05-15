@@ -1,4 +1,4 @@
-package com.example.plm2.data
+package com.example.plm2.data.local
 
 import android.content.SharedPreferences
 import android.util.Log

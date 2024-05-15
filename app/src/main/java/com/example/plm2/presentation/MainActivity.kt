@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
+import com.example.plm2.presentation.base.BaseActivity
+import com.example.plm2.presentation.viewmodel.MainViewModel
 
 
 class MainActivity : BaseActivity() {
