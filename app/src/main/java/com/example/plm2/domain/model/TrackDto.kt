@@ -17,8 +17,8 @@ data class TrackDto(
     fun toDomainModel(): Track {
         return Track(
             itemId = trackId,
-            trackName = trackName,
-            artistName = artistName,
+            trackName = trackName ?: "Unknown Track Name",
+            artistName = artistName ?: "Unknown Artist",
             trackTimeMillis = trackTimeMillis,
             artworkUrl100 = artworkUrl100,
             collectionName = collectionName,
