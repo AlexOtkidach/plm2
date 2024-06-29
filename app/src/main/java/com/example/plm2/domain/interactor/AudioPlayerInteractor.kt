@@ -1,6 +1,6 @@
 package com.example.plm2.domain.interactor
 
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 
 interface AudioPlayerInteractor {
     fun playTrack(track: Track): Boolean

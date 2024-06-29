@@ -1,34 +1,21 @@
 package com.example.plm2.presentation.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plm2.domain.Track
-import com.example.plm2.data.TracksRepositoryImpl
-import kotlinx.coroutines.Dispatchers
+import com.example.plm2.domain.interactor.TrackInteractor
+import com.example.plm2.domain.model.Track
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val trackRepository = TracksRepositoryImpl(application)
-
+class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
     private val _searchResults = MutableLiveData<List<Track>>()
-    val searchResults: LiveData<List<Track>>
-        get() = _searchResults
+    val searchResults: LiveData<List<Track>> = _searchResults
 
-    fun search(query: String) {
+    fun searchTracks(query: String) {
         viewModelScope.launch {
-            val results = performSearch(query)
-            withContext(Dispatchers.Main) {
-                _searchResults.value = results
-            }
+            val results = trackInteractor.searchTracks(query)
+            _searchResults.postValue(results)
         }
-    }
-
-    private suspend fun performSearch(query: String): List<Track> {
-        return trackRepository.loadTracks()
     }
 }

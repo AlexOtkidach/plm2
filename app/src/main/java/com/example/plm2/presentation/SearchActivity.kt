@@ -7,13 +7,10 @@ import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -22,25 +19,25 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plm2.R
 import com.example.plm2.data.local.SearchHistory
-import com.example.plm2.data.SearchResults
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import com.example.plm2.presentation.base.BaseActivity
 import com.example.plm2.presentation.viewmodel.SearchViewModel
+import com.example.plm2.presentation.viewmodel.SearchViewModelFactory
+import com.example.plm2.data.network.ApiService
+import com.example.plm2.data.repository.TrackRepositoryImpl
+import com.example.plm2.domain.interactor.TrackInteractorImpl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -52,9 +49,6 @@ class SearchActivity : BaseActivity() {
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var apiService: MusicApiService
-    private lateinit var viewModel: SearchViewModel
-    private var lastSearchQuery: String? = null
     private lateinit var searchHistory: SearchHistory
     private lateinit var placeholderImageView: ImageView
     private lateinit var placeholderTextView: TextView
@@ -68,13 +62,30 @@ class SearchActivity : BaseActivity() {
     private var debounceJob: Job? = null
     private val debouncePeriod: Long = 2000 // Задержка debounce в миллисекундах
 
-    // Управления состоянием прогресс-бара
     private var isSearching: Boolean = false
 
-    @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
+    private val viewModel: SearchViewModel by viewModels {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val apiService = retrofit.create(ApiService::class.java)
+        val trackRepository = TrackRepositoryImpl(apiService)
+        val trackInteractor = TrackInteractorImpl(trackRepository)
+        SearchViewModelFactory(trackInteractor)
+    }
+
+    @SuppressLint("MissingInflatedId", "SuspiciousIndentation", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        viewModel.searchResults.observe(this, Observer { tracks: List<Track> ->
+            trackAdapter.setTracks(tracks)
+            trackAdapter.notifyDataSetChanged()
+            recyclerView.visibility = if (tracks.isNotEmpty()) View.VISIBLE else View.GONE
+            updatePlaceholderVisibility(tracks)
+        })
 
         // Инициализация переменных для плейсхолдеров
         placeholderImageView = findViewById(R.id.placeholderImageView)
@@ -140,16 +151,17 @@ class SearchActivity : BaseActivity() {
         val refreshButton = findViewById<Button>(R.id.refreshButton)
         val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
 
-        //Обработчика кнопки "Очистить историю"
+        // Обработчика кнопки "Очистить историю"
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            lastSearchQuery = null
+            var lastSearchQuery = null
             trackAdapter.setTracks(emptyList())
             recyclerView.visibility = View.GONE
             updatePlaceholderVisibility(emptyList())
             displaySearchHistory()
             hideSearchHistory()
         }
+
         // Инициализация sharedPreferences
         sharedPreferences = getSharedPreferences("search_history_key", Context.MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferences)
@@ -161,6 +173,7 @@ class SearchActivity : BaseActivity() {
             it.visibility = View.GONE
             hideSearchHistory()
         }
+
         refreshButton.setText(R.string.refresh_button)
         refreshButton.transformationMethod = null
 
@@ -182,86 +195,29 @@ class SearchActivity : BaseActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+
         // Обработчик события нажатия кнопки "Ввод" на клавиатуре
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                performSearch(searchQuery)
+                performSearch(inputEditText.text.toString())
                 hideKeyboard()
                 true
             } else {
                 false
             }
         }
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(SearchViewModel::class.java)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        apiService = retrofit.create(MusicApiService::class.java)
-        searchQuery = ""
-        performSearch(searchQuery)
-
-        val secondPlaceholderImageView =
-            findViewById<ImageView>(R.id.secondPlaceholderImageView)
-        val secondPlaceholderTextView = findViewById<TextView>(R.id.secondPlaceholderTextView)
-        val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
-        val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
-        if (!isNetworkAvailable(connectivityManager)) {
-            secondPlaceholderImageView.visibility = View.VISIBLE
-            secondPlaceholderTextView.visibility = View.VISIBLE
-            refreshButton.visibility = View.VISIBLE
-            placeholderImageView.visibility = View.GONE
-            placeholderTextView.visibility = View.GONE
-            refreshButton.setOnClickListener {
-                performSearch(searchQuery)
-            }
-        } else {
-            secondPlaceholderImageView.visibility = View.GONE
-            secondPlaceholderTextView.visibility = View.GONE
-            refreshButton.visibility = View.GONE
-        }
-        inputEditText.clearFocus()
-        refreshButton.setOnClickListener {
-            performSearch(searchQuery)
-            if (lastSearchQuery != null) {
-                searchQuery = lastSearchQuery!!
-                performSearch(searchQuery)
-            } else {
-                performSearch(searchQuery)
-            }
-            ViewCompat.animate(refreshButton)
-                .setDuration(200)
-                .alpha(0.5f)
-                .withEndAction {
-                    ViewCompat.animate(refreshButton)
-                        .setDuration(200)
-                        .alpha(1.0f)
-                        .start()
-                }
-                .start()
-        }
-        // Инициализация sharedPreferences
-        displaySearchHistory()  // Первоначальное отображение истории поиска
+        displaySearchHistory() // Первоначальное отображение истории поиска
     }
 
     private fun isNetworkAvailable(connectivityManager: ConnectivityManager): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(network)
-            return capabilities?.let {
-                it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                        it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                        it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
-            } ?: false
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo
-            return networkInfo != null && networkInfo.isConnected
-        }
+        val network = connectivityManager.activeNetwork
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        return capabilities?.let {
+            it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
+        } ?: false
     }
 
     private fun performSearch(query: String) {
@@ -272,175 +228,52 @@ class SearchActivity : BaseActivity() {
         searchQuery = query
         hideSearchHistory()
 
-        val currentPlaybackTime: Int = 0
-        val call = apiService.search(searchQuery)
-        call.enqueue(object : Callback<SearchResults> {
-            override fun onResponse(call: Call<SearchResults>, response: Response<SearchResults>) {
-                if (response.isSuccessful) {
-                    val songs = response.body()?.results
-                    val tracks: List<Track> = songs?.mapNotNull { song ->
-                        song?.let {
-                            Track(
-                                itemId = song.trackId?.toLongOrNull() ?: 0L,
-                                trackName = song.trackName ?: "",
-                                artistName = song.artistName ?: "",
-                                trackTimeMillis = song.trackTimeMillis ?: 0L,
-                                artworkUrl100 = song.artworkUrl100 ?: "",
-                                collectionName = song.collectionName ?: "",
-                                releaseDate = song.releaseDate ?: "",
-                                primaryGenreName = song.primaryGenreName ?: "",
-                                country = song.country ?: "",
-                                previewUrl = song.previewUrl ?: "",
-                                currentPlaybackTime = 0
-                            )
-                        }
-                    }?.filterNotNull() ?: emptyList()
-                    trackAdapter.setTracks(tracks)
-                    trackAdapter.notifyDataSetChanged()
-                    recyclerView.visibility = if (!tracks.isNullOrEmpty()) View.VISIBLE else View.GONE
-                    updatePlaceholderVisibility(tracks)
-                    lastSearchQuery = searchQuery
-                } else {
-                    showSearchErrorPlaceholder()
-                    updatePlaceholderVisibility(emptyList()) // Обновление видимости плейсхолдеров
-                }
-                if (isNetworkAvailable(connectivityManager)) {
-                    findViewById<Button>(R.id.refreshButton).visibility = View.GONE
-                }
-                // Завершение поиска
-                isSearching = false
-                progressBar.visibility = View.GONE
-            }
-
-            override fun onFailure(call: Call<SearchResults>, t: Throwable) {
-                showSearchErrorPlaceholder()
-                updatePlaceholderVisibility(emptyList())
-                // Завершение поиска
-                isSearching = false
-                progressBar.visibility = View.GONE
-            }
-        })
+        viewModel.searchTracks(query)
     }
 
     // Метод для отображения истории поиска
     private fun displaySearchHistory() {
-        Log.d("SearchActivity", "Displaying search history")
-        // Скрыть все плейсхолдеры
-        placeholderImageView.visibility = View.GONE
-        placeholderTextView.visibility = View.GONE
-        secondPlaceholderImageView.visibility = View.GONE
-        secondPlaceholderTextView.visibility = View.GONE
-
-        val historyTracks = searchHistory.getSearchHistory()
-        historyAdapter.setTracks(historyTracks)
-        historyAdapter.notifyDataSetChanged()
-
-        // Установить видимость компонентов истории
-        val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
-        val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
-
-        if (historyTracks.isEmpty()) {
-            searchHistoryTitle.visibility = View.GONE
-            historyRecyclerView.visibility = View.GONE
-            clearHistoryButton.visibility = View.GONE
-        } else {
-            searchHistoryTitle.visibility = View.VISIBLE
+        val history = searchHistory.getSearchHistory()
+        if (history.isNotEmpty()) {
+            historyAdapter.setTracks(history)
+            historyAdapter.notifyDataSetChanged()
             historyRecyclerView.visibility = View.VISIBLE
-            clearHistoryButton.visibility = View.VISIBLE
+        } else {
+            historyRecyclerView.visibility = View.GONE
         }
-    }
-
-    private fun showSearchHistoryComponents() {
-        // Показываем элементы, связанные с историей поиска
-        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.VISIBLE
-        historyRecyclerView.visibility = View.VISIBLE
-        findViewById<Button>(R.id.clearHistoryButton).visibility = View.VISIBLE
-
-    }
-
-    private fun hideSearchHistoryComponents() {
-        // Скрываем элементы, связанные с историей поиска
-        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.GONE
-        historyRecyclerView.visibility = View.GONE
-        findViewById<Button>(R.id.clearHistoryButton).visibility = View.GONE
-
     }
 
     // Метод для скрытия истории поиска
     private fun hideSearchHistory() {
-        Log.d("SearchActivity", "Hiding search history")
-        // Скрыть компоненты истории
-        findViewById<TextView>(R.id.searchHistoryTitle).visibility = View.GONE
         historyRecyclerView.visibility = View.GONE
-        findViewById<Button>(R.id.clearHistoryButton).visibility = View.GONE
     }
 
-    private fun updatePlaceholderVisibility(tracks: List<Track>?) {
-        Log.d("SearchActivity", "Updating placeholder visibility: tracks is null or empty = ${tracks.isNullOrEmpty()}, searchQuery is blank = ${searchQuery.isBlank()}")
-        Handler(mainLooper).post {
-            val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
-            val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-            val secondPlaceholderImageView =
-                findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView =
-                findViewById<TextView>(R.id.secondPlaceholderTextView)
-            val refreshButton = findViewById<Button>(R.id.refreshButton)
-            val searchHistoryTitle = findViewById<TextView>(R.id.searchHistoryTitle)
-
-            if (tracks.isNullOrEmpty() && searchQuery.isNotBlank()) {
-                placeholderImageView.visibility = View.VISIBLE
-                placeholderTextView.visibility = View.VISIBLE
-                secondPlaceholderImageView.visibility = View.GONE
-                secondPlaceholderTextView.visibility = View.GONE
-                refreshButton.visibility = View.GONE
-            } else if (tracks.isNullOrEmpty() && searchQuery.isBlank()) {
-                placeholderImageView.visibility = View.GONE
-                placeholderTextView.visibility = View.GONE
-                secondPlaceholderImageView.visibility = View.GONE
-                secondPlaceholderTextView.visibility = View.GONE
-                refreshButton.visibility = View.GONE
-            } else {
-                placeholderImageView.visibility = View.GONE
-                placeholderTextView.visibility = View.GONE
-                secondPlaceholderImageView.visibility = View.GONE
-                secondPlaceholderTextView.visibility = View.GONE
-                refreshButton.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun showSearchErrorPlaceholder() {
-        Handler(mainLooper).post {
-            val refreshButton = findViewById<Button>(R.id.refreshButton)
-            val placeholderImageView = findViewById<ImageView>(R.id.placeholderImageView)
-            val placeholderTextView = findViewById<TextView>(R.id.placeholderTextView)
-            val secondPlaceholderImageView =
-                findViewById<ImageView>(R.id.secondPlaceholderImageView)
-            val secondPlaceholderTextView =
-                findViewById<TextView>(R.id.secondPlaceholderTextView)
-
+    // Метод для обновления видимости плейсхолдеров
+    private fun updatePlaceholderVisibility(tracks: List<com.example.plm2.domain.model.Track>) {
+        if (tracks.isEmpty()) {
+            placeholderImageView.visibility = View.VISIBLE
+            placeholderTextView.visibility = View.VISIBLE
             secondPlaceholderImageView.visibility = View.VISIBLE
             secondPlaceholderTextView.visibility = View.VISIBLE
-            refreshButton.visibility = View.VISIBLE
-
+        } else {
             placeholderImageView.visibility = View.GONE
             placeholderTextView.visibility = View.GONE
+            secondPlaceholderImageView.visibility = View.GONE
+            secondPlaceholderTextView.visibility = View.GONE
+        }
+        progressBar.visibility = View.GONE
+        isSearching = false // Сброс флага поиска после завершения обновления UI
+    }
 
-            refreshButton.setOnClickListener {
-                performSearch(searchQuery)
-            }
+    private fun hideKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 
     private fun createTrackList(): List<Track> {
+        // Создание и возврат списка треков
         return emptyList()
-    }
-
-    private fun hideKeyboard() {
-        val view = this.currentFocus
-        view?.let {
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
-        }
     }
 }

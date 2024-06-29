@@ -1,6 +1,6 @@
 package com.example.plm2.presentation
 
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import android.content.res.Resources
 import android.graphics.Color
 import android.util.Log
@@ -89,7 +89,7 @@ class TrackAdapter(private var trackList: List<Track>) : RecyclerView.Adapter<Tr
 
     override fun getItemCount(): Int = trackList.size
 
-    fun setTracks(tracks: List<Track>?) {
+    fun setTracks(tracks: List<Track>) {
         trackList = tracks ?: emptyList()
         notifyDataSetChanged()
     }

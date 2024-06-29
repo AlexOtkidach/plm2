@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
 

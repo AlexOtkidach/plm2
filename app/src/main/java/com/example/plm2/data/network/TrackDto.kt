@@ -1,6 +1,6 @@
 package com.example.plm2.data.network
 
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 
 data class TrackDto(
     val itemId: Long,

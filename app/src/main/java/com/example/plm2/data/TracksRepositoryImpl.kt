@@ -1,7 +1,7 @@
 package com.example.plm2.data
 
 import android.content.Context
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import com.example.plm2.domain.AudioPlayerRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

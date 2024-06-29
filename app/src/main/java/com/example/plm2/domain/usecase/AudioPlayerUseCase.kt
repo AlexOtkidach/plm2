@@ -1,7 +1,7 @@
 package com.example.plm2.domain.usecase
 
 import com.example.plm2.domain.AudioPlayerRepository
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import com.example.plm2.domain.interactor.AudioPlayerInteractor
 
 class AudioPlayerUseCase(private val repository: AudioPlayerRepository) : AudioPlayerInteractor {

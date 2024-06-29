@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plm2.data.TracksRepositoryImpl
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import kotlinx.coroutines.launch
-import com.example.plm2.presentation.viewmodel.AudioPlayerViewModel
 
 class AudioPlayerViewModelImpl(private val repository: TracksRepositoryImpl) : ViewModel(),
     AudioPlayerViewModel {

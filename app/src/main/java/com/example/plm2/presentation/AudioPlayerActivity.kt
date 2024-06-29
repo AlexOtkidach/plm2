@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import com.example.plm2.R
 import com.example.plm2.domain.AudioPlayerRepository
 import com.example.plm2.domain.usecase.AudioPlayerUseCase
-import com.example.plm2.domain.Track
+import com.example.plm2.domain.model.Track
 import com.squareup.picasso.Picasso
 import java.util.concurrent.TimeUnit
 import com.example.plm2.data.TracksRepositoryImpl
