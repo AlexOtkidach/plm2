@@ -63,4 +63,6 @@
 
     <!-- Цвет для Progress Bar -->
     <color name="progress_bar">#3772E7</color>
+
+    <color name="primary">#FF6200EE</color>
 </resources>

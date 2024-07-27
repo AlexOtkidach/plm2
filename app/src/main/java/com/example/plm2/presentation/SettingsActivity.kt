@@ -2,118 +2,86 @@ package com.example.plm2.presentation
 
 import android.content.Intent
 import android.net.Uri
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import com.example.plm2.R
-import com.example.plm2.presentation.base.BaseActivity
+import com.example.plm2.data.local.SharedPreferencesManager
 
-class SettingsActivity : BaseActivity() {
-    private lateinit var sharedPrefs: SharedPreferences
+class SettingsActivity : AppCompatActivity() {
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        sharedPrefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+        sharedPreferencesManager = SharedPreferencesManager(this)
 
         val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
 
-        // Установка цвета свитча
-        switchTheme.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
-        switchTheme.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
-
-        // Восстановление сохраненного состояния темы и установка переключателя в соответствующее положение
-        val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
+        // Инициализация состояния свитча из SharedPreferences
+        val isDarkTheme = sharedPreferencesManager.isDarkTheme()
         switchTheme.isChecked = isDarkTheme
 
         // Слушатель для переключения темы
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            // Сохраняем выбор пользователя
-            sharedPrefs.edit().putBoolean("isDarkTheme", isChecked).apply()
-
-            // Переключение темы
+            sharedPreferencesManager.setDarkTheme(isChecked)
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+            recreate() // Перезапускаем активити для применения темы
         }
 
-        // Установка цвета свитча
-        val switchCompat = findViewById<SwitchCompat>(R.id.switchTheme)
-        switchCompat.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
-        switchCompat.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.SwitchColorRe))
+        setupToolbar()
+        setupShareButton()
+        setupSupportButton()
+        setupTermsButton()
+    }
 
-        // Цвет подложки (track)
-        switchCompat.trackTintList = ColorStateList.valueOf(resources.getColor(R.color.switchTrackColor))
-
-        // Цвет рычажка (thumb)
-        switchCompat.thumbTintList = ColorStateList.valueOf(resources.getColor(R.color.switchThumbColor))
-
-        // Обработчик для Switch
-        switchTheme.setOnCheckedChangeListener { _, isChecked ->
-
-            // Сохраняем состояние в настройках
-            sharedPrefs.edit().putBoolean("isDarkTheme", isChecked).apply()
-
-            // Установка выбранной темы
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-
-        // Стрелка назад с настроек на главную
+    private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        // Устанавливаем слушатель для кнопки назад (стрелки)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
 
-        toolbar.setNavigationOnClickListener {
-            onBackPressed() // Это обработчик для кнопки "назад"
-        }
-
-        // Кнопка поделиться приложением
+    private fun setupShareButton() {
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener {
-            val sendIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                val shareButtonText = resources.getString(R.string.shareButtonText)
-                putExtra(Intent.EXTRA_TEXT, shareButtonText)
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.shareButtonText))
                 type = "text/plain"
             }
-            val shareIntent = Intent.createChooser(sendIntent, null)
-            startActivity(shareIntent)
+            startActivity(Intent.createChooser(sendIntent, null))
         }
+    }
 
-        // Кнопка Написать в техподдержку
+    private fun setupSupportButton() {
         val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SENDTO)
-            val support_theme = resources.getString(R.string.themeMail)
-            val support_text = resources.getString(R.string.textMail)
-            shareIntent.data = Uri.parse("mailto:otkidach.lesha@yandex.ru")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("mailto:alexotkidach@gmail.com"))
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, support_theme)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, support_text)
-            startActivity(shareIntent)
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("support@example.com"))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeMail))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.textMail))
+            }
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
         }
+    }
 
-        // Кнопка Пользовательское соглашение
+    private fun setupTermsButton() {
         val termsButton = findViewById<FrameLayout>(R.id.btnTerms)
         termsButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_VIEW)
-            val termsOfUseArticle = resources.getString(R.string.termsArticle)
-            shareIntent.data = Uri.parse(termsOfUseArticle)
-            startActivity(shareIntent)
+            val url = getString(R.string.termsArticle)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
         }
     }
 }

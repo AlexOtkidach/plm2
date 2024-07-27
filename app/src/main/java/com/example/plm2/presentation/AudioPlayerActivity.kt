@@ -87,6 +87,11 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
             // Загрузка треков
             loadTracks()
         }
+        // Получение трека из Intent
+        val track: Track? = intent.getParcelableExtra("track")
+        track?.let {
+            displayTrackInfo(it)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

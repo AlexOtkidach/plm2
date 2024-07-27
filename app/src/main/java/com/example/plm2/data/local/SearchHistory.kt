@@ -15,26 +15,31 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
             gson.fromJson<List<Track>>(it, type)
         } ?: emptyList()
     }
+
     fun addTrackToHistory(track: Track) {
         val currentHistory = getSearchHistory().toMutableList()
-
+        // Удаляем трек, если он уже есть в истории
         currentHistory.removeIf { it.itemId == track.itemId }
         currentHistory.add(0, track)
+        // Ограничиваем размер истории
         if (currentHistory.size > MAX_HISTORY_SIZE) {
-            currentHistory.removeAt(MAX_HISTORY_SIZE)
+            currentHistory.removeAt(currentHistory.size - 1)
         }
         Log.d("SearchHistory", "Adding track to history: ${track.trackName}")
         saveSearchHistory(currentHistory)
     }
+
     fun clearSearchHistory() {
         Log.d("SearchHistory", "Clearing search history")
         saveSearchHistory(emptyList())
     }
+
     private fun saveSearchHistory(history: List<Track>) {
-        val json = Gson().toJson(history)
+        val json = gson.toJson(history)
         sharedPreferences.edit().putString(HISTORY_KEY, json).apply()
         Log.d("SearchHistory", "Saving search history: ${history.size} items")
     }
+
     companion object {
         const val MAX_HISTORY_SIZE = 10
         const val HISTORY_KEY = "search_history_key"
