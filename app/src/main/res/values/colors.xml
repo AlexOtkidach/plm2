@@ -27,8 +27,8 @@
     <color name="searchLineX">#AEAFB4</color>
 
     <!-- Цвета для Свитча -->
-        <color name="SwitchColorRe">#AEAFB4</color>
-        <color name="DarkSwitchColorRe">#E6E8EB</color>
+    <color name="SwitchColorRe">#AEAFB4</color>
+    <color name="DarkSwitchColorRe">#E6E8EB</color>
     <color name="switchTrackColor">#E6E8EB</color>
     <color name="switchThumbColor">#AEAFB4</color>
 
@@ -40,9 +40,8 @@
     <!-- Визуальное отображение нажатия обновить -->
     <color name="colorButtonPressed">#FFFFFF</color>
 
-
-        <color name="lightTextColor">#AEAFB4</color>
-        <color name="darkTextColor">#FFFFFF</color>
+    <color name="lightTextColor">#AEAFB4</color>
+    <color name="darkTextColor">#FFFFFF</color>
 
     <!-- Цвет для кнопки обновить-->
     <color name="buttonBackground">#FF000000</color>
@@ -66,3 +65,4 @@
 
     <color name="primary">#FF6200EE</color>
 </resources>
+

@@ -27,6 +27,7 @@
         <item name="android:statusBarColor">@color/colorPrimaryVariant</item>
     </style>
 
+    <!-- Тема приложения в темном режиме -->
     <style name="appTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@color/black</item>
         <item name="android:textColor">@color/buttonBackground</item>
@@ -39,50 +40,48 @@
         <item name="android:textSize">26sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
-        <!-- Стиль для текста для наименования артиста -->
-        <style name="artistStyleName">
-            <item name="android:textSize">@dimen/padding12dp</item>
-        </style>
+
+    <!-- Стиль для текста для наименования артиста -->
+    <style name="artistStyleName">
+        <item name="android:textSize">@dimen/padding12dp</item>
+    </style>
 
     <!-- Стиль для текста для наименования композитора -->
-        <style name="CompositionNameStyle">
-            <item name="android:fontFamily">@font/ys_display_regular</item>
-            <item name="android:textSize">@dimen/typesettingFontSize</item>
-            <item name="android:textColor">@color/black</item>
-        </style>
-    <!-- Стиль продолжительности трека -->
-                  <style name="TrackDuration">
-                <item name="android:textSize">@dimen/miniFontSize</item>
-            </style>
+    <style name="CompositionNameStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/typesettingFontSize</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
+    <!-- Стиль продолжительности трека -->
+    <style name="TrackDuration">
+        <item name="android:textSize">@dimen/miniFontSize</item>
+    </style>
+
+    <!-- Стиль для текста ошибки -->
     <style name="TextFrontError">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/typesettingFontSize2</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
-        <!-- Кнопка Обновить -->
-
-        <style name="buttonStyle">
-            <item name="android:fontFamily">@font/ys_display_regular</item>
-            <item name="android:textSize">@dimen/typesettingFontSize</item>
-            <item name="android:textColor">@color/buttonText</item>
-            <item name="android:background">@color/buttonBackground</item>
-        </style>
-
-    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Определите цвета и атрибуты для светлой темы -->
+    <!-- Кнопка Обновить -->
+    <style name="buttonStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/typesettingFontSize</item>
+        <item name="android:textColor">@color/buttonText</item>
+        <item name="android:background">@color/buttonBackground</item>
     </style>
 
     <!-- Для изменения цвета курсора в поле поиска -->
     <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>
-        <!-- Для текста строк данных Аудиоплеера  -->
-        <style name="AudioPlayerTextLeft" parent="Widget.AppCompat.EditText">
-            <item name="android:textColor">@color/playlist_favorite_icon_color_dark</item>
-            <item name="android:fontFamily">@font/ys_display_regular</item>
-            <item name="android:textSize">@dimen/text13</item>
-        </style>
 
+    <!-- Для текста строк данных Аудиоплеера -->
+    <style name="AudioPlayerTextLeft" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/playlist_favorite_icon_color_dark</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text13</item>
+    </style>
 </resources>

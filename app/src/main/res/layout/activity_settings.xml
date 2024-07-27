@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/activity_settings.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +18,6 @@
     </LinearLayout>
 
     <!-- Заголовок страницы (используем Toolbar) -->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -27,21 +26,21 @@
         app:navigationIcon="?android:attr/homeAsUpIndicator"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/arrBack"
+            style="@style/page_settings_string_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginStart="@dimen/padding1dp"
+            android:layout_marginEnd="@dimen/padding24dp"/>
 
-            <ImageView
-                android:id="@+id/arrBack"
-                style="@style/page_settings_string_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding1dp"
-                android:layout_marginEnd="@dimen/padding24dp"/>
-
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,8 +48,6 @@
         android:orientation="horizontal">
 
         <!-- Заголовок "Темная тема" -->
-
-        <!-- Переключатель -->
         <TextView
             style="@style/page_settings_text_night_theme"
             android:text="@string/darkTheme" />
@@ -60,63 +57,64 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding12dp"
-            android:layout_marginEnd="@dimen/padding12dp" />
+            android:layout_marginEnd="@dimen/padding12dp"/>
 
     </LinearLayout>
-        <!-- Секция "Поделиться приложением" -->
-        <LinearLayout
-            style="@style/page_settings_string_simple">
-            <FrameLayout
-                android:id="@+id/shareButton"
-                style="@style/page_settings_string_frame">
 
-                <!-- Заголовок "Поделиться приложением" -->
-                <TextView
-                    style="@style/page_settings_string_text"
-                    android:text="@string/shareApp" />
+    <!-- Секция "Поделиться приложением" -->
+    <LinearLayout
+        style="@style/page_settings_string_simple">
+        <FrameLayout
+            android:id="@+id/shareButton"
+            style="@style/page_settings_string_frame">
 
-                <!-- Иконка "Поделиться" -->
-                <ImageView
-                    style="@style/page_settings_string_icon"
-                    android:src="@drawable/ic_share" />
-            </FrameLayout>
-        </LinearLayout>
+            <!-- Заголовок "Поделиться приложением" -->
+            <TextView
+                style="@style/page_settings_string_text"
+                android:text="@string/shareApp" />
 
-        <!-- Секция "Написать в техподдержку" -->
-        <LinearLayout
-            style="@style/page_settings_string_simple">
-            <FrameLayout
-                android:id="@+id/btnSupport"
-                style="@style/page_settings_string_frame">
-
-                <!-- Заголовок "Написать в техподдержку" -->
-                <TextView
-                    style="@style/page_settings_string_text"
-                    android:text="@string/writeToSupport" />
-
-                <!-- Иконка "Техподдержка" -->
-                <ImageView
-                    style="@style/page_settings_string_icon"
-                    android:src="@drawable/ic_support" />
-            </FrameLayout>
-        </LinearLayout>
-
-        <!-- Секция "Пользовательское соглашение" -->
-        <LinearLayout
-            style="@style/page_settings_string_simple">
-            <FrameLayout
-                android:id="@+id/btnTerms"
-                style="@style/page_settings_string_frame">
-
-                <!-- Заголовок "Пользовательское соглашение" -->
-                <TextView
-                    style="@style/page_settings_string_text"
-                    android:text="@string/termsOfUse" />
-
-                <!-- Иконка "Стрелка вправо" -->
-                <ImageView
-                    style="@style/page_settings_string_icon"
-                    android:src="@drawable/ic_arrow_forward" />
-            </FrameLayout>
-        </LinearLayout>
+            <!-- Иконка "Поделиться" -->
+            <ImageView
+                style="@style/page_settings_string_icon"
+                android:src="@drawable/ic_share" />
+        </FrameLayout>
     </LinearLayout>
+
+    <!-- Секция "Написать в техподдержку" -->
+    <LinearLayout
+        style="@style/page_settings_string_simple">
+        <FrameLayout
+            android:id="@+id/btnSupport"
+            style="@style/page_settings_string_frame">
+
+            <!-- Заголовок "Написать в техподдержку" -->
+            <TextView
+                style="@style/page_settings_string_text"
+                android:text="@string/writeToSupport" />
+
+            <!-- Иконка "Техподдержка" -->
+            <ImageView
+                style="@style/page_settings_string_icon"
+                android:src="@drawable/ic_support" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Секция "Пользовательское соглашение" -->
+    <LinearLayout
+        style="@style/page_settings_string_simple">
+        <FrameLayout
+            android:id="@+id/btnTerms"
+            style="@style/page_settings_string_frame">
+
+            <!-- Заголовок "Пользовательское соглашение" -->
+            <TextView
+                style="@style/page_settings_string_text"
+                android:text="@string/termsOfUse" />
+
+            <!-- Иконка "Стрелка вправо" -->
+            <ImageView
+                style="@style/page_settings_string_icon"
+                android:src="@drawable/ic_arrow_forward" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

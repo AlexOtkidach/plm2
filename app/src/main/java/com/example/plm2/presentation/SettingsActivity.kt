@@ -5,9 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
 
@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            recreate() // Перезапускаем активити для применения темы
+            recreate()
         }
 
         setupToolbar()

@@ -1,17 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Основная тема приложения. -->
+    <!-- Base application theme -->
     <style name="Theme.Plm2" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Основной цвет бренда. -->
+        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
-        <item name="colorAccent">@color/white</item>
         <item name="colorPrimaryVariant">@color/blueDark</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Вторичный цвет бренда. -->
+        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/gray</item>
         <item name="colorSecondaryVariant">@color/pink</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Цвет строки состояния. -->
+        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
 
+    <!-- Стили для SwitchCompat -->
+    <style name="SwitchCompatTheme.Light" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="thumbTint">@color/switchThumbColor</item>
+        <item name="trackTint">@color/switchTrackColor</item>
+    </style>
+
+    <style name="SwitchCompatTheme.Dark" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="thumbTint">@color/DarkSwitchColorRe</item>
+        <item name="trackTint">@color/switchTrackColor</item>
     </style>
 </resources>
