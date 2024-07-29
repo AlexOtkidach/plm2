@@ -2,9 +2,9 @@ package com.example.plm2.data.local
 
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.plm2.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.example.plm2.domain.model.Track
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
@@ -18,10 +18,8 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     fun addTrackToHistory(track: Track) {
         val currentHistory = getSearchHistory().toMutableList()
-        // Удаляем трек, если он уже есть в истории
         currentHistory.removeIf { it.itemId == track.itemId }
         currentHistory.add(0, track)
-        // Ограничиваем размер истории
         if (currentHistory.size > MAX_HISTORY_SIZE) {
             currentHistory.removeAt(currentHistory.size - 1)
         }
@@ -46,4 +44,3 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
         val gson = Gson()
     }
 }
-

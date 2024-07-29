@@ -15,33 +15,46 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
-import com.example.plm2.domain.AudioPlayerRepository
-import com.example.plm2.domain.usecase.AudioPlayerUseCase
+import com.example.plm2.data.network.ApiService
+import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.model.Track
+import com.example.plm2.domain.repository.TrackRepository
+import com.example.plm2.presentation.viewmodel.AudioPlayerViewModel
+import com.example.plm2.presentation.viewmodel.AudioPlayerViewModelFactory
 import com.squareup.picasso.Picasso
-import java.util.concurrent.TimeUnit
-import com.example.plm2.data.TracksRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var playPauseButton: ImageButton
     private lateinit var playbackProgressTextView: TextView
     private lateinit var audioPlayerManager: AudioPlayerManager
-    private lateinit var audioPlayerUseCase: AudioPlayerUseCase
+    private lateinit var trackRepository: TrackRepository
 
     private val TRACK_KEY = "track"
 
-    // Создание экземпляра репозитория
-    private val audioPlayerRepository: AudioPlayerRepository by lazy {
-        TracksRepositoryImpl(this)
+    private val audioPlayerViewModel: AudioPlayerViewModel by lazy {
+        ViewModelProvider(this, AudioPlayerViewModelFactory(trackRepository))[AudioPlayerViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
+
+        // Инициализация Retrofit и TrackRepository
+        val apiService = Retrofit.Builder()
+            .baseUrl(TrackRepositoryImpl.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+        trackRepository = TrackRepositoryImpl(apiService)
 
         val mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
@@ -59,35 +72,22 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
             }
         }
 
-        // Инициализация AudioPlayerUseCase с использованием AudioPlayerRepository
-        audioPlayerUseCase = AudioPlayerUseCase(audioPlayerRepository)
-
-        // Инициализация и настройка AudioPlayerManager и UI
-        audioPlayerManager.onProgressUpdate = { currentPosition ->
-            updatePlaybackTime(currentPosition)
-        }
         initializeUI()
 
-        // Инициализация playbackProgressTextView
         playbackProgressTextView = findViewById(R.id.time_playback)
 
-        // Toolbar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Назад на Toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        // Проверяем интернет-соединение перед загрузкой треков
         if (!isInternetConnected()) {
-            // Обработка отсутствия интернет-соединения
             Toast.makeText(this, "Нет соединения с Интернетом", Toast.LENGTH_SHORT).show()
         } else {
-            // Загрузка треков
             loadTracks()
         }
-        // Получение трека из Intent
+
         val track: Track? = intent.getParcelableExtra("track")
         track?.let {
             displayTrackInfo(it)
@@ -95,7 +95,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Проверяем, что нажата именно кнопка "Назад"
         if (item.itemId == android.R.id.home) {
             audioPlayerManager.pausePlaybackIfNeeded()
             onBackPressed()
@@ -105,17 +104,14 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     private fun updatePlaybackTime(timeInMillis: Int) {
-        // Добавляем 1000 миллисекунд к текущему времени воспроизведения (+1 секунда)
         val adjustedTimeInMillis = timeInMillis + 1000
         val minutes = TimeUnit.MILLISECONDS.toMinutes(adjustedTimeInMillis.toLong())
         val seconds = TimeUnit.MILLISECONDS.toSeconds(adjustedTimeInMillis.toLong()) % 60
         playbackProgressTextView.text = String.format("%02d:%02d", minutes, seconds)
-        // Добавляем вызов метода для обновления прогресса воспроизведения в UI
         updatePlaybackProgress(timeInMillis)
     }
 
     override fun updatePlaybackProgress(timeInMillis: Int) {
-        // Обновление времени воспроизведения в UI
         val formattedTime = formatTime(timeInMillis)
         playbackProgressTextView.text = formattedTime
     }
@@ -177,17 +173,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         } else {
             findViewById<ImageView>(R.id.album_cover).setImageResource(R.drawable.placeholder_image)
         }
-        track?.let { track ->
-            val artworkUrl: String? = track.artworkUrl512
-            if (artworkUrl != null) {
-                Picasso.get()
-                    .load(artworkUrl)
-                    .placeholder(R.drawable.placeholder_image)
-                    .into(findViewById<ImageView>(R.id.album_cover))
-            } else {
-                findViewById<ImageView>(R.id.album_cover).setImageResource(R.drawable.placeholder_image)
-            }
-        }
     }
 
     private fun togglePlayback() {
@@ -218,8 +203,8 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     private fun loadTracks() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val tracks = audioPlayerRepository.loadTracks()
-        }
+        audioPlayerViewModel.loadTracks().observe(this, Observer { tracks ->
+            // Обработка загруженных треков
+        })
     }
 }

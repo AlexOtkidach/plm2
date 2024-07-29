@@ -65,8 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf("support@example.com"))
+                data = Uri.parse("mailto:support@example.com")
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeMail))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.textMail))
             }

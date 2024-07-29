@@ -21,9 +21,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plm2.R
-import com.example.plm2.data.TracksRepositoryImpl.Companion.BASE_URL
-import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.local.SearchHistory
+import com.example.plm2.data.local.SharedPreferencesManager
+import com.example.plm2.data.network.ApiService
 import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
@@ -35,12 +35,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.example.plm2.data.network.ApiService
 
 class SearchActivity : BaseActivity() {
 
     private lateinit var connectivityManager: ConnectivityManager
-    private lateinit var searchQuery: String
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var recyclerView: RecyclerView
@@ -61,7 +59,7 @@ class SearchActivity : BaseActivity() {
 
     private val viewModel: SearchViewModel by viewModels {
         val apiService = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(TrackRepositoryImpl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
@@ -78,7 +76,6 @@ class SearchActivity : BaseActivity() {
         sharedPreferencesManager = SharedPreferencesManager(this)
         searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
 
-        // Инициализация адаптеров
         trackAdapter = TrackAdapter(emptyList()).apply {
             onTrackClickListener = { track ->
                 openPlayerActivity(track)

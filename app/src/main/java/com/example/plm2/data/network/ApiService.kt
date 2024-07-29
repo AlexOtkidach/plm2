@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
+
     @GET("search")
-    suspend fun getTracks(@Query("term") query: String): TrackResponse
+    suspend fun searchTracks(@Query("term") query: String): TrackResponse
 }
