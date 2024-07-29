@@ -7,33 +7,34 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
+import com.example.plm2.domain.interactor.SettingsInteractor
+import com.example.plm2.presentation.viewmodel.SettingsViewModel
+import com.example.plm2.presentation.viewmodel.SettingsViewModelFactory
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var sharedPreferencesManager: SharedPreferencesManager
+    private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        sharedPreferencesManager = SharedPreferencesManager(this)
+
+        val sharedPreferencesManager = SharedPreferencesManager(this)
+        val settingsInteractor = SettingsInteractor(sharedPreferencesManager)
+
+        settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settingsInteractor))[SettingsViewModel::class.java]
 
         val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
 
-        // Инициализация состояния свитча из SharedPreferences
-        val isDarkTheme = sharedPreferencesManager.isDarkTheme()
+        // Инициализация состояния свитча из ViewModel
+        val isDarkTheme = settingsViewModel.isDarkTheme()
         switchTheme.isChecked = isDarkTheme
 
         // Слушатель для переключения темы
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferencesManager.setDarkTheme(isChecked)
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            recreate()
+            settingsViewModel.setDarkTheme(isChecked)
         }
 
         setupToolbar()
@@ -65,7 +66,8 @@ class SettingsActivity : AppCompatActivity() {
         val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:support@example.com")
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("support@example.com"))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeMail))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.textMail))
             }

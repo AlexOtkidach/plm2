@@ -1,5 +1,6 @@
 package com.example.plm2.presentation
 
+import SearchViewModelFactory
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -29,7 +30,6 @@ import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
 import com.example.plm2.presentation.base.BaseActivity
 import com.example.plm2.presentation.viewmodel.SearchViewModel
-import com.example.plm2.presentation.viewmodel.SearchViewModelFactory
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -56,16 +56,8 @@ class SearchActivity : BaseActivity() {
 
     private var isSearching: Boolean = false
 
-    private val viewModel: SearchViewModel by viewModels {
-        val apiService = Retrofit.Builder()
-            .baseUrl(TrackRepositoryImpl.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService::class.java)
-        val trackRepository = TrackRepositoryImpl(apiService)
-        val trackInteractor = TrackInteractorImpl(trackRepository)
-        SearchViewModelFactory(trackInteractor, SearchHistory(sharedPreferencesManager.sharedPreferences))
-    }
+    private lateinit var viewModelFactory: SearchViewModelFactory
+    private val viewModel: SearchViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +65,17 @@ class SearchActivity : BaseActivity() {
 
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         sharedPreferencesManager = SharedPreferencesManager(this)
+
+        val apiService = Retrofit.Builder()
+            .baseUrl(TrackRepositoryImpl.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+
+        val searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
+        val trackRepository = TrackRepositoryImpl(apiService, searchHistory)
+        val trackInteractor = TrackInteractorImpl(trackRepository)
+        viewModelFactory = SearchViewModelFactory(trackInteractor)
 
         // Инициализация адаптеров
         trackAdapter = TrackAdapter(emptyList()).apply {

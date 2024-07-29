@@ -1,7 +1,6 @@
 package com.example.plm2.data.local
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.plm2.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -12,7 +11,7 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
         val json = sharedPreferences.getString(HISTORY_KEY, null)
         return json?.let {
             val type = object : TypeToken<List<Track>>() {}.type
-            gson.fromJson<List<Track>>(it, type)
+            Gson().fromJson(it, type)
         } ?: emptyList()
     }
 
@@ -23,24 +22,20 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
         if (currentHistory.size > MAX_HISTORY_SIZE) {
             currentHistory.removeAt(currentHistory.size - 1)
         }
-        Log.d("SearchHistory", "Adding track to history: ${track.trackName}")
         saveSearchHistory(currentHistory)
     }
 
     fun clearSearchHistory() {
-        Log.d("SearchHistory", "Clearing search history")
         saveSearchHistory(emptyList())
     }
 
     private fun saveSearchHistory(history: List<Track>) {
-        val json = gson.toJson(history)
+        val json = Gson().toJson(history)
         sharedPreferences.edit().putString(HISTORY_KEY, json).apply()
-        Log.d("SearchHistory", "Saving search history: ${history.size} items")
     }
 
     companion object {
         const val MAX_HISTORY_SIZE = 10
         const val HISTORY_KEY = "search_history_key"
-        val gson = Gson()
     }
 }

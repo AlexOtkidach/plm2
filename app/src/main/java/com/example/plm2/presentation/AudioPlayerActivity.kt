@@ -18,16 +18,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
+import com.example.plm2.data.local.SearchHistory
+import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.network.ApiService
 import com.example.plm2.data.repository.TrackRepositoryImpl
+import com.example.plm2.domain.interactor.TrackInteractor
+import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
-import com.example.plm2.domain.repository.TrackRepository
 import com.example.plm2.presentation.viewmodel.AudioPlayerViewModel
 import com.example.plm2.presentation.viewmodel.AudioPlayerViewModelFactory
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -36,25 +36,29 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var playPauseButton: ImageButton
     private lateinit var playbackProgressTextView: TextView
     private lateinit var audioPlayerManager: AudioPlayerManager
-    private lateinit var trackRepository: TrackRepository
+    private lateinit var trackInteractor: TrackInteractor
 
     private val TRACK_KEY = "track"
 
     private val audioPlayerViewModel: AudioPlayerViewModel by lazy {
-        ViewModelProvider(this, AudioPlayerViewModelFactory(trackRepository))[AudioPlayerViewModel::class.java]
+        ViewModelProvider(this, AudioPlayerViewModelFactory(trackInteractor))[AudioPlayerViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
 
-        // Инициализация Retrofit и TrackRepository
+        // Инициализация Retrofit, SearchHistory и TrackRepository
         val apiService = Retrofit.Builder()
             .baseUrl(TrackRepositoryImpl.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
-        trackRepository = TrackRepositoryImpl(apiService)
+
+        val sharedPreferencesManager = SharedPreferencesManager(this)
+        val searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
+        val trackRepository = TrackRepositoryImpl(apiService, searchHistory)
+        trackInteractor = TrackInteractorImpl(trackRepository)
 
         val mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
@@ -114,6 +118,14 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     override fun updatePlaybackProgress(timeInMillis: Int) {
         val formattedTime = formatTime(timeInMillis)
         playbackProgressTextView.text = formattedTime
+    }
+
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun updateTrackInfo(track: Track) {
+        TODO("Not yet implemented")
     }
 
     override fun onResume() {

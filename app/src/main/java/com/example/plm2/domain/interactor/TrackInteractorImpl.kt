@@ -1,10 +1,27 @@
 package com.example.plm2.domain.interactor
 
+import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.model.Track
-import com.example.plm2.domain.repository.TrackRepository
 
-class TrackInteractorImpl(private val repository: TrackRepository) : TrackInteractor {
+class TrackInteractorImpl(private val trackRepository: TrackRepositoryImpl) : TrackInteractor {
+
     override suspend fun searchTracks(query: String): List<Track> {
-        return repository.searchTracks(query)
+        return trackRepository.searchTracks(query)
+    }
+
+    override suspend fun loadTracks(): List<Track> {
+        return trackRepository.loadTracks()
+    }
+
+    override fun loadSearchHistory(): List<Track> {
+        return trackRepository.loadSearchHistory()
+    }
+
+    override fun addTrackToHistory(track: Track) {
+        trackRepository.addTrackToHistory(track)
+    }
+
+    override fun clearSearchHistory() {
+        trackRepository.clearSearchHistory()
     }
 }
