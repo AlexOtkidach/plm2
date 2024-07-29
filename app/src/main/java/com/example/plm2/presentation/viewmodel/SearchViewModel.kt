@@ -6,15 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.plm2.domain.interactor.TrackInteractor
 import com.example.plm2.domain.model.Track
+import com.example.plm2.data.local.SearchHistory
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
+class SearchViewModel(
+    private val trackInteractor: TrackInteractor,
+    private val searchHistory: SearchHistory
+) : ViewModel() {
 
     private val _searchResults = MutableLiveData<List<Track>>()
     val searchResults: LiveData<List<Track>> get() = _searchResults
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
+
+    private val _searchHistory = MutableLiveData<List<Track>>()
+    val searchHistoryLiveData: LiveData<List<Track>> get() = _searchHistory
 
     fun searchTracks(query: String) {
         viewModelScope.launch {
@@ -25,5 +32,19 @@ class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel(
                 _errorMessage.value = "Failed to fetch search results: ${e.message}"
             }
         }
+    }
+
+    fun loadSearchHistory() {
+        _searchHistory.value = searchHistory.getSearchHistory()
+    }
+
+    fun addTrackToHistory(track: Track) {
+        searchHistory.addTrackToHistory(track)
+        loadSearchHistory() // Обновить историю после добавления трека
+    }
+
+    fun clearSearchHistory() {
+        searchHistory.clearSearchHistory()
+        loadSearchHistory() // Обновить историю после очистки
     }
 }

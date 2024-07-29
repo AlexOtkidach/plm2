@@ -43,7 +43,6 @@ class SearchActivity : BaseActivity() {
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var searchHistory: SearchHistory
     private lateinit var placeholderImageView: ImageView
     private lateinit var placeholderTextView: TextView
     private lateinit var secondPlaceholderImageView: ImageView
@@ -65,7 +64,7 @@ class SearchActivity : BaseActivity() {
             .create(ApiService::class.java)
         val trackRepository = TrackRepositoryImpl(apiService)
         val trackInteractor = TrackInteractorImpl(trackRepository)
-        SearchViewModelFactory(trackInteractor)
+        SearchViewModelFactory(trackInteractor, SearchHistory(sharedPreferencesManager.sharedPreferences))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,18 +73,18 @@ class SearchActivity : BaseActivity() {
 
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         sharedPreferencesManager = SharedPreferencesManager(this)
-        searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
 
+        // Инициализация адаптеров
         trackAdapter = TrackAdapter(emptyList()).apply {
             onTrackClickListener = { track ->
                 openPlayerActivity(track)
-                addTrackToSearchHistory(track)
+                viewModel.addTrackToHistory(track)
             }
         }
         historyAdapter = TrackAdapter(emptyList()).apply {
             onTrackClickListener = { track ->
                 openPlayerActivity(track)
-                addTrackToSearchHistory(track)
+                viewModel.addTrackToHistory(track)
             }
         }
 
@@ -107,9 +106,16 @@ class SearchActivity : BaseActivity() {
             Log.e("SearchActivity", "Error: $message")
             isSearching = false
             progressBar.visibility = View.GONE
+            // Show error message to the user if necessary
         })
 
-        displaySearchHistory() // Первоначальное отображение истории поиска
+        viewModel.searchHistoryLiveData.observe(this, Observer { history ->
+            historyAdapter.setTracks(history)
+            historyAdapter.notifyDataSetChanged()
+            historyRecyclerView.visibility = if (history.isNotEmpty()) View.VISIBLE else View.GONE
+        })
+
+        viewModel.loadSearchHistory() // Первоначальное отображение истории поиска
     }
 
     private fun setupRecyclerViews() {
@@ -174,17 +180,6 @@ class SearchActivity : BaseActivity() {
         viewModel.searchTracks(query)
     }
 
-    private fun displaySearchHistory() {
-        val history = searchHistory.getSearchHistory()
-        if (history.isNotEmpty()) {
-            historyAdapter.setTracks(history)
-            historyAdapter.notifyDataSetChanged()
-            historyRecyclerView.visibility = View.VISIBLE
-        } else {
-            historyRecyclerView.visibility = View.GONE
-        }
-    }
-
     private fun updatePlaceholderVisibility(tracks: List<Track>) {
         if (tracks.isEmpty()) {
             placeholderImageView.visibility = View.VISIBLE
@@ -215,10 +210,6 @@ class SearchActivity : BaseActivity() {
             putExtra("track", track)
         }
         startActivity(intent)
-    }
-
-    private fun addTrackToSearchHistory(track: Track) {
-        searchHistory.addTrackToHistory(track)
     }
 
     private fun isNetworkAvailable(): Boolean {
