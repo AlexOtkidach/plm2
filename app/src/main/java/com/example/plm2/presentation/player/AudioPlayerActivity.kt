@@ -87,7 +87,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         if (!isInternetConnected()) {
-            Toast.makeText(this, "Нет соединения с Интернетом", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.no_internet_connect), Toast.LENGTH_SHORT).show()
         }
 
         val track: Track? = intent.getParcelableExtra("track")
@@ -123,7 +123,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     override fun updateTrackInfo(track: Track) {
-        // Реализуйте логику обновления информации о треке
     }
 
     override fun onResume() {
@@ -210,9 +209,5 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         val minutes = (timeInMillis / 1000) / 60
         val seconds = (timeInMillis / 1000) % 60
         return String.format("%02d:%02d", minutes, seconds)
-    }
-
-    private fun loadTracks() {
-        // Реализуйте логику загрузки треков, если необходимо
     }
 }
