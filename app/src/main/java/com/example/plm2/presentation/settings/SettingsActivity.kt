@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -13,10 +14,11 @@ import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.repository.PreferencesRepository
 import com.example.plm2.domain.interactor.SettingsInteractor
-import com.example.plm2.presentation.base.BaseActivity
+import com.example.plm2.presentation.viewmodel.PreferencesViewModel
+import com.example.plm2.presentation.viewmodel.PreferencesViewModelFactory
 
-class SettingsActivity : BaseActivity() {
-    private lateinit var settingsViewModel: SettingsViewModel
+class SettingsActivity : AppCompatActivity() {
+    private lateinit var preferencesViewModel: PreferencesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,20 +26,18 @@ class SettingsActivity : BaseActivity() {
 
         val sharedPreferencesManager = SharedPreferencesManager(this)
         val preferencesRepository = PreferencesRepository(sharedPreferencesManager)
-        val settingsInteractor = SettingsInteractor(preferencesRepository)
-
-        settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settingsInteractor))[SettingsViewModel::class.java]
+        preferencesViewModel = ViewModelProvider(this, PreferencesViewModelFactory(preferencesRepository))[PreferencesViewModel::class.java]
 
         val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
 
         // Инициализация состояния свитча из ViewModel
-        val isDarkTheme = settingsViewModel.isDarkTheme()
+        val isDarkTheme = preferencesViewModel.isDarkTheme()
         switchTheme.isChecked = isDarkTheme
 
         // Слушатель для переключения темы
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            settingsViewModel.setDarkTheme(isChecked)
-            setDarkTheme(isChecked) // Используем метод из BaseActivity
+            preferencesViewModel.setDarkTheme(isChecked)
+            applyTheme(isChecked)
         }
 
         setupToolbar()
@@ -77,7 +77,7 @@ class SettingsActivity : BaseActivity() {
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Почтовый клиент недоступен. Пожалуйста, попробуйте позже.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Почтовый клиент не доступен, попробуйте позже", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -88,6 +88,14 @@ class SettingsActivity : BaseActivity() {
             val url = getString(R.string.termsArticle)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
+        }
+    }
+
+    private fun applyTheme(isDarkTheme: Boolean) {
+        if (isDarkTheme) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 }

@@ -49,11 +49,10 @@
                     android:background="@color/searchLine"
                     android:gravity="top"
                     android:hint="Поиск"
-                    android:textCursorDrawable="@drawable/custom_cursor"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textColor="@android:color/black"
-                    android:textColorHint="@color/search_text_color"/>
+                    android:textColor="@color/search_text_selector"
+                    android:textColorHint="@color/search_text_selector"/>
 
                 <!-- Иконка очистки поля -->
                 <ImageView
@@ -176,7 +175,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="gone"/>
 
-            <!-- Кнопка очистки истории -->
+        <!-- Кнопка очистки истории -->
         <Button
             android:id="@+id/clearHistoryButton"
             android:layout_width="wrap_content"

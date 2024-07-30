@@ -15,13 +15,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
 import com.example.plm2.data.local.SearchHistory
 import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.network.ApiService
 import com.example.plm2.data.repository.TrackRepositoryImpl
+import com.example.plm2.domain.interactor.AudioPlayerInteractorImpl
 import com.example.plm2.domain.interactor.TrackInteractor
 import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
@@ -38,9 +38,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
     private val TRACK_KEY = "track"
 
-    private val audioPlayerViewModel: AudioPlayerViewModel by lazy {
-        ViewModelProvider(this, AudioPlayerViewModelFactory(trackInteractor))[AudioPlayerViewModel::class.java]
-    }
+    private lateinit var audioPlayerViewModel: AudioPlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +55,10 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         val searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
         val trackRepository = TrackRepositoryImpl(apiService, searchHistory)
         trackInteractor = TrackInteractorImpl(trackRepository)
+
+        // Создаем AudioPlayerInteractor и передаем его в AudioPlayerViewModelFactory
+        val audioPlayerInteractor = AudioPlayerInteractorImpl(trackRepository)
+        audioPlayerViewModel = ViewModelProvider(this, AudioPlayerViewModelFactory(audioPlayerInteractor))[AudioPlayerViewModel::class.java]
 
         val mediaPlayer = MediaPlayer().apply {
             setAudioAttributes(
@@ -214,4 +216,3 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         // Реализуйте логику загрузки треков, если необходимо
     }
 }
-

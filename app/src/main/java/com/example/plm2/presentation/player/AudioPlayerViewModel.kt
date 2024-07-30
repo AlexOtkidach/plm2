@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plm2.domain.interactor.TrackInteractor
+import com.example.plm2.domain.interactor.AudioPlayerInteractorImpl
 import com.example.plm2.domain.model.Track
 import kotlinx.coroutines.launch
 
-class AudioPlayerViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
+class AudioPlayerViewModel(private val trackInteractor: AudioPlayerInteractorImpl) : ViewModel() {
 
     private val _track = MutableLiveData<Track>()
     val track: LiveData<Track> get() = _track

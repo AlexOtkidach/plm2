@@ -2,10 +2,10 @@ package com.example.plm2.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.plm2.domain.interactor.SettingsInteractor
+import com.example.plm2.data.repository.PreferencesRepository
 
 class SettingsViewModelFactory(
-    private val settingsInteractor: SettingsInteractor
+    private val settingsInteractor: PreferencesRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {

@@ -2,6 +2,7 @@ package com.example.plm2.presentation.search
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -144,15 +145,34 @@ class SearchActivity : BaseActivity() {
     private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val color = ContextCompat.getColor(this, R.color.primary)
+
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val color = when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, android.R.color.white)
+            Configuration.UI_MODE_NIGHT_NO -> ContextCompat.getColor(this, android.R.color.black)
+            else -> ContextCompat.getColor(this, android.R.color.black)
+        }
+
         val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back)
         upArrow?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
+
         toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setupSearchBar() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
+
+        // Установка цветов текста и подсказки в зависимости от темы
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val searchTextColor = when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, R.color.search_text_color_dark)
+            Configuration.UI_MODE_NIGHT_NO -> ContextCompat.getColor(this, R.color.search_text_color_light)
+            else -> ContextCompat.getColor(this, R.color.search_text_color_light)
+        }
+        inputEditText.setTextColor(searchTextColor)
+        inputEditText.setHintTextColor(searchTextColor)
+
         inputEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
