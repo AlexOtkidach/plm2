@@ -109,7 +109,6 @@ class SearchActivity : BaseActivity() {
             Log.e("SearchActivity", "Error: $message")
             isSearching = false
             progressBar.visibility = View.GONE
-            // Show error message to the user if necessary
         })
 
         viewModel.searchHistory.observe(this, Observer { history ->
@@ -162,37 +161,30 @@ class SearchActivity : BaseActivity() {
 
     private fun setupSearchBar() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
+        val clearIcon = findViewById<ImageView>(R.id.seachBarLineImageV)
 
-        // Установка цветов текста и подсказки в зависимости от темы
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val searchTextColor = when (nightModeFlags) {
-            Configuration.UI_MODE_NIGHT_YES -> ContextCompat.getColor(this, R.color.search_text_color_dark)
-            Configuration.UI_MODE_NIGHT_NO -> ContextCompat.getColor(this, R.color.search_text_color_light)
-            else -> ContextCompat.getColor(this, R.color.search_text_color_light)
-        }
-        inputEditText.setTextColor(searchTextColor)
-        inputEditText.setHintTextColor(searchTextColor)
+        // Начальное состояние иконки
+        clearIcon.visibility = View.GONE
 
         inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                debounceJob?.cancel()
-                debounceJob = lifecycleScope.launch {
-                    delay(debouncePeriod)
-                    s?.let {
-                        if (it.isNotEmpty()) {
-                            if (isNetworkAvailable()) {
-                                performSearch(it.toString())
-                            } else {
-                                Log.e("SearchActivity", "No internet connection")
-                                showNoInternetPlaceholder()
-                            }
-                        }
-                    }
-                }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Не используется
             }
-            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Отображаем иконку очистки только если есть текст
+                clearIcon.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Не используется
+            }
         })
+
+        // Добавление слушателя нажатий на иконку очистки
+        clearIcon.setOnClickListener {
+            inputEditText.text.clear()
+        }
     }
 
     private fun performSearch(query: String) {
@@ -239,3 +231,4 @@ class SearchActivity : BaseActivity() {
         return networkInfo != null && networkInfo.isConnected
     }
 }
+
