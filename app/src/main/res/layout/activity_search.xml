@@ -51,8 +51,9 @@
                     android:hint="Поиск"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textColor="@color/search_text_selector"
-                    android:textColorHint="@color/search_text_selector"/>
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/search_text_selector"
+                    android:textCursorDrawable="@drawable/custom_cursor"/>
 
                 <!-- Иконка очистки поля -->
                 <ImageView
