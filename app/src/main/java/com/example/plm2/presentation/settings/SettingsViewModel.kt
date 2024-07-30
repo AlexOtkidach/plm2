@@ -1,4 +1,4 @@
-package com.example.plm2.presentation.viewmodel
+package com.example.plm2.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import com.example.plm2.domain.interactor.SettingsInteractor

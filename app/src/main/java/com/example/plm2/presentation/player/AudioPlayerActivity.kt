@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.player
 
 import android.content.Context
 import android.content.res.Configuration
@@ -25,8 +25,6 @@ import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.interactor.TrackInteractor
 import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
-import com.example.plm2.presentation.viewmodel.AudioPlayerViewModel
-import com.example.plm2.presentation.viewmodel.AudioPlayerViewModelFactory
 import com.squareup.picasso.Picasso
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

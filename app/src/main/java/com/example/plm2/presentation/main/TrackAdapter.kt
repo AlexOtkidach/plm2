@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.main
 
 import com.example.plm2.domain.model.Track
 import android.content.res.Resources

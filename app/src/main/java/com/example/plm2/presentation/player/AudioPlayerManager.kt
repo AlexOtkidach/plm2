@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.player
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer

@@ -32,20 +32,20 @@
 
         <!-- Активити и другие настройки приложения -->
         <activity
-            android:name=".presentation.SearchActivity"
+            android:name=".presentation.search.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.MediaActivity"
+            android:name=".presentation.main.MediaActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.SettingsActivity"
+            android:name=".presentation.settings.SettingsActivity"
             android:exported="true" />
         <activity
-            android:name=".presentation.AudioPlayerActivity"
+            android:name=".presentation.player.AudioPlayerActivity"
             android:exported="true"
             android:label=""/>
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Plm2">
             <intent-filter>

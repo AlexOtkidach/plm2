@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.main
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
+import com.example.plm2.presentation.search.SearchActivity
+import com.example.plm2.presentation.settings.SettingsActivity
 import com.example.plm2.presentation.base.BaseActivity
-import com.example.plm2.presentation.viewmodel.MainViewModel
 
 
 class MainActivity : BaseActivity() {

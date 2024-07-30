@@ -1,4 +1,4 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.domain.interactor.SettingsInteractor
-import com.example.plm2.presentation.viewmodel.SettingsViewModel
-import com.example.plm2.presentation.viewmodel.SettingsViewModelFactory
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var settingsViewModel: SettingsViewModel

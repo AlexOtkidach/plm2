@@ -1,6 +1,5 @@
-package com.example.plm2.presentation
+package com.example.plm2.presentation.search
 
-import SearchViewModelFactory
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -28,8 +27,9 @@ import com.example.plm2.data.network.ApiService
 import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
+import com.example.plm2.presentation.main.TrackAdapter
 import com.example.plm2.presentation.base.BaseActivity
-import com.example.plm2.presentation.viewmodel.SearchViewModel
+import com.example.plm2.presentation.player.AudioPlayerActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

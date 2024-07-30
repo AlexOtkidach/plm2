@@ -1,4 +1,4 @@
-package com.example.plm2.presentation.viewmodel
+package com.example.plm2.presentation.player
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
