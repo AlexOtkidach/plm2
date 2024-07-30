@@ -163,6 +163,9 @@ class SearchActivity : BaseActivity() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
         val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
 
+        // Начальное состояние кнопки: скрыто, если поле пустое
+        clearButton.visibility = if (inputEditText.text.isNullOrEmpty()) View.GONE else View.VISIBLE
+
         // Установка слушателя для очистки поля ввода
         clearButton.setOnClickListener {
             inputEditText.text.clear()
@@ -170,6 +173,7 @@ class SearchActivity : BaseActivity() {
 
         inputEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Показать или скрыть кнопку очистки в зависимости от содержимого текста
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
