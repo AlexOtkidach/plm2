@@ -27,8 +27,8 @@ import com.example.plm2.data.network.ApiService
 import com.example.plm2.data.repository.TrackRepositoryImpl
 import com.example.plm2.domain.interactor.TrackInteractorImpl
 import com.example.plm2.domain.model.Track
-import com.example.plm2.presentation.main.TrackAdapter
 import com.example.plm2.presentation.base.BaseActivity
+import com.example.plm2.presentation.main.TrackAdapter
 import com.example.plm2.presentation.player.AudioPlayerActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

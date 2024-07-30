@@ -1,22 +1,36 @@
 package com.example.plm2.presentation.base
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.plm2.data.local.SharedPreferencesManager
+import com.example.plm2.data.repository.PreferencesRepository
 
 open class BaseActivity : AppCompatActivity() {
 
+    private lateinit var preferencesRepository: PreferencesRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val sharedPreferencesManager = SharedPreferencesManager(this)
+        preferencesRepository = PreferencesRepository(sharedPreferencesManager)
+
         // Загрузка темы из SharedPreferences
-        val sharedPrefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isDarkTheme = sharedPrefs.getBoolean("isDarkTheme", false)
+        val isDarkTheme = preferencesRepository.isDarkTheme()
         if (isDarkTheme) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-        super.onCreate(savedInstanceState)
+    }
+
+    fun setDarkTheme(enabled: Boolean) {
+        preferencesRepository.setDarkTheme(enabled)
+        if (enabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 }

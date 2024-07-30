@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
+import com.example.plm2.data.repository.PreferencesRepository
 import com.example.plm2.domain.interactor.SettingsInteractor
 
 class SettingsActivity : AppCompatActivity() {
@@ -20,7 +21,8 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val sharedPreferencesManager = SharedPreferencesManager(this)
-        val settingsInteractor = SettingsInteractor(sharedPreferencesManager)
+        val preferencesRepository = PreferencesRepository(sharedPreferencesManager)
+        val settingsInteractor = SettingsInteractor(preferencesRepository)
 
         settingsViewModel = ViewModelProvider(this, SettingsViewModelFactory(settingsInteractor))[SettingsViewModel::class.java]
 
