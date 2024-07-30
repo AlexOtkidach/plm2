@@ -56,8 +56,18 @@ class SearchActivity : BaseActivity() {
 
     private var isSearching: Boolean = false
 
-    private lateinit var viewModelFactory: SearchViewModelFactory
-    private val viewModel: SearchViewModel by viewModels { viewModelFactory }
+    private val viewModel: SearchViewModel by viewModels {
+        val apiService = Retrofit.Builder()
+            .baseUrl(TrackRepositoryImpl.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ApiService::class.java)
+        sharedPreferencesManager = SharedPreferencesManager(this)
+        val searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
+        val trackRepository = TrackRepositoryImpl(apiService, searchHistory)
+        val trackInteractor = TrackInteractorImpl(trackRepository)
+        SearchViewModelFactory(trackInteractor)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,17 +75,6 @@ class SearchActivity : BaseActivity() {
 
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         sharedPreferencesManager = SharedPreferencesManager(this)
-
-        val apiService = Retrofit.Builder()
-            .baseUrl(TrackRepositoryImpl.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService::class.java)
-
-        val searchHistory = SearchHistory(sharedPreferencesManager.sharedPreferences)
-        val trackRepository = TrackRepositoryImpl(apiService, searchHistory)
-        val trackInteractor = TrackInteractorImpl(trackRepository)
-        viewModelFactory = SearchViewModelFactory(trackInteractor)
 
         // Инициализация адаптеров
         trackAdapter = TrackAdapter(emptyList()).apply {
@@ -112,7 +111,7 @@ class SearchActivity : BaseActivity() {
             // Show error message to the user if necessary
         })
 
-        viewModel.searchHistoryLiveData.observe(this, Observer { history ->
+        viewModel.searchHistory.observe(this, Observer { history ->
             historyAdapter.setTracks(history)
             historyAdapter.notifyDataSetChanged()
             historyRecyclerView.visibility = if (history.isNotEmpty()) View.VISIBLE else View.GONE

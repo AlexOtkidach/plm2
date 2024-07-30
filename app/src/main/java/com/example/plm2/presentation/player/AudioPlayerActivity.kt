@@ -86,8 +86,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
         if (!isInternetConnected()) {
             Toast.makeText(this, "Нет соединения с Интернетом", Toast.LENGTH_SHORT).show()
-        } else {
-            loadTracks()
         }
 
         val track: Track? = intent.getParcelableExtra("track")
@@ -123,7 +121,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     override fun updateTrackInfo(track: Track) {
-        TODO("Not yet implemented")
+        // Реализуйте логику обновления информации о треке
     }
 
     override fun onResume() {
@@ -213,8 +211,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     }
 
     private fun loadTracks() {
-        audioPlayerViewModel.loadTracks().observe(this, Observer { tracks ->
-            // Обработка загруженных треков
-        })
+        // Реализуйте логику загрузки треков, если необходимо
     }
 }
+

@@ -4,13 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.plm2.domain.interactor.TrackInteractorImpl
+import com.example.plm2.domain.interactor.TrackInteractor
 import com.example.plm2.domain.model.Track
 import kotlinx.coroutines.launch
 
-class SearchViewModel(
-    private val trackInteractor: TrackInteractorImpl
-) : ViewModel() {
+class SearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
 
     private val _searchResults = MutableLiveData<List<Track>>()
     val searchResults: LiveData<List<Track>> get() = _searchResults
@@ -19,15 +17,21 @@ class SearchViewModel(
     val errorMessage: LiveData<String> get() = _errorMessage
 
     private val _searchHistory = MutableLiveData<List<Track>>()
-    val searchHistoryLiveData: LiveData<List<Track>> get() = _searchHistory
+    val searchHistory: LiveData<List<Track>> get() = _searchHistory
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     fun searchTracks(query: String) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val results = trackInteractor.searchTracks(query)
                 _searchResults.value = results
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to fetch search results: ${e.message}"
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -24,4 +24,21 @@ class TrackInteractorImpl(private val trackRepository: TrackRepositoryImpl) : Tr
     override fun clearSearchHistory() {
         trackRepository.clearSearchHistory()
     }
+
+    // Реализация методов управления воспроизведением
+    override suspend fun playTrack(track: Track) {
+        // Логика воспроизведения трека
+    }
+
+    override suspend fun pauseTrack() {
+        // Логика паузы воспроизведения
+    }
+
+    override suspend fun resumeTrack() {
+        // Логика возобновления воспроизведения
+    }
+
+    override suspend fun stopTrack() {
+        // Логика остановки воспроизведения
+    }
 }

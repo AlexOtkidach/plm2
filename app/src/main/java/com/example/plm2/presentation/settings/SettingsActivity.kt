@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
@@ -12,8 +13,9 @@ import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.repository.PreferencesRepository
 import com.example.plm2.domain.interactor.SettingsInteractor
+import com.example.plm2.presentation.base.BaseActivity
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,7 @@ class SettingsActivity : AppCompatActivity() {
         // Слушатель для переключения темы
         switchTheme.setOnCheckedChangeListener { _, isChecked ->
             settingsViewModel.setDarkTheme(isChecked)
+            setDarkTheme(isChecked) // Используем метод из BaseActivity
         }
 
         setupToolbar()
@@ -66,13 +69,15 @@ class SettingsActivity : AppCompatActivity() {
         val supportButton = findViewById<FrameLayout>(R.id.btnSupport)
         supportButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
+                data = Uri.parse("mailto:support@example.com")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf("support@example.com"))
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.themeMail))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.textMail))
             }
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
+            } else {
+                Toast.makeText(this, "Почтовый клиент недоступен. Пожалуйста, попробуйте позже.", Toast.LENGTH_SHORT).show()
             }
         }
     }
