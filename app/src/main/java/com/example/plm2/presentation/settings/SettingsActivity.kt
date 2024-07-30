@@ -1,6 +1,8 @@
 package com.example.plm2.presentation.settings
 
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -9,13 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.plm2.R
 import com.example.plm2.data.local.SharedPreferencesManager
 import com.example.plm2.data.repository.PreferencesRepository
-import com.example.plm2.domain.interactor.SettingsInteractor
 import com.example.plm2.presentation.viewmodel.PreferencesViewModel
 import com.example.plm2.presentation.viewmodel.PreferencesViewModelFactory
+import androidx.core.graphics.drawable.DrawableCompat
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var preferencesViewModel: PreferencesViewModel
@@ -26,7 +29,10 @@ class SettingsActivity : AppCompatActivity() {
 
         val sharedPreferencesManager = SharedPreferencesManager(this)
         val preferencesRepository = PreferencesRepository(sharedPreferencesManager)
-        preferencesViewModel = ViewModelProvider(this, PreferencesViewModelFactory(preferencesRepository))[PreferencesViewModel::class.java]
+        preferencesViewModel = ViewModelProvider(
+            this,
+            PreferencesViewModelFactory(preferencesRepository)
+        )[PreferencesViewModel::class.java]
 
         val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
 
@@ -44,6 +50,7 @@ class SettingsActivity : AppCompatActivity() {
         setupShareButton()
         setupSupportButton()
         setupTermsButton()
+        setupThemeSwitch()
     }
 
     private fun setupToolbar() {
@@ -77,7 +84,11 @@ class SettingsActivity : AppCompatActivity() {
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Почтовый клиент не доступен, попробуйте позже", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Почтовый клиент не доступен, попробуйте позже",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -89,6 +100,37 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
         }
+    }
+
+    private fun setupThemeSwitch() {
+        val switchTheme = findViewById<SwitchCompat>(R.id.switchTheme)
+        switchTheme.isChecked = preferencesViewModel.isDarkTheme()
+
+        switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            preferencesViewModel.setDarkTheme(isChecked)
+            applyTheme(isChecked)
+            updateSwitchColor(switchTheme, isChecked)
+        }
+        updateSwitchColor(switchTheme, switchTheme.isChecked)
+    }
+
+    private fun updateSwitchColor(switch: SwitchCompat, checked: Boolean) {
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val thumbColor: Int
+        val trackColor: Int
+
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+            // Цвета для тёмной темы из ресурсов
+            thumbColor = ContextCompat.getColor(this, R.color.switchThumbColor)
+            trackColor = ContextCompat.getColor(this, R.color.switchTrackColor)
+        } else {
+            // Цвета для светлой темы из ресурсов
+            thumbColor = ContextCompat.getColor(this, R.color.switchTrackColor)
+            trackColor = ContextCompat.getColor(this, R.color.gray)
+        }
+
+        DrawableCompat.setTint(DrawableCompat.wrap(switch.thumbDrawable), thumbColor)
+        DrawableCompat.setTint(DrawableCompat.wrap(switch.trackDrawable), trackColor)
     }
 
     private fun applyTheme(isDarkTheme: Boolean) {

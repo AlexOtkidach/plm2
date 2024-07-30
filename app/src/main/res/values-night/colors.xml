@@ -29,8 +29,9 @@
     <!-- Цвета для Свитча -->
     <color name="SwitchColorRe">#9FBBF3</color>
     <color name="DarkSwitchColorRe">#3772E7</color>
-    <color name="switchTrackColor">#9FBBF3</color>
+    <color name="switchTrackColor">#AEAFB4</color>
     <color name="switchThumbColor">#3772E7</color>
+
 
     <!-- Визуальное отображение нажатия обновить -->
     <color name="colorButtonPressed">#000000</color>
