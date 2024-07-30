@@ -161,30 +161,36 @@ class SearchActivity : BaseActivity() {
 
     private fun setupSearchBar() {
         val inputEditText = findViewById<EditText>(R.id.seachBarLineEditT)
-        val clearIcon = findViewById<ImageView>(R.id.seachBarLineImageV)
+        val clearButton = findViewById<ImageView>(R.id.seachBarLineImageV)
 
-        // Начальное состояние иконки
-        clearIcon.visibility = View.GONE
-
-        inputEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Не используется
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Отображаем иконку очистки только если есть текст
-                clearIcon.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // Не используется
-            }
-        })
-
-        // Добавление слушателя нажатий на иконку очистки
-        clearIcon.setOnClickListener {
+        // Установка слушателя для очистки поля ввода
+        clearButton.setOnClickListener {
             inputEditText.text.clear()
         }
+
+        inputEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Показать или скрыть кнопку очистки в зависимости от содержимого текста
+                clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                debounceJob?.cancel()
+                debounceJob = lifecycleScope.launch {
+                    delay(debouncePeriod)
+                    s?.let {
+                        if (it.isNotEmpty()) {
+                            if (isNetworkAvailable()) {
+                                performSearch(it.toString())
+                            } else {
+                                Log.e("SearchActivity", "No internet connection")
+                                showNoInternetPlaceholder()
+                            }
+                        }
+                    }
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun performSearch(query: String) {
