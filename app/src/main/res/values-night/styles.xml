@@ -72,4 +72,5 @@
     <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
     </style>
+
 </resources>

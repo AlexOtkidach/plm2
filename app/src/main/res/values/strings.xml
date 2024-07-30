@@ -41,6 +41,9 @@
     <string name="clear_history">Очистить историю</string>
 
     <!-- Тут все для Аудиоплеера -->
+    <string name="no_internet_connect">Нет соединения с Интернетом</string>
+    <string name="error_network">Произошла ошибка сети. Попробуйте позже.</string>
+
     <!-- Длительность выше, дублирую из медиатеки -->
     <string name="album">Альбом</string>
     <string name="year">Год</string>Genre

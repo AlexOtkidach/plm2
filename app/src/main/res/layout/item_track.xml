@@ -12,7 +12,7 @@
         android:layout_height="48dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder"
-        android:background="@drawable/image_background_rounded" />/>
+        android:background="@drawable/image_background_rounded" />
 
     <!-- Основной контейнер для текстовых полей -->
     <LinearLayout
@@ -41,4 +41,13 @@
             style="@style/LightTextStyle"
             android:layout_marginTop="4dp" />
     </LinearLayout>
+
+    <!-- Значок стрелки -->
+    <ImageView
+        android:id="@+id/arrowIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_arrow_forward" />
 </LinearLayout>
